@@ -1,0 +1,20 @@
+﻿<Window x:Class="CRMAgentieImobiliara.WindowLogin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CRMAgentieImobiliara"
+        mc:Ignorable="d"
+        Title="Login" Height="300" Width="300" FontSize="14" Background="#2e3137">
+    <Grid>
+        <StackPanel Margin="20">
+            <Label Content="Login" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
+            <Separator Height="2" Margin="0,2,-0.4,2"></Separator>
+            <Label Content="Username" Foreground="White"/>
+            <TextBox Name="txtloginUsername" />
+            <Label Content="Password" Foreground="White"/>
+            <PasswordBox Name="txtloginPassword" />
+            <Button Name="btnLoginSubmit" Click="btnLoginSubmit_Click" Margin="60 20" Content="Submit" />
+        </StackPanel>
+    </Grid>
+</Window>

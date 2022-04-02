@@ -1,0 +1,130 @@
+﻿<Window x:Class="CRMAgentieImobiliara.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CRMAgentieImobiliara"
+        mc:Ignorable="d"
+        Title="Window1" Height="450" Width="800">
+    <Grid>
+        <Label VerticalAlignment="Center" Margin="23,53,0,341" HorizontalAlignment="Left" Content="Tip Oferta:"/>
+        <ComboBox Name="cmbTipOferta" Margin="119,56,554.6,340" >
+            <ComboBoxItem Content="vanzare"/>
+            <ComboBoxItem Content="inchiriere"/>
+            <ComboBoxItem Content="regim hotelier"/>
+        </ComboBox>
+
+        <Label VerticalAlignment="Center" Margin="27,257,0,137" HorizontalAlignment="Left" Content="Adresa:"/>
+        <TextBox x:Name="adresaTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Adresa, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="0" Margin="120,259,0,139" Height="22" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="23,295,0,99" HorizontalAlignment="Left" Grid.Column="0" Content="Amplasament:"/>
+        <ComboBox Name="cmbAmplasament" Margin="119,297,554.6,99" >
+            <ComboBoxItem Content="bloc"/>
+            <ComboBoxItem Content="casa/vila"/>
+        </ComboBox>
+
+        <Label VerticalAlignment="Center" Margin="584,53,0,341" HorizontalAlignment="Left" Grid.Column="0" Content="Pret:" RenderTransformOrigin="0.69,-0.183"/>
+        <TextBox x:Name="pretTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Pret, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="664,53,0,344" Height="23" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="584,87,0,309" HorizontalAlignment="Left" Grid.Column="0" Content="Comision:" RenderTransformOrigin="0.69,-0.183"/>
+        <TextBox x:Name="comisionTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Pret, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="664,88,0,309" Height="23" HorizontalAlignment="Left"/>
+
+
+        <Label VerticalAlignment="Center" Margin="288,179,0,215" HorizontalAlignment="Left" Grid.Column="0" Content="Compartimentare:"/>
+        <ComboBox Name="cmbCompartimentare" Margin="410,181,263.6,215" >
+            <ComboBoxItem Content="decomandat"/>
+            <ComboBoxItem Content="semidecomandat"/>
+            <ComboBoxItem Content="circular"/>
+            <ComboBoxItem Content="vagon"/>
+        </ComboBox>
+
+        <Label VerticalAlignment="Center" Margin="288,282,0,112" HorizontalAlignment="Left" Grid.Column="0" Content="Descriere:"/>
+        <TextBox x:Name="descriereTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Descriere, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="409,282,0,57" Height="81" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="291,82,0,312" HorizontalAlignment="Left" Grid.Column="0" Content="Etaj:" RenderTransformOrigin="0.509,0"/>
+        <TextBox x:Name="etajTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Etaj, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="410,86,0,312" Height="22" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="291,112,0,282" HorizontalAlignment="Left" Grid.Column="0" Content="Etaje imobil:" RenderTransformOrigin="0.509,0" Width="104"/>
+        <TextBox x:Name="etajeimobilTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Etaj, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="410,116,0,282" Height="22" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="27,153,0,241" HorizontalAlignment="Left" Grid.Column="0" Content="Judet:"/>
+        <ComboBox Name="cmbJudet" SelectedItem="CJ" Margin="119,151,554.6,241">
+            <ComboBoxItem Content="B"/>
+            <ComboBoxItem Content="AB"/>
+            <ComboBoxItem Content="AR"/>
+            <ComboBoxItem Content="AG"/>
+            <ComboBoxItem Content="BC"/>
+            <ComboBoxItem Content="BH"/>
+            <ComboBoxItem Content="BN"/>
+            <ComboBoxItem Content="BT"/>
+            <ComboBoxItem Content="BV"/>
+            <ComboBoxItem Content="BR"/>
+            <ComboBoxItem Content="BZ"/>
+            <ComboBoxItem Content="CS"/>
+            <ComboBoxItem Content="CL"/>
+            <ComboBoxItem Content="CJ"/>
+            <ComboBoxItem Content="CT"/>
+            <ComboBoxItem Content="CV"/>
+            <ComboBoxItem Content="DB"/>
+            <ComboBoxItem Content="DJ"/>
+            <ComboBoxItem Content="GL"/>
+            <ComboBoxItem Content="GR"/>
+            <ComboBoxItem Content="GJ"/>
+            <ComboBoxItem Content="HR"/>
+            <ComboBoxItem Content="HD"/>
+            <ComboBoxItem Content="IL"/>
+            <ComboBoxItem Content="IS"/>
+            <ComboBoxItem Content="IF"/>
+            <ComboBoxItem Content="MM"/>
+            <ComboBoxItem Content="MH"/>
+            <ComboBoxItem Content="MS"/>
+            <ComboBoxItem Content="NT"/>
+            <ComboBoxItem Content="OT"/>
+            <ComboBoxItem Content="PH"/>
+            <ComboBoxItem Content="SM"/>
+            <ComboBoxItem Content="SJ"/>
+            <ComboBoxItem Content="SB"/>
+            <ComboBoxItem Content="SV"/>
+            <ComboBoxItem Content="TR"/>
+            <ComboBoxItem Content="TM"/>
+            <ComboBoxItem Content="TL"/>
+            <ComboBoxItem Content="VL"/>
+            <ComboBoxItem Content="VS"/>
+            <ComboBoxItem Content="VN"/>
+        </ComboBox>
+        <Label VerticalAlignment="Center" Margin="291,246,0,148" HorizontalAlignment="Left" Grid.Column="0" Content="Link Oferta:"/>
+        <TextBox x:Name="linkOfertaTextBox" Width="120" VerticalAlignment="Center" Text="{Binding LinkOferta, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="409,248,0,150" Height="22" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="288,210,0,184" HorizontalAlignment="Left" Grid.Column="0" Content="Locuri Parcare:" RenderTransformOrigin="1.693,7.383"/>
+        <TextBox x:Name="locuriParcareTextBox" Width="120" VerticalAlignment="Center" Text="{Binding LocuriParcare, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="410,213,0,184" Height="23" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="23,340,0,54" HorizontalAlignment="Left" Grid.Column="0" Content="Nr Camere:"/>
+        <TextBox x:Name="nrCamereTextBox" Width="120" VerticalAlignment="Center" Text="{Binding NrCamere, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="120,343,0,54" Height="23" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="288,148,0,246" HorizontalAlignment="Left" Content="Suprafata Utila:"/>
+        <TextBox x:Name="suprafataUtilaTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Path=suprafata_utila}" Margin="410,151,0,246" Height="23" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="23,85,0,309" HorizontalAlignment="Left" Content="Tip Proprietate:"/>
+        <ComboBox Name="cmbTipProprietate"  Margin="119,85,554.6,307">
+            <ComboBoxItem Content="apartament"/>
+            <ComboBoxItem Content="casa/vila"/>
+            <ComboBoxItem Content="teren"/>
+            <ComboBoxItem Content="spatiu"/>
+            <ComboBoxItem Content="hotel/pensiune"/>
+        </ComboBox>
+
+        <Label VerticalAlignment="Center" Margin="27,223,0,171" HorizontalAlignment="Left" Content="Zona:"/>
+        <TextBox x:Name="zonaTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Zona, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="120,221,0,176" Height="23" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="288,53,0,343" HorizontalAlignment="Left" Content="Nr Bai:" Height="24" Width="70"/>
+        <TextBox x:Name="nrBaiTextBox" Width="120" VerticalAlignment="Center" Text="{Binding NrBai, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="409,53,0,344" Height="23" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="23,120,0,277" HorizontalAlignment="Left" Grid.Column="0" Content="Contact" Height="23" Width="87"/>
+        <TextBox x:Name="contactTextBox" Width="120" VerticalAlignment="Center" Text="{Binding NrTel, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="120,121,0,276" Height="23" HorizontalAlignment="Left"/>
+
+        <Label VerticalAlignment="Center" Margin="23,184,0,210" HorizontalAlignment="Left" Content="Localitate:" Width="87" Height="26"/>
+        <TextBox x:Name="localitateTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Oras, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="120,187,0,210" Height="23" HorizontalAlignment="Left"/>
+
+        <Button x:Name="btnAddProprietateNoua" Click="btnAddProprietateNoua_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Adauga proprietate" Margin="647,349,10,10"/>
+    </Grid>
+</Window>

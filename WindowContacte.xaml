@@ -1,0 +1,36 @@
+﻿<Window x:Class="CRMAgentieImobiliara.WindowContacte"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CRMAgentieImobiliara"
+        mc:Ignorable="d"
+        Title="Contacte" Height="443.5" Width="518.197">
+    <Grid Margin="0,0,4,4.4">
+        <DataGrid Name="contacteDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,163.2" Width="310" ItemsSource="{Binding}" CanUserResizeRows="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=id_contact}" Header="ID" Width="Auto" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Path=nume}" Header="Nume" Width="Auto" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Path=prenume}" Header="Prenume" Width="Auto" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Path=nr_tel}" Header="Nr tel" Width="Auto" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Path=nr_tel2}" Header="Nr tel alternativ" Width="Auto" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Path=mail}" Header="Mail" Width="Auto" IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="Nume:" Margin="352,10,27,368.2" FontSize="9"/>
+        <TextBox Name="txtNume" Margin="352,53,27,330.2"/>
+        <Label Content="Prenume:"  Margin="352,90,27,291.2" FontSize="9"/>
+        <TextBox Name="txtPrenume" Margin="352,131,27,255.2"/>
+        <Label Content="Nr.telefon:" Margin="352,172,27,209.2" FontSize="9"/>
+        <TextBox Name="txtNrTel" Margin="352,214,27,171.2"/>
+        <Label Content="Nr. telefon alternativ:" Margin="352,251,27,126.2" FontSize="9"/>
+        <TextBox Name="txtNrTel2" Margin="352,296,27,89.2" RenderTransformOrigin="0.447,1.184"/>
+        <Label Content="Adresa de mail:" Margin="352,325,27,54.2" FontSize="9" />
+        <TextBox Name="txtMail" Margin="352,369,27,16.2"/>
+        <Button x:Name="btnAddContact" Click="btnAddContact_Click" Content="Adauga" Margin="10,279,434,101.2"/>
+        <Button x:Name="btnEditContact" Click="btnAddContact_Click" Content="Editeaza" Margin="10,313,434,68.2"/>
+        <Button x:Name="btnDelContact" Click="btnAddContact_Click" Content="Sterge" Margin="10,346,434,35.2"/>
+        <Button Content="Refresh" Height="18" HorizontalAlignment="Left" Margin="285,246,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="35" Click="btnRefresh_Click" FontSize="8" />
+
+    </Grid>
+</Window>
