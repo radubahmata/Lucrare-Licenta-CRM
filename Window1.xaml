@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CRMAgentieImobiliara"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Width="800">
+        Title="Adaugare proprietate" Height="450" Width="800">
     <Grid>
         <Label VerticalAlignment="Center" Margin="23,53,0,341" HorizontalAlignment="Left" Content="Tip Oferta:"/>
         <ComboBox Name="cmbTipOferta" Margin="119,56,554.6,340" >
