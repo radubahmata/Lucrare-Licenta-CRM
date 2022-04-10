@@ -25,6 +25,32 @@ namespace CRMAgentieImobiliara
         public Window1()
         {
             InitializeComponent();
+            fillComboIdContact();
+        }
+        void fillComboIdContact()
+        {
+            String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection con = new MySqlConnection(connectionString);
+            try
+            {
+                con.Open();
+                string query = "select * from contacte";
+                MySqlCommand createCommand = new MySqlCommand(query, con);
+                MySqlDataReader dr = createCommand.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    String Id = dr.GetString("id_contact");
+                    String nume = dr.GetString("nume");
+                    String prenume = dr.GetString("prenume");
+                    cmbContact.Items.Add(Id+" "+nume+" "+prenume);
+                }
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         private void btnAddProprietateNoua_Click(object sender, RoutedEventArgs e)
@@ -37,7 +63,10 @@ namespace CRMAgentieImobiliara
                     using (var cmd = new MySqlCommand("INSERT INTO `proprietati` ( `id_contact`, `tip_oferta`, `tip_proprietate`, `judet`, `localitate`, `zona`, `adresa`, `amplasament`, `nr_camere`, `nr_bai`, `etaj`, `nr_etaje_imobil`, `suprafata_utila`, `compartimentare`, `descriere`, `link_oferta`, `pret`, `comision`) VALUES (@Contact, @Oferta, @TipProprietate, @Judet, @Localitate, @Zona, @Adresa, @Amplasament, @NrCamere, @NrBai, @Etaj, @EtajeImobil, @SUtila, @Compartimentare, @Descriere, @LinkOferta, @Pret, @Comision)"))
                     {
                         cmd.Connection = con;
-                        cmd.Parameters.AddWithValue("@Contact", Convert.ToInt32(contactTextBox.Text.ToString()));
+                        string s = cmbContact.Text.ToString();
+                        int index = s.IndexOf(' ');
+                        string idContact = s.Substring(0, index);
+                        cmd.Parameters.AddWithValue("@Contact", Convert.ToInt32(idContact));
                         cmd.Parameters.AddWithValue("@Oferta", cmbTipOferta.Text.ToString());
                         cmd.Parameters.AddWithValue("@TipProprietate", cmbTipProprietate.Text.ToString());
                         cmd.Parameters.AddWithValue("@Judet", cmbJudet.Text.ToString());
@@ -73,5 +102,6 @@ namespace CRMAgentieImobiliara
             }
             
         }
+
     }
 }
