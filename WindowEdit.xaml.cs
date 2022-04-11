@@ -49,7 +49,7 @@ namespace CRMAgentieImobiliara
                 con.Close();
             }
             catch (Exception ex) {
-
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -59,7 +59,7 @@ namespace CRMAgentieImobiliara
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("UPDATE `proprietati` SET (`id_contact`=@idContact, `tip_oferta`=@tipOferta, `tip_proprietate`=@tipProprietate, `judet`=@judet, `localitate`=@localitate, `zona`=@zona, `adresa`=@adresa, `amplasament`=@amplasament, `nr_camere`=@nrCamere, `nr_bai`=@nrBai, `etaj`=@etaj, `nr_etaje_imobil`=@etajeImobil, `suprafata_utila`=@sUtila, `compartimentare`=@compartimentare, `descriere`=@descriere, `link_oferta`=@linkOferta, `pret`=@pret, `comision`=@comision"))
+                    using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `id_contact`=@idContact, `tip_oferta`=@tipOferta, `tip_proprietate`=@tipProprietate, `judet`=@judet, `localitate`=@localitate, `zona`=@zona, `adresa`=@adresa, `amplasament`=@amplasament, `nr_camere`=@nrCamere, `nr_bai`=@nrBai, `etaj`=@etaj, `nr_etaje_imobil`=@etajeImobil, `suprafata_utila`=@sUtila, `compartimentare`=@compartimentare, `descriere`=@descriere, `link_oferta`=@linkOferta, `pret`=@pret, `comision`=@comision where id_proprietate='"+cmbIdEdit.SelectedValue+"'",con))
                     {
                         cmd.Connection = con;
                         string s = cmbContact.Text.ToString();
@@ -124,8 +124,8 @@ namespace CRMAgentieImobiliara
                 }
                 catch (Exception ex)
                 {
-
-                }
+                MessageBox.Show(ex.Message);
+            }
             }
 
             private void WindowEdit_Loaded(object sender, RoutedEventArgs e)
@@ -161,7 +161,7 @@ namespace CRMAgentieImobiliara
                     while (dr.Read())
                     {
                         string idProprietate = dr.GetInt32("id_proprietate").ToString();
-                        MessageBox.Show(idProprietate);
+                        MessageBox.Show("Urmeaza sa editati proprietatea cu ID intern"+idProprietate);
                         string tipOferta = dr.GetString("tip_oferta");
                         string tipProprietate = dr.GetString("tip_proprietate");
                         string idContact = dr.GetInt32("id_contact").ToString();
@@ -180,6 +180,7 @@ namespace CRMAgentieImobiliara
                         string linkOferta = dr.GetString("link_oferta");
                         string pret = dr.GetDouble("pret").ToString();
                         string comision = dr.GetDouble("comision").ToString();
+                        string nrParcari = dr.GetInt32("nr_parcari").ToString();
 
                         cmbIdEdit.Text = idProprietate;
                         cmbTipOferta.Text = tipOferta;
@@ -200,12 +201,13 @@ namespace CRMAgentieImobiliara
                         linkOfertaTextBox.Text = linkOferta;
                         pretTextBox.Text = pret;
                         comisionTextBox.Text = comision;
+                        locuriParcareTextBox.Text = nrParcari;
                     }
                     con.Close();
                 }
                 catch (Exception ex)
                 {
-
+                    MessageBox.Show(ex.Message);
                 }
             }
         

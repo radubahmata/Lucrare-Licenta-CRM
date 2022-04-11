@@ -31,8 +31,8 @@ namespace CRMAgentieImobiliara
 
     public partial class MainWindow : Window
     {
-        ActionState action = ActionState.Nothing;
-        int indexRow;
+        //ActionState action = ActionState.Nothing;
+       
         public MainWindow()
         {
             InitializeComponent();
@@ -50,14 +50,14 @@ namespace CRMAgentieImobiliara
 
         private void btnProprietateNoua_Click(object sender, RoutedEventArgs e)
         {
-            action = ActionState.New;
+         //   action = ActionState.New;
             Window1 window = new Window1();
             window.Show();
         }
 
         private void btnProprietateEdit_Click(object sender, RoutedEventArgs e)
         {
-            action = ActionState.Edit;
+           // action = ActionState.Edit;
             WindowEdit window = new WindowEdit();
             window.Show();
             
@@ -65,7 +65,7 @@ namespace CRMAgentieImobiliara
 
         private void btnProprietateStergere_Click(object sender, RoutedEventArgs e)
         {
-            action = ActionState.Delete;
+            //action = ActionState.Delete;
 
         }
 
