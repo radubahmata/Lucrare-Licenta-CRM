@@ -88,10 +88,11 @@ namespace CRMAgentieImobiliara
                         con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
-                            MessageBox.Show("Record inserted");
+                            MessageBox.Show("Proprietate adaugata!");
+                            this.Close();
                         }
                         else {
-                            MessageBox.Show("Record failed");
+                            MessageBox.Show("Adaugarea proprietatii a esuat!");
                         }
                     }
                 }
@@ -103,5 +104,10 @@ namespace CRMAgentieImobiliara
             
         }
 
+        private void btnViewContacte_Click(object sender, RoutedEventArgs e)
+        {
+            WindowContacte window = new WindowContacte();
+            window.Show();
+        }
     }
 }

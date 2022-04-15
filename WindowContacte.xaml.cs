@@ -54,6 +54,15 @@ namespace CRMAgentieImobiliara
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Contact adaugat");
+                            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+                            MySqlConnection connection = new MySqlConnection(ConnectionString);
+                            MySqlCommand command = new MySqlCommand("select * from contacte", connection);
+                            connection.Open();
+                            DataTable dt = new DataTable();
+                            dt.Load(command.ExecuteReader());
+                            connection.Close();
+                            contacteDataGrid.DataContext = dt;
+                            //this.Close();
                         }
                         else
                         {
@@ -78,6 +87,35 @@ namespace CRMAgentieImobiliara
             dt.Load(cmd.ExecuteReader());
             connection.Close();
             contacteDataGrid.DataContext = dt;
+        }
+
+        private void btnDelContact_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView row_selected = contacteDataGrid.SelectedItem as DataRowView;
+            if (row_selected != null)
+            {
+                string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                string idSters = row_selected["id_contact"].ToString();
+                string query = "DELETE from contacte where id_contact='" + idSters + "'";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                MessageBox.Show("Contact sters!");
+                MySqlCommand refresh = new MySqlCommand("select * from contacte", connection);
+                connection.Open();
+                DataTable dt = new DataTable();
+                dt.Load(refresh.ExecuteReader());
+                connection.Close();
+                contacteDataGrid.DataContext = dt;
+
+            }
+            else
+            {
+                MessageBox.Show("Nu ati selectat nicio proprietate!");
+            }
+
         }
     }
 }

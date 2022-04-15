@@ -16,7 +16,7 @@
 
         <Label VerticalAlignment="Center" Margin="23,261,0,130" HorizontalAlignment="Left" Content="Adresa:" Height="29"/>
         <TextBox x:Name="adresaTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Adresa, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="0" Margin="120,264,0,134" Height="22" HorizontalAlignment="Left"/>
-
+        <Button x:Name="btnViewContacte" Click="btnViewContacte_Click" Background="#FF46C70B" FontFamily="Times New Roman" Content="+" Margin="246,121,524.6,277" RenderTransformOrigin="0.3,-4.268"/>
         <Label VerticalAlignment="Center" Margin="23,303,0,85" HorizontalAlignment="Left" Grid.Column="0" Content="Amplasament:" Height="32"/>
         <ComboBox Name="cmbAmplasament" Margin="119,303,554.6,93" >
             <ComboBoxItem Content="bloc"/>

@@ -12,9 +12,14 @@
 
             <TabItem Header="Manager Proprietati">
                 <Grid Background="#2e3137">
-                    <DataGrid Name="proprietatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,146" Width="768" ItemsSource="{Binding}" CanUserResizeRows="True">
+                    <DataGrid Name="proprietatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,146" Width="768" ItemsSource="{Binding}" CanUserResizeRows="True" >
+                        <DataGrid.ItemContainerStyle>
+                            <Style TargetType="DataGridRow">
+                                <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
+                            </Style>
+                        </DataGrid.ItemContainerStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Path=id_proprietate}" Header="ID" Width="Auto" IsReadOnly="True" />
+                            <DataGridTextColumn x:Name="id_proprietate" Binding="{Binding Path=id_proprietate}" Header="ID" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=id_contact}" Header="Contact" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=tip_oferta}" Header="Oferta" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=tip_proprietate}" Header="Tip" Width="Auto" IsReadOnly="True" />

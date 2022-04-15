@@ -24,12 +24,95 @@ namespace CRMAgentieImobiliara
     /// </summary>
     public partial class WindowEdit : Window
     {
-
-        public WindowEdit()
+        string idEd;
+        public WindowEdit(string idEditat)
         {
+
             InitializeComponent();
             fillComboId();
             fillComboIdContact();
+            idEd = idEditat;
+
+            string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection con = new MySqlConnection(connectionString);
+            string query = "select * from proprietati where id_proprietate='" + idEd + "';";
+            MySqlCommand cmd = new MySqlCommand(query, con);
+            MySqlDataReader dr;
+            try
+            {
+                con.Open();
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    string idProp = idEd;
+                    //string idProprietate = dr.GetInt32("id_proprietate").ToString();
+                    //MessageBox.Show("Urmeaza sa editati proprietatea cu ID intern"+idProp);
+                    /*string tipOferta = dr.GetString("tip_oferta");
+                    string tipProprietate = dr.GetString("tip_proprietate");
+                    */
+                   
+                    /* string judet = dr.GetString("judet");
+                     string localitate = dr.GetString("localitate");
+                     string zona = dr.GetString("zona");
+                     string adresa = dr.GetString("adresa");
+                     string amplasament = dr.GetString("amplasament");
+                     string nrCamere = dr.GetInt32("nr_camere").ToString();
+                     string nrBai = dr.GetInt32("nr_bai").ToString();
+                     string etaj = dr.GetString("etaj");
+                     string etajeImobil = dr.GetString("nr_etaje_imobil");
+                     string sUtila = dr.GetDouble("suprafata_utila").ToString();
+                     string compartimentare = dr.GetString("compartimentare");
+                     string descriere = dr.GetString("descriere");
+                     string linkOferta = dr.GetString("link_oferta");
+                     string pret = dr.GetDouble("pret").ToString();
+                     string comision = dr.GetDouble("comision").ToString();
+                     // string nrParcari = dr.GetInt32("nr_parcari").ToString();
+                     */
+                    
+                    cmbIdEdit.Text = idProp;
+                    cmbTipOferta.Text = dr.GetString("tip_oferta");
+                    cmbTipProprietate.Text = dr.GetString("tip_proprietate");
+                    //cmbContact.Text = dr.GetString("id_contact");
+                    cmbJudet.Text = dr.GetString("judet");
+                    localitateTextBox.Text = dr.GetString("localitate");
+                    zonaTextBox.Text = dr.GetString("zona");
+                    adresaTextBox.Text = dr.GetString("adresa");
+                    cmbAmplasament.Text = dr.GetString("amplasament");
+                    nrCamereTextBox.Text = dr.GetInt32("nr_camere").ToString();
+                    nrBaiTextBox.Text = dr.GetInt32("nr_bai").ToString();
+                    etajTextBox.Text = dr.GetString("etaj");
+                    etajeimobilTextBox.Text = dr.GetString("nr_etaje_imobil");
+                    suprafataUtilaTextBox.Text = dr.GetDouble("suprafata_utila").ToString();
+                    cmbCompartimentare.Text = dr.GetString("compartimentare");
+                    descriereTextBox.Text = dr.GetString("descriere");
+                    linkOfertaTextBox.Text = dr.GetString("link_oferta");
+                    pretTextBox.Text = dr.GetDouble("pret").ToString();
+                    comisionTextBox.Text = dr.GetDouble("comision").ToString();
+                    //locuriParcareTextBox.Text = nrParcari;
+                    
+                    
+                }
+                dr.Close();
+                
+                string idContact = dr.GetString("id_contact");
+                string queryContact = "select * from contacte where id_contact='" + idContact + "'";
+                MySqlCommand cmdJoinContact = new MySqlCommand(queryContact, con);
+                MySqlDataReader drContact = cmdJoinContact.ExecuteReader();
+                while (drContact.Read())
+                {
+                    String Id = dr.GetString("id_contact");
+                    String nume = dr.GetString("nume");
+                    String prenume = dr.GetString("prenume");
+                    cmbContact.Text = Id + " " + nume + " " + prenume;
+                    
+                }
+                drContact.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
 
@@ -46,6 +129,7 @@ namespace CRMAgentieImobiliara
                     int Id = dr.GetInt32("id_proprietate");
                     cmbIdEdit.Items.Add(Id);
                 }
+                dr.Close();
                 con.Close();
             }
             catch (Exception ex) {
@@ -88,6 +172,7 @@ namespace CRMAgentieImobiliara
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Record updated");
+                            this.Close();
                         }
                         else
                         {
@@ -110,8 +195,8 @@ namespace CRMAgentieImobiliara
                 {
                     con.Open();
                     string query = "select * from contacte";
-                    MySqlCommand createCommand = new MySqlCommand(query, con);
-                    MySqlDataReader dr = createCommand.ExecuteReader();
+                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    MySqlDataReader dr = cmd.ExecuteReader();
 
                     while (dr.Read())
                     {
@@ -121,6 +206,7 @@ namespace CRMAgentieImobiliara
                         cmbContact.Items.Add(Id + " " + nume + " " + prenume);
                     }
                     con.Close();
+                dr.Close();
                 }
                 catch (Exception ex)
                 {
@@ -145,71 +231,7 @@ namespace CRMAgentieImobiliara
                  */
             }
 
-            private void cmbIdEdit_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            {
-                MySqlConnection con = new MySqlConnection(connectionString);
-                string query = "select * from proprietati where id_proprietate='" + cmbIdEdit.SelectedValue + "';";
-                MySqlCommand cmd = new MySqlCommand(query, con);
-                MySqlDataReader dr;
-                try
-                {
-                    con.Open();
-                    dr = cmd.ExecuteReader();
-
-
-
-                    while (dr.Read())
-                    {
-                        string idProprietate = dr.GetInt32("id_proprietate").ToString();
-                        MessageBox.Show("Urmeaza sa editati proprietatea cu ID intern"+idProprietate);
-                        string tipOferta = dr.GetString("tip_oferta");
-                        string tipProprietate = dr.GetString("tip_proprietate");
-                        string idContact = dr.GetInt32("id_contact").ToString();
-                        string judet = dr.GetString("judet");
-                        string localitate = dr.GetString("localitate");
-                        string zona = dr.GetString("zona");
-                        string adresa = dr.GetString("adresa");
-                        string amplasament = dr.GetString("amplasament");
-                        string nrCamere = dr.GetInt32("nr_camere").ToString();
-                        string nrBai = dr.GetInt32("nr_bai").ToString();
-                        string etaj = dr.GetString("etaj");
-                        string etajeImobil = dr.GetString("nr_etaje_imobil");
-                        string sUtila = dr.GetDouble("suprafata_utila").ToString();
-                        string compartimentare = dr.GetString("compartimentare");
-                        string descriere = dr.GetString("descriere");
-                        string linkOferta = dr.GetString("link_oferta");
-                        string pret = dr.GetDouble("pret").ToString();
-                        string comision = dr.GetDouble("comision").ToString();
-                        string nrParcari = dr.GetInt32("nr_parcari").ToString();
-
-                        cmbIdEdit.Text = idProprietate;
-                        cmbTipOferta.Text = tipOferta;
-                        cmbTipProprietate.Text = tipProprietate;
-                        cmbContact.SelectedValue = idContact;
-                        cmbJudet.Text = judet;
-                        localitateTextBox.Text = localitate;
-                        zonaTextBox.Text = zona;
-                        adresaTextBox.Text = adresa;
-                        cmbAmplasament.Text = amplasament;
-                        nrCamereTextBox.Text = nrCamere;
-                        nrBaiTextBox.Text = nrBai;
-                        etajTextBox.Text = etaj;
-                        etajeimobilTextBox.Text = etajeImobil;
-                        suprafataUtilaTextBox.Text = sUtila;
-                        cmbCompartimentare.Text = compartimentare;
-                        descriereTextBox.Text = descriere;
-                        linkOfertaTextBox.Text = linkOferta;
-                        pretTextBox.Text = pret;
-                        comisionTextBox.Text = comision;
-                        locuriParcareTextBox.Text = nrParcari;
-                    }
-                    con.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            
         
     } 
 }

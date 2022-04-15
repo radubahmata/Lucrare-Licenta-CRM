@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Configuration;
+using System.Windows.Controls;
 
 namespace CRMAgentieImobiliara
 {
@@ -57,15 +58,46 @@ namespace CRMAgentieImobiliara
 
         private void btnProprietateEdit_Click(object sender, RoutedEventArgs e)
         {
-           // action = ActionState.Edit;
-            WindowEdit window = new WindowEdit();
-            window.Show();
-            
+            // action = ActionState.Edit;
+            DataRowView row_selected = proprietatiDataGrid.SelectedItem as DataRowView;
+            if (row_selected != null)
+            {
+                string idEditat = row_selected["id_proprietate"].ToString();
+                WindowEdit window = new WindowEdit(idEditat);
+                window.Show();
+            }
+            else {
+                MessageBox.Show("Nu ati selectat nicio proprietate!");
+            }
         }
 
         private void btnProprietateStergere_Click(object sender, RoutedEventArgs e)
         {
             //action = ActionState.Delete;
+            DataRowView row_selected = proprietatiDataGrid.SelectedItem as DataRowView;
+            if (row_selected != null)
+            {
+                string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                string idSters = row_selected["id_proprietate"].ToString();
+                string query = "DELETE from proprietati where id_proprietate='" + idSters + "'";
+                MySqlCommand cmd = new MySqlCommand(query,connection);
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                MessageBox.Show("Proprietate stearsa!");
+                MySqlCommand refresh = new MySqlCommand("select * from proprietati", connection);
+                connection.Open();
+                DataTable dt = new DataTable();
+                dt.Load(refresh.ExecuteReader());
+                connection.Close();
+                proprietatiDataGrid.DataContext = dt;
+
+            }
+            else
+            {
+                MessageBox.Show("Nu ati selectat nicio proprietate!");
+            }
 
         }
 
@@ -86,6 +118,18 @@ namespace CRMAgentieImobiliara
             WindowContacte window = new WindowContacte();
             window.Show();
 
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataRowView row_selected = proprietatiDataGrid.SelectedItem as DataRowView;
+            if (row_selected != null)
+            {
+                string idDetalii = row_selected["id_proprietate"].ToString();
+                DetailsWindow windowDetalii = new DetailsWindow(idDetalii);
+                windowDetalii.Show();
+            }
+            
         }
     }
 }
