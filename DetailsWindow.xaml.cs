@@ -37,15 +37,16 @@ namespace CRMAgentieImobiliara
                 while (dr.Read())
                 {
                
-                    string tipOferta = dr.GetString("tip_oferta");
-                    string tipProprietate = dr.GetString("tip_proprietate");
+                    string tipOferta = dr.GetString("tip_oferta").ToUpper();
+                    string tipProprietate = dr.GetString("tip_proprietate").ToUpper();
                     string nrCamere = dr.GetInt32("nr_camere").ToString();
+                    string zona = dr.GetString("zona").ToString().ToUpper();
                     if (nrCamere == "1")
                     {
-                        txtTitle.Text = tipOferta + " " + tipProprietate + " " + nrCamere + " camera";
+                        txtTitle.Text = tipOferta + " " + tipProprietate + " " + nrCamere + " CAMERA " + zona;
                     }
                     else {
-                        txtTitle.Text = tipOferta + " " + tipProprietate + " " + nrCamere + " camere";
+                        txtTitle.Text = tipOferta + " " + tipProprietate + " " + nrCamere + " CAMERE " + zona;
                     }
                 }
             } 
