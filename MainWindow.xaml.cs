@@ -47,6 +47,14 @@ namespace CRMAgentieImobiliara
             dt.Load(cmd.ExecuteReader());
             connection.Close();
             proprietatiDataGrid.DataContext = dt;
+
+            MySqlCommand cmdActivitati = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
+            connection.Open();
+            DataTable dtActivitati = new DataTable();
+            dtActivitati.Load(cmdActivitati.ExecuteReader());
+            connection.Close();
+            activitatiDataGrid.DataContext = dtActivitati;
+            MessageBox.Show(DateTime.Now.ToString("dddd, dd-MM-yyyy HH:mm"));
         }
 
         private void btnProprietateNoua_Click(object sender, RoutedEventArgs e)
@@ -130,6 +138,19 @@ namespace CRMAgentieImobiliara
                 windowDetalii.Show();
             }
             
+        }
+
+        private void activitatiDataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataRowView row_selected = activitatiDataGrid.SelectedItem as DataRowView;
+            if (row_selected != null)
+            {
+                string idActivitate = row_selected["id"].ToString();
+                DetaliiActivitate windowDetaliiActivitate = new DetaliiActivitate(idActivitate);
+                windowDetaliiActivitate.Show();
+               // DetailsWindow windowDetalii = new DetailsWindow(idDetalii);
+               // windowDetalii.Show();
+            }
         }
     }
 }

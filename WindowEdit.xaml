@@ -9,54 +9,57 @@
         Loaded="WindowEdit_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="677*"/>
-            <ColumnDefinition Width="117*"/>
+            <ColumnDefinition Width="362*"/>
+            <ColumnDefinition Width="61*"/>
         </Grid.ColumnDefinitions>
         <Label VerticalAlignment="Center" Margin="28,20,0,391.4" HorizontalAlignment="Left" Grid.Column="0" Content="Id Editat" Height="23" Width="87"/>
-        <ComboBox Name="cmbIdEdit" Margin="124,18,476.6,389.4" />
+        <ComboBox Name="cmbIdEdit" Margin="124,18,477,389.4" />
 
-        <Label VerticalAlignment="Center" Margin="27,74,0,334.4" HorizontalAlignment="Left" Content="Tip Oferta:"/>
-        <ComboBox Name="cmbTipOferta" Margin="123,73,477.6,333.4" >
+        <Label VerticalAlignment="Center" Margin="27,74,0,334.4" HorizontalAlignment="Left" Content="Tip Oferta:" Height="26" Width="66"/>
+        <ComboBox Name="cmbTipOferta" Margin="123,73,478,333.4" >
             <ComboBoxItem Content="vanzare"/>
             <ComboBoxItem Content="inchiriere"/>
             <ComboBoxItem Content="regim hotelier"/>
         </ComboBox>
 
-        <Label VerticalAlignment="Center" Margin="29,337,0,71.4" HorizontalAlignment="Left" Content="Adresa:"/>
+        <Label VerticalAlignment="Center" Margin="29,337,0,71.4" HorizontalAlignment="Left" Content="Adresa:" Height="26" Width="50"/>
         <TextBox x:Name="adresaTextBox" Width="120" VerticalAlignment="Center" Grid.Row="0" Margin="124,339,0,73.4" Height="22" HorizontalAlignment="Left"/>
 
-        <Label VerticalAlignment="Center" Margin="27,387,0,19.4" HorizontalAlignment="Left" Grid.Column="0" Content="Amplasament:" Height="28"/>
-        <ComboBox Name="cmbAmplasament" Margin="124,387,477.6,19.4" >
+        <Label VerticalAlignment="Center" Margin="27,387,0,19.4" HorizontalAlignment="Left" Grid.Column="0" Content="Amplasament:" Height="28" Width="85"/>
+        <ComboBox Name="cmbAmplasament" Margin="124,387,478,19.4" >
             <ComboBoxItem Content="bloc"/>
             <ComboBoxItem Content="casa/vila"/>
         </ComboBox>
 
-        <Label VerticalAlignment="Center" Margin="584,134,0,275.4" HorizontalAlignment="Left" Grid.Column="0" Content="Pret:" RenderTransformOrigin="0.69,-0.183" Height="25"/>
+        <Label VerticalAlignment="Center" Margin="584,134,0,275.4" HorizontalAlignment="Left" Grid.Column="0" Content="Pret:" RenderTransformOrigin="0.69,-0.183" Height="25" Width="34"/>
         <TextBox x:Name="pretTextBox" Width="120" VerticalAlignment="Center" Margin="664,136,0,275.4" Height="23" HorizontalAlignment="Left" Grid.ColumnSpan="2"/>
 
-        <Label VerticalAlignment="Center" Margin="584,177,0,226.4" HorizontalAlignment="Left" Grid.Column="0" Content="Comision:" RenderTransformOrigin="0.69,-0.183" Height="31"/>
+        <Label VerticalAlignment="Center" Margin="584,177,0,226.4" HorizontalAlignment="Left" Grid.Column="0" Content="Comision:" RenderTransformOrigin="0.69,-0.183" Height="31" Width="62"/>
         <TextBox x:Name="comisionTextBox" Width="120" VerticalAlignment="Center" Margin="664,181,0,230.4" Height="23" HorizontalAlignment="Left" Grid.ColumnSpan="2"/>
 
 
-        <Label VerticalAlignment="Center" Margin="296,274,0,132.4" HorizontalAlignment="Left" Grid.Column="0" Content="Compartimentare:" Height="28"/>
-        <ComboBox Name="cmbCompartimentare" Margin="418,276,183.6,129.4" >
+        <Label VerticalAlignment="Center" Margin="296,274,0,132.4" HorizontalAlignment="Left" Grid.Column="0" Content="Compartimentare:" Height="28" Width="106"/>
+        <ComboBox Name="cmbCompartimentare" Margin="418,276,184,129.4" >
             <ComboBoxItem Content="decomandat"/>
             <ComboBoxItem Content="semidecomandat"/>
             <ComboBoxItem Content="circular"/>
             <ComboBoxItem Content="vagon"/>
         </ComboBox>
 
-        <Label VerticalAlignment="Center" Margin="584,18,0,389.4" HorizontalAlignment="Left" Grid.Column="0" Content="Descriere:" Height="27"/>
+        <Label VerticalAlignment="Center" Margin="584,18,0,389.4" HorizontalAlignment="Left" Grid.Column="0" Content="Descriere:" Height="27" Width="62"/>
         <TextBox x:Name="descriereTextBox" Width="120" VerticalAlignment="Center" Margin="664,18,0,335.4" Height="81" HorizontalAlignment="Left" Grid.ColumnSpan="2"/>
 
-        <Label VerticalAlignment="Center" Margin="299,125,0,280.4" HorizontalAlignment="Left" Grid.Column="0" Content="Etaj:" RenderTransformOrigin="0.509,0" Height="29"/>
+        <Label VerticalAlignment="Center" Margin="299,125,0,280.4" HorizontalAlignment="Left" Grid.Column="0" Content="Etaj:" RenderTransformOrigin="0.509,0" Height="29" Width="32"/>
         <TextBox x:Name="etajTextBox" Width="120" VerticalAlignment="Center" Margin="418,130,0,280.4" Height="24" HorizontalAlignment="Left"/>
 
         <Label VerticalAlignment="Center" Margin="299,179,0,226.4" HorizontalAlignment="Left" Grid.Column="0" Content="Etaje imobil:" RenderTransformOrigin="0.509,0" Width="104" Height="29"/>
         <TextBox x:Name="etajeimobilTextBox" Width="120" VerticalAlignment="Center" Margin="418,184,0,226.4" Height="24" HorizontalAlignment="Left"/>
 
-        <Label VerticalAlignment="Center" Margin="31,212,0,196.4" HorizontalAlignment="Left" Grid.Column="0" Content="Judet:"/>
-        <ComboBox Name="cmbJudet" Margin="123,214,477.6,194.4">
+        <Image Name="imgThumb" Margin="584,219,60.4,116.4" Grid.ColumnSpan="2"/>
+        <Button Name="btChange" Content="Schimba" Margin="584,325,78,71.4" Click="btChange_Click" RenderTransformOrigin="0.326,2.068"/>
+
+        <Label VerticalAlignment="Center" Margin="31,212,0,196.4" HorizontalAlignment="Left" Grid.Column="0" Content="Judet:" Height="26" Width="42"/>
+        <ComboBox Name="cmbJudet" Margin="123,214,478,194.4">
             <ComboBoxItem Content="B"/>
             <ComboBoxItem Content="AB"/>
             <ComboBoxItem Content="AR"/>
@@ -100,20 +103,20 @@
             <ComboBoxItem Content="VS"/>
             <ComboBoxItem Content="VN"/>
         </ComboBox>
-        <Label VerticalAlignment="Center" Margin="299,367,0,38.4" HorizontalAlignment="Left" Grid.Column="0" Content="Link Oferta:" Height="29"/>
+        <Label VerticalAlignment="Center" Margin="299,367,0,38.4" HorizontalAlignment="Left" Grid.Column="0" Content="Link Oferta:" Height="29" Width="70"/>
         <TextBox x:Name="linkOfertaTextBox" Width="120" VerticalAlignment="Center"  Margin="418,370,0,39.4" Height="25" HorizontalAlignment="Left"/>
 
-        <Label VerticalAlignment="Center" Margin="296,316,0,89.4" HorizontalAlignment="Left" Grid.Column="0" Content="Locuri Parcare:" RenderTransformOrigin="1.693,7.383" Height="29"/>
+        <Label VerticalAlignment="Center" Margin="296,316,0,89.4" HorizontalAlignment="Left" Grid.Column="0" Content="Locuri Parcare:" RenderTransformOrigin="1.693,7.383" Height="29" Width="86"/>
         <TextBox x:Name="locuriParcareTextBox" Width="120" VerticalAlignment="Center" Margin="418,318,0,90.4" Height="26" HorizontalAlignment="Left"/>
 
-        <Label VerticalAlignment="Center" Margin="299,16,0,383.4" HorizontalAlignment="Left" Grid.Column="0" Content="Nr Camere:" Height="35"/>
+        <Label VerticalAlignment="Center" Margin="299,16,0,383.4" HorizontalAlignment="Left" Grid.Column="0" Content="Nr Camere:" Height="35" Width="70"/>
         <TextBox x:Name="nrCamereTextBox" Width="120" VerticalAlignment="Center" Margin="418,23,0,389.4" Height="22" HorizontalAlignment="Left"/>
 
-        <Label VerticalAlignment="Center" Margin="296,228,0,178.4" HorizontalAlignment="Left" Content="Suprafata Utila:" Height="28"/>
+        <Label VerticalAlignment="Center" Margin="296,228,0,178.4" HorizontalAlignment="Left" Content="Suprafata Utila:" Height="28" Width="91"/>
         <TextBox x:Name="suprafataUtilaTextBox" Width="120" VerticalAlignment="Center"  Margin="418,230,0,178.4" Height="26" HorizontalAlignment="Left"/>
 
-        <Label VerticalAlignment="Center" Margin="27,123,0,285.4" HorizontalAlignment="Left" Content="Tip Proprietate:"/>
-        <ComboBox Name="cmbTipProprietate"  Margin="124,122,476.6,281.4">
+        <Label VerticalAlignment="Center" Margin="27,123,0,285.4" HorizontalAlignment="Left" Content="Tip Proprietate:" Height="26" Width="91"/>
+        <ComboBox Name="cmbTipProprietate"  Margin="124,122,477,281.4">
             <ComboBoxItem Content="apartament"/>
             <ComboBoxItem Content="casa/vila"/>
             <ComboBoxItem Content="teren"/>
@@ -121,18 +124,18 @@
             <ComboBoxItem Content="hotel/pensiune"/>
         </ComboBox>
 
-        <Label VerticalAlignment="Center" Margin="28,295,0,113.4" HorizontalAlignment="Left" Content="Zona:"/>
+        <Label VerticalAlignment="Center" Margin="28,295,0,113.4" HorizontalAlignment="Left" Content="Zona:" Height="26" Width="40"/>
         <TextBox x:Name="zonaTextBox" Width="120" VerticalAlignment="Center" Margin="124,295,0,116.4" Height="23" HorizontalAlignment="Left"/>
 
         <Label VerticalAlignment="Center" Margin="296,70,0,337.4" HorizontalAlignment="Left" Content="Nr Bai:" Height="27" Width="70"/>
         <TextBox x:Name="nrBaiTextBox" Width="120" VerticalAlignment="Center" Margin="417,73,0,335.4" Height="26" HorizontalAlignment="Left"/>
 
         <Label VerticalAlignment="Center" Margin="28,171,0,240.4" HorizontalAlignment="Left" Grid.Column="0" Content="Contact" Height="23" Width="87"/>
-        <ComboBox Name="cmbContact" Margin="124,169,476.6,234.4"/>
+        <ComboBox Name="cmbContact" Margin="124,169,477,234.4"/>
         <Label VerticalAlignment="Center" Margin="27,255,0,153.4" HorizontalAlignment="Left" Content="Localitate:" Width="87" Height="26"/>
         <TextBox x:Name="localitateTextBox" Width="120" VerticalAlignment="Center" Margin="124,257,0,154.4" Height="23" HorizontalAlignment="Left"/>
 
-        <Button x:Name="btnUpdateProprietate" Click="btnUpdateProprietate_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Actualizeaza" Margin="30.4,391,10.4,10.4" Grid.Column="1"/>
+        <Button x:Name="btnUpdateProprietate" Click="btnUpdateProprietate_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Actualizeaza" Margin="30,391,10.4,10.4" Grid.Column="1"/>
 
     </Grid>
 </Window>

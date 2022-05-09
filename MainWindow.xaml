@@ -26,19 +26,17 @@
                             <DataGridTextColumn Binding="{Binding Path=judet}" Header="Judet" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=localitate}" Header="Localitate" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=zona}" Header="Zona" Width="Auto" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Path=adresa}" Header="Adresa" Width="Auto" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Path=amplasament}" Header="Amplasament" Width="Auto" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Path=nr_camere}" Header="Nr Camere" Width="Auto" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Path=nr_bai}" Header="Nr Bai" Width="Auto" IsReadOnly="True" />
+
+
+                            <DataGridTextColumn Binding="{Binding Path=nr_camere}" Header="Camere" Width="Auto" IsReadOnly="True" />
+                            <DataGridTextColumn Binding="{Binding Path=nr_bai}" Header="Bai" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=etaj}" Header="Etaj" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=nr_etaje_imobil}" Header="Etaje imobil" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=suprafata_utila}" Header="S. Utila" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=compartimentare}" Header="Compartimentare" Width="Auto" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Path=descriere}" Header="Descriere" Width="Auto" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Path=link_oferta}" Header="Link Oferta" Width="Auto" IsReadOnly="True" />
+
+
                             <DataGridTextColumn Binding="{Binding Path=pret}" Header="Pret" Width="Auto" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Path=comision}" Header="Comision" Width="Auto" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Path=imagini}" Header="Imagini" Width="Auto" IsReadOnly="True" />
                         </DataGrid.Columns>
                     </DataGrid>
                     <Button Content="Refresh" Height="25" HorizontalAlignment="Left" Margin="678,246,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="100" Click="btnRefresh_Click" />
@@ -51,7 +49,25 @@
             </TabItem>
 
             <TabItem Header="Calendar Activitati">
-                <Grid Background="#2e3137"/>
+                <Grid Background="#2e3137">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="365*"/>
+                        <ColumnDefinition Width="423*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid Name="activitatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="26,29,0,127" Width="272" ItemsSource="{Binding}" CanUserResizeRows="True">
+                        <DataGrid.ItemContainerStyle>
+                            <Style TargetType="DataGridRow">
+                                <EventSetter Event="MouseDoubleClick" Handler="activitatiDataGridRow_MouseDoubleClick"/>
+                            </Style>
+                        </DataGrid.ItemContainerStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=id}" Header="Id" Width="Auto" IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding Path=tip}" Header="Activitate" Width="Auto" IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding Path=data}" Header="Data" Width="Auto" IsReadOnly="True"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </TabItem>
             <TabItem Header="Cereri">
                 <Grid Background="#2e3137"/>

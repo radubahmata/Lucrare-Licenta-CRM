@@ -13,7 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using MySql.Data.MySqlClient;
+using System.Drawing.Imaging;
+using Microsoft.Win32;
 
 namespace CRMAgentieImobiliara
 {
@@ -22,6 +25,9 @@ namespace CRMAgentieImobiliara
     /// </summary>
     public partial class Window1 : Window
     {
+        String connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
+        DataSet dataSet;
+        string stringName, imageName;
         public Window1()
         {
             InitializeComponent();
@@ -55,17 +61,34 @@ namespace CRMAgentieImobiliara
 
         private void btnAddProprietateNoua_Click(object sender, RoutedEventArgs e)
         {
-            String connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
+            
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `proprietati` ( `id_contact`, `tip_oferta`, `tip_proprietate`, `judet`, `localitate`, `zona`, `adresa`, `amplasament`, `nr_camere`, `nr_bai`, `etaj`, `nr_etaje_imobil`, `suprafata_utila`, `compartimentare`, `descriere`, `link_oferta`, `pret`, `comision`) VALUES (@Contact, @Oferta, @TipProprietate, @Judet, @Localitate, @Zona, @Adresa, @Amplasament, @NrCamere, @NrBai, @Etaj, @EtajeImobil, @SUtila, @Compartimentare, @Descriere, @LinkOferta, @Pret, @Comision)"))
+                    using (var cmd = new MySqlCommand("INSERT INTO `proprietati` ( `id_contact`, `tip_oferta`, `tip_proprietate`, `judet`, `localitate`, `zona`, `adresa`, `amplasament`, `nr_camere`, `nr_bai`, `etaj`, `nr_etaje_imobil`, `suprafata_utila`, `compartimentare`, `descriere`, `link_oferta`, `pret`, `comision`,`imagini`) VALUES (@Contact, @Oferta, @TipProprietate, @Judet, @Localitate, @Zona, @Adresa, @Amplasament, @NrCamere, @NrBai, @Etaj, @EtajeImobil, @SUtila, @Compartimentare, @Descriere, @LinkOferta, @Pret, @Comision, @Img)"))
                     {
                         cmd.Connection = con;
                         string s = cmbContact.Text.ToString();
                         int index = s.IndexOf(' ');
                         string idContact = s.Substring(0, index);
+                        byte[] imageByteArray;
+                        try
+                        {
+                            if (imageName != null)
+                            {
+                                FileStream fs = new FileStream(imageName, FileMode.Open, FileAccess.Read);
+                                imageByteArray = new byte[fs.Length];
+                                fs.Read(imageByteArray, 0, Convert.ToInt32(fs.Length));
+                                fs.Close();
+                                cmd.Parameters.Add(new MySqlParameter("Img", imageByteArray));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
                         cmd.Parameters.AddWithValue("@Contact", Convert.ToInt32(idContact));
                         cmd.Parameters.AddWithValue("@Oferta", cmbTipOferta.Text.ToString());
                         cmd.Parameters.AddWithValue("@TipProprietate", cmbTipProprietate.Text.ToString());
@@ -84,7 +107,7 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@LinkOferta", linkOfertaTextBox.Text.ToString());
                         cmd.Parameters.AddWithValue("@Pret", float.Parse((pretTextBox.Text.ToString()),CultureInfo.InvariantCulture.NumberFormat));
                         cmd.Parameters.AddWithValue("@Comision", float.Parse((comisionTextBox.Text.ToString()), CultureInfo.InvariantCulture.NumberFormat));
-
+                        
                         con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
@@ -109,5 +132,50 @@ namespace CRMAgentieImobiliara
             WindowContacte window = new WindowContacte();
             window.Show();
         }
+
+        private void btnBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            try {
+                FileDialog dialog = new OpenFileDialog();
+                dialog.InitialDirectory = Environment.SpecialFolder.MyPictures.ToString();
+                dialog.Filter = "Imagine (*.jpg;*.png;*.jpeg)|*.jpg;*.png;*.jpeg";
+                dialog.ShowDialog();
+                {
+                    stringName = dialog.SafeFileName;
+                    imageName = dialog.FileName;
+                    ImageSourceConverter isc = new ImageSourceConverter();
+                    ///image1.SetVa
+                }
+                dialog = null;
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message.ToString());
+            }
+        }
+
+      /*  private void insertImgData()
+        {
+            try {
+                if (imageName != null)
+                {
+                    FileStream fs = new FileStream(imageName, FileMode.Open, FileAccess.Read);
+                    byte[] imageByteArray = new byte[fs.Length];
+                    fs.Read(imageByteArray, 0, Convert.ToInt32(fs.Length));
+                    fs.Close();
+                    using (MySqlConnection imgcon = new MySqlConnection(connectionString))
+                    {
+                        imgcon.Open();
+                        string instructiune = "insert into proprietati (imagini) values @img";
+                        using (MySqlCommand imgcmd = new MySqlCommand(instructiune, imgcon))
+                        { 
+                            imgcmd.Parameters.
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show(e.Message);
+            }
+        }*/
     }
 }

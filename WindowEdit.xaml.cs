@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Globalization;
+using Microsoft.Win32;
+using System.Drawing.Imaging;
 
 
 namespace CRMAgentieImobiliara
@@ -25,6 +28,7 @@ namespace CRMAgentieImobiliara
     public partial class WindowEdit : Window
     {
         string idEd;
+        string stringName, imageName;
         public WindowEdit(string idEditat)
         {
 
@@ -35,12 +39,14 @@ namespace CRMAgentieImobiliara
 
             string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection con = new MySqlConnection(connectionString);
+            MySqlConnection conContact = new MySqlConnection(connectionString);
             string query = "select * from proprietati where id_proprietate='" + idEd + "';";
             MySqlCommand cmd = new MySqlCommand(query, con);
             MySqlDataReader dr;
             try
             {
                 con.Open();
+                conContact.Open();
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -89,30 +95,50 @@ namespace CRMAgentieImobiliara
                     pretTextBox.Text = dr.GetDouble("pret").ToString();
                     comisionTextBox.Text = dr.GetDouble("comision").ToString();
                     //locuriParcareTextBox.Text = nrParcari;
+
+                    byte[] imgblob = (byte[])dr["imagini"];
+                    if (imgblob != null)
+                    {
+                        MemoryStream stream = new MemoryStream();
+                        stream.Write(imgblob, 0, imgblob.Length);
+                        stream.Position = 0;
+                        System.Drawing.Image img = System.Drawing.Image.FromStream(stream);
+                        BitmapImage bi = new BitmapImage();
+                        bi.BeginInit();
+
+                        MemoryStream ms = new MemoryStream();
+                        img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        ms.Seek(0, SeekOrigin.Begin);
+                        bi.StreamSource = ms;
+                        bi.EndInit();
+                        imgThumb.Source = bi;
+                    }
+                    string idContact = dr.GetString("id_contact");
+                    string queryContact = "select * from contacte where id_contact='" + idContact + "'";
+                    MySqlCommand cmdJoinContact = new MySqlCommand(queryContact, conContact);
+                    MySqlDataReader drContact = cmdJoinContact.ExecuteReader();
+                    while (drContact.Read())
+                    {
+                        String Id = drContact.GetString("id_contact");
+                        String nume = drContact.GetString("nume");
+                        String prenume = drContact.GetString("prenume");
+                        cmbContact.Text = Id + " " + nume + " " + prenume;
+
+                    }
+                    drContact.Close();
+                    conContact.Close();
                     
-                    
+
                 }
                 dr.Close();
-                
-                string idContact = dr.GetString("id_contact");
-                string queryContact = "select * from contacte where id_contact='" + idContact + "'";
-                MySqlCommand cmdJoinContact = new MySqlCommand(queryContact, con);
-                MySqlDataReader drContact = cmdJoinContact.ExecuteReader();
-                while (drContact.Read())
-                {
-                    String Id = dr.GetString("id_contact");
-                    String nume = dr.GetString("nume");
-                    String prenume = dr.GetString("prenume");
-                    cmbContact.Text = Id + " " + nume + " " + prenume;
-                    
-                }
-                drContact.Close();
                 con.Close();
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            
         }
         string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
 
@@ -143,12 +169,29 @@ namespace CRMAgentieImobiliara
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `id_contact`=@idContact, `tip_oferta`=@tipOferta, `tip_proprietate`=@tipProprietate, `judet`=@judet, `localitate`=@localitate, `zona`=@zona, `adresa`=@adresa, `amplasament`=@amplasament, `nr_camere`=@nrCamere, `nr_bai`=@nrBai, `etaj`=@etaj, `nr_etaje_imobil`=@etajeImobil, `suprafata_utila`=@sUtila, `compartimentare`=@compartimentare, `descriere`=@descriere, `link_oferta`=@linkOferta, `pret`=@pret, `comision`=@comision where id_proprietate='"+cmbIdEdit.SelectedValue+"'",con))
+                    using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `id_contact`=@idContact, `tip_oferta`=@tipOferta, `tip_proprietate`=@tipProprietate, `judet`=@judet, `localitate`=@localitate, `zona`=@zona, `adresa`=@adresa, `amplasament`=@amplasament, `nr_camere`=@nrCamere, `nr_bai`=@nrBai, `etaj`=@etaj, `nr_etaje_imobil`=@etajeImobil, `suprafata_utila`=@sUtila, `compartimentare`=@compartimentare, `descriere`=@descriere, `link_oferta`=@linkOferta, `pret`=@pret, `comision`=@comision, `imagini`=@Img where id_proprietate='"+cmbIdEdit.SelectedValue+"'",con))
                     {
                         cmd.Connection = con;
                         string s = cmbContact.Text.ToString();
                         int index = s.IndexOf(' ');
                         string idContact = s.Substring(0, index);
+                        byte[] imageByteArray;
+                        try
+                        {
+                            if (imageName != null)
+                            {
+                                FileStream fs = new FileStream(imageName, FileMode.Open, FileAccess.Read);
+                                imageByteArray = new byte[fs.Length];
+                                fs.Read(imageByteArray, 0, Convert.ToInt32(fs.Length));
+                                fs.Close();
+                                cmd.Parameters.Add(new MySqlParameter("Img", imageByteArray));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
                         cmd.Parameters.AddWithValue("@idContact", Convert.ToInt32(idContact));
                         cmd.Parameters.AddWithValue("@tipOferta", cmbTipOferta.Text.ToString());
                         cmd.Parameters.AddWithValue("@tipProprietate", cmbTipProprietate.Text.ToString());
@@ -211,10 +254,12 @@ namespace CRMAgentieImobiliara
                 catch (Exception ex)
                 {
                 MessageBox.Show(ex.Message);
-            }
+                }
             }
 
-            private void WindowEdit_Loaded(object sender, RoutedEventArgs e)
+
+
+        private void WindowEdit_Loaded(object sender, RoutedEventArgs e)
             {
                 /* 
                  MySqlConnection connection = new MySqlConnection(connectionString);
@@ -231,7 +276,28 @@ namespace CRMAgentieImobiliara
                  */
             }
 
-            
-        
+        private void btChange_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                FileDialog dialog = new OpenFileDialog();
+                dialog.InitialDirectory = Environment.SpecialFolder.MyPictures.ToString();
+                dialog.Filter = "Imagine (*.jpg;*.png;*.jpeg)|*.jpg;*.png;*.jpeg";
+                dialog.ShowDialog();
+                {
+                    stringName = dialog.SafeFileName;
+                    imageName = dialog.FileName;
+                    ImageSourceConverter isc = new ImageSourceConverter();
+                    ///image1.SetVa
+                }
+                dialog = null;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+        }
+
+       
     } 
 }
