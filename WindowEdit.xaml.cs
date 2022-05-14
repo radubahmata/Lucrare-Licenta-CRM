@@ -29,11 +29,12 @@ namespace CRMAgentieImobiliara
     {
         string idEd;
         string stringName, imageName;
+        byte[] imgDB;
         public WindowEdit(string idEditat)
         {
 
             InitializeComponent();
-            fillComboId();
+           // fillComboId();
             fillComboIdContact();
             idEd = idEditat;
 
@@ -97,8 +98,10 @@ namespace CRMAgentieImobiliara
                     //locuriParcareTextBox.Text = nrParcari;
 
                     byte[] imgblob = (byte[])dr["imagini"];
+                    
                     if (imgblob != null)
                     {
+                        imgDB = imgblob;
                         MemoryStream stream = new MemoryStream();
                         stream.Write(imgblob, 0, imgblob.Length);
                         stream.Position = 0;
@@ -142,7 +145,7 @@ namespace CRMAgentieImobiliara
         }
         string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
 
-        void fillComboId()
+       /* void fillComboId()
         {
             MySqlConnection con = new MySqlConnection(connectionString);
             try {
@@ -161,7 +164,7 @@ namespace CRMAgentieImobiliara
             catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
-        }
+        }*/
 
         private void btnUpdateProprietate_Click(object sender, RoutedEventArgs e)
         {
@@ -169,7 +172,7 @@ namespace CRMAgentieImobiliara
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `id_contact`=@idContact, `tip_oferta`=@tipOferta, `tip_proprietate`=@tipProprietate, `judet`=@judet, `localitate`=@localitate, `zona`=@zona, `adresa`=@adresa, `amplasament`=@amplasament, `nr_camere`=@nrCamere, `nr_bai`=@nrBai, `etaj`=@etaj, `nr_etaje_imobil`=@etajeImobil, `suprafata_utila`=@sUtila, `compartimentare`=@compartimentare, `descriere`=@descriere, `link_oferta`=@linkOferta, `pret`=@pret, `comision`=@comision, `imagini`=@Img where id_proprietate='"+cmbIdEdit.SelectedValue+"'",con))
+                    using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `id_contact`=@idContact, `tip_oferta`=@tipOferta, `tip_proprietate`=@tipProprietate, `judet`=@judet, `localitate`=@localitate, `zona`=@zona, `adresa`=@adresa, `amplasament`=@amplasament, `nr_camere`=@nrCamere, `nr_bai`=@nrBai, `etaj`=@etaj, `nr_etaje_imobil`=@etajeImobil, `suprafata_utila`=@sUtila, `compartimentare`=@compartimentare, `descriere`=@descriere, `link_oferta`=@linkOferta, `pret`=@pret, `comision`=@comision, `imagini`=@Img where id_proprietate='"+idEd+"'",con))
                     {
                         cmd.Connection = con;
                         string s = cmbContact.Text.ToString();
@@ -184,7 +187,10 @@ namespace CRMAgentieImobiliara
                                 imageByteArray = new byte[fs.Length];
                                 fs.Read(imageByteArray, 0, Convert.ToInt32(fs.Length));
                                 fs.Close();
-                                cmd.Parameters.Add(new MySqlParameter("Img", imageByteArray));
+                                cmd.Parameters.AddWithValue("Img", imageByteArray);
+                            }
+                            else {
+                                cmd.Parameters.AddWithValue("Img", imgDB);
                             }
                         }
                         catch (Exception ex)
@@ -202,8 +208,8 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@amplasament", cmbAmplasament.Text.ToString());
                         cmd.Parameters.AddWithValue("@nrCamere", Convert.ToInt32(nrCamereTextBox.Text.ToString()));
                         cmd.Parameters.AddWithValue("@nrBai", Convert.ToInt32(nrBaiTextBox.Text.ToString()));
-                        cmd.Parameters.AddWithValue("@etaj", Convert.ToInt32(etajTextBox.Text.ToString()));
-                        cmd.Parameters.AddWithValue("@etajeImobil", Convert.ToInt32(etajeimobilTextBox.Text.ToString()));
+                        cmd.Parameters.AddWithValue("@etaj", etajTextBox.Text.ToString());
+                        cmd.Parameters.AddWithValue("@etajeImobil", etajeimobilTextBox.Text.ToString());
                         cmd.Parameters.AddWithValue("@sUtila", float.Parse((suprafataUtilaTextBox.Text.ToString()), CultureInfo.InvariantCulture.NumberFormat));
                         cmd.Parameters.AddWithValue("@compartimentare", cmbCompartimentare.Text.ToString());
                         cmd.Parameters.AddWithValue("@descriere", descriereTextBox.Text.ToString());

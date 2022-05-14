@@ -13,7 +13,7 @@
             <ColumnDefinition Width="61*"/>
         </Grid.ColumnDefinitions>
         <Label VerticalAlignment="Center" Margin="28,20,0,391.4" HorizontalAlignment="Left" Grid.Column="0" Content="Id Editat" Height="23" Width="87"/>
-        <ComboBox Name="cmbIdEdit" Margin="124,18,477,389.4" />
+        <TextBlock Name="cmbIdEdit" Margin="124,18,477,389.4" />
 
         <Label VerticalAlignment="Center" Margin="27,74,0,334.4" HorizontalAlignment="Left" Content="Tip Oferta:" Height="26" Width="66"/>
         <ComboBox Name="cmbTipOferta" Margin="123,73,478,333.4" >

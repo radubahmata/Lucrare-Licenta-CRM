@@ -1,18 +1,22 @@
-﻿<Window x:Class="CRMAgentieImobiliara.MainWindow"
+﻿<Window xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  x:Class="CRMAgentieImobiliara.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CRMAgentieImobiliara"
         mc:Ignorable="d"
-        Title="CRM Agentie Imobiliara" Height="450" Width="800">
+        Title="Estate Buddy" Height="450" Width="800">
 
     <Grid >
         <TabControl HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="794" Margin="0,0,-0.4,0">
 
-            <TabItem Header="Manager Proprietati">
+            <TabItem Header="Proprietati si Contacte">
                 <Grid Background="#2e3137">
-                    <DataGrid Name="proprietatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,146" Width="768" ItemsSource="{Binding}" CanUserResizeRows="True" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="87*"/>
+                        <ColumnDefinition Width="307*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid Name="proprietatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,146" Width="768" ItemsSource="{Binding}" CanUserResizeRows="True" Grid.ColumnSpan="2" >
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
                                 <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
@@ -39,24 +43,25 @@
                             <DataGridTextColumn Binding="{Binding Path=pret}" Header="Pret" Width="Auto" IsReadOnly="True" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Refresh" Height="25" HorizontalAlignment="Left" Margin="678,246,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="100" Click="btnRefresh_Click" />
+                    <Button Content="Refresh" Height="25" HorizontalAlignment="Left" Margin="504.1,246,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="100" Click="btnRefresh_Click" Grid.Column="1" />
 
-                    <Button x:Name="btnProprietateNoua" Click="btnProprietateNoua_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Adauga" Margin="14,251,717,108"/>
-                    <Button x:Name="btnProprietateEdit" Click="btnProprietateEdit_Click" Background="#FFD6C530" FontFamily="Times New Roman" Content="Editeaza" Margin="76,251,651,108"/>
-                    <Button x:Name="btnProprietateStergere" Click="btnProprietateStergere_Click" Background="#FFC7190B" FontFamily="Times New Roman" Content="Sterge" Margin="142,251,590,108"/>
-                    <Button x:Name="btnViewContacte" Click="btnViewContacte_Click" Background="#FF0BA9C7" FontFamily="Times New Roman" Content="Contacte" Margin="15,323,717,36"/>
+                    <Button x:Name="btnProprietateNoua" Click="btnProprietateNoua_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Adauga" Margin="14,251,102.9,108"/>
+                    <Button x:Name="btnProprietateEdit" Click="btnProprietateEdit_Click" Background="#FFD6C530" FontFamily="Times New Roman" Content="Editeaza" Margin="76,251,36.9,108"/>
+                    <Button x:Name="btnProprietateStergere" Click="btnProprietateStergere_Click" Background="#FFC7190B" FontFamily="Times New Roman" Content="Sterge" Margin="142,251,590,108" Grid.ColumnSpan="2"/>
+                    <Button x:Name="btnViewContacte" Click="btnViewContacte_Click" Background="#FF0BA9C7" FontFamily="Times New Roman" Content="Contacte" Margin="15,323,102.9,36"/>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Calendar Activitati">
-                <Grid Background="#2e3137">
+            <TabItem Header="Manager Activitati" >
+                <Grid Background="#2e3137" Margin="0,2,0,-2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="365*"/>
                         <ColumnDefinition Width="423*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid Name="activitatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="26,29,0,127" Width="272" ItemsSource="{Binding}" CanUserResizeRows="True">
+                    <DataGrid Name="activitatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="26,34,0,122" Width="272" ItemsSource="{Binding}" CanUserResizeRows="True">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
+
                                 <EventSetter Event="MouseDoubleClick" Handler="activitatiDataGridRow_MouseDoubleClick"/>
                             </Style>
                         </DataGrid.ItemContainerStyle>
@@ -67,6 +72,11 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
+
+                    <Button x:Name="btnAddActivitate" Content="Adauga" Margin="26,315,270.8,48" Click="btnAddActivitate_Click"/>
+                    <Button x:Name="btnEditActivitate" Content="Editeaza" Margin="130,315,166.8,48" IsEnabled="False"/>
+                    <Button x:Name="btnDelActivitate" Content="Sterge" Margin="230,315,66.8,48" IsEnabled="False"/>
+                    <Button Content="Refresh" Height="25" HorizontalAlignment="Left" Margin="230,4,0,0" x:Name="btnRefreshActivitati" VerticalAlignment="Top" Width="68" Click="btnRefreshActivitati_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="Cereri">

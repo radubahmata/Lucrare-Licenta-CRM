@@ -62,6 +62,7 @@ namespace CRMAgentieImobiliara
                             dt.Load(command.ExecuteReader());
                             connection.Close();
                             contacteDataGrid.DataContext = dt;
+                            
                             //this.Close();
                         }
                         else

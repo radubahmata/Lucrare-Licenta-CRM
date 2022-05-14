@@ -37,7 +37,7 @@ namespace CRMAgentieImobiliara
         public MainWindow()
         {
             InitializeComponent();
-            
+           
 
             string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
@@ -54,8 +54,13 @@ namespace CRMAgentieImobiliara
             dtActivitati.Load(cmdActivitati.ExecuteReader());
             connection.Close();
             activitatiDataGrid.DataContext = dtActivitati;
-            MessageBox.Show(DateTime.Now.ToString("dddd, dd-MM-yyyy HH:mm"));
+
+            //MessageBox.Show(DateTime.Now.ToString("dddd, dd-MM-yyyy HH:mm"));
         }
+
+       
+
+        
 
         private void btnProprietateNoua_Click(object sender, RoutedEventArgs e)
         {
@@ -125,7 +130,7 @@ namespace CRMAgentieImobiliara
         {
             WindowContacte window = new WindowContacte();
             window.Show();
-
+          
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -152,6 +157,88 @@ namespace CRMAgentieImobiliara
                // windowDetalii.Show();
             }
         }
+
+        private void btnAddActivitate_Click(object sender, RoutedEventArgs e)
+        {
+            WindowAddActivitate window = new WindowAddActivitate();
+            window.Show();
+        }
+
+        private void btnRefreshActivitati_Click(object sender, RoutedEventArgs e)
+        {
+            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand("select * from activitati", connection);
+            connection.Open();
+            DataTable dt = new DataTable();
+            dt.Load(cmd.ExecuteReader());
+            connection.Close();
+            activitatiDataGrid.DataContext = dt;
+        }
+
+        /* private void activitatiDataGridRow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+         {
+
+             DataRowView row_selected = activitatiDataGrid.SelectedItem as DataRowView;
+             if (row_selected != null)
+             {
+                 string idActivitate = row_selected["id"].ToString();
+                 btnEditActivitate.IsEnabled = true;
+                 btnDelActivitate.IsEnabled = true;
+
+                 string connectionstring = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+                 MySqlConnection con = new MySqlConnection(connectionstring);
+                 string query = "select * from activitati where id='" + idActivitate + "'";
+                 MySqlCommand cmd = new MySqlCommand(query, con);
+                 MySqlDataReader dr;
+
+                 try
+                 {
+                     con.Open();
+                     dr = cmd.ExecuteReader();
+                     while (dr.Read())
+                     {
+                         cmbActivitate.Text = dr.GetString("tip");
+                         string numeContact;
+                         string prenumeContact;
+                         string nrTel;
+                         MySqlConnection conContact = new MySqlConnection(connectionstring);
+                         string idContact = dr.GetString("id_contact").ToString();
+                         string queryContact = "select * from contacte where id_contact='" + idContact + "'";
+                         MySqlCommand cmdContact = new MySqlCommand(queryContact, conContact);
+                         MySqlDataReader drContact;
+                         conContact.Open();
+                         drContact = cmdContact.ExecuteReader();
+                         while (drContact.Read())
+                         {
+                             numeContact = drContact.GetString("nume");
+                             prenumeContact = drContact.GetString("prenume");
+                             nrTel = drContact.GetString("nr_tel");
+                             cmbContact.Text = numeContact + " " + prenumeContact + "(ID=" + idContact + ")\n " + nrTel;
+                         }
+                         conContact.Close();
+
+                         string idContact2 = dr.GetString("id_contact2").ToString();
+                         string queryContact2 = "select * from contacte where id_contact='" + idContact2 + "'";
+                         MySqlCommand cmdContact2 = new MySqlCommand(queryContact2, conContact);
+                         MySqlDataReader drContact2;
+                         conContact.Open();
+                         drContact2 = cmdContact2.ExecuteReader();
+                         while (drContact2.Read())
+                         {
+                             numeContact = drContact2.GetString("nume");
+                             prenumeContact = drContact2.GetString("prenume");
+                             nrTel = drContact2.GetString("nr_tel");
+                             cmbContact2.Text = numeContact + " " + prenumeContact + "(ID=" + idContact2 + ")\n " + nrTel;
+                         }
+                         conContact.Close();
+                     }
+                 }
+                 catch { }
+             }
+         }*/
+
+
     }
 }
 
