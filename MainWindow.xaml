@@ -74,8 +74,8 @@
                     </DataGrid>
 
                     <Button x:Name="btnAddActivitate" Content="Adauga" Margin="26,315,270.8,48" Click="btnAddActivitate_Click"/>
-                    <Button x:Name="btnEditActivitate" Content="Editeaza" Margin="130,315,166.8,48" IsEnabled="False"/>
-                    <Button x:Name="btnDelActivitate" Content="Sterge" Margin="230,315,66.8,48" IsEnabled="False"/>
+                    <Button x:Name="btnEditActivitate" Content="Editeaza" Margin="130,315,166.8,48" Click="btnEditActivitate_Click"/>
+                    <Button x:Name="btnDelActivitate" Content="Sterge" Margin="230,315,66.8,48" Click="btnDelActivitate_Click"/>
                     <Button Content="Refresh" Height="25" HorizontalAlignment="Left" Margin="230,4,0,0" x:Name="btnRefreshActivitati" VerticalAlignment="Top" Width="68" Click="btnRefreshActivitati_Click" />
                 </Grid>
             </TabItem>

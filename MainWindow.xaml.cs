@@ -168,12 +168,56 @@ namespace CRMAgentieImobiliara
         {
             string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand("select * from activitati", connection);
+            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data >= '"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
             connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             connection.Close();
             activitatiDataGrid.DataContext = dt;
+        }
+
+        private void btnEditActivitate_Click(object sender, RoutedEventArgs e)
+        {
+            
+            DataRowView row_selected = activitatiDataGrid.SelectedItem as DataRowView;
+            if (row_selected != null)
+            {
+                string idEditat = row_selected["id"].ToString();
+                WindowEditActivitate windowEditActivitate = new WindowEditActivitate(idEditat);
+                windowEditActivitate.Show();
+            }
+            else
+            {
+                MessageBox.Show("Nu ati selectat nicio proprietate!");
+            }
+        }
+
+        private void btnDelActivitate_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView row_selected = activitatiDataGrid.SelectedItem as DataRowView;
+            if (row_selected != null)
+            {
+                string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                string idSters = row_selected["id"].ToString();
+                string query = "DELETE from activitati where id='" + idSters + "'";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                MessageBox.Show("Activitate stearsa!");
+                MySqlCommand refresh = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", connection);
+                connection.Open();
+                DataTable dt = new DataTable();
+                dt.Load(refresh.ExecuteReader());
+                connection.Close();
+                activitatiDataGrid.DataContext = dt;
+
+            }
+            else
+            {
+                MessageBox.Show("Nu ati selectat nicio proprietate!");
+            }
         }
 
         /* private void activitatiDataGridRow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

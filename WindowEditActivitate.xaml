@@ -1,0 +1,37 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CRMAgentieImobiliara"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="CRMAgentieImobiliara.WindowEditActivitate"
+        mc:Ignorable="d"
+        Title="Edit Activitate" Height="450" Width="350">
+    <Grid HorizontalAlignment="Left" Width="340">
+        <Label Content="Activitate:" Background="White" Margin="32,34,216,357"/>
+        <ComboBox x:Name="cmbActivitate" Margin="180,34,25,357" >
+            <ComboBoxItem Content="vizionare"/>
+            <ComboBoxItem Content="intalnire"/>
+            <ComboBoxItem Content="semnare"/>
+            <ComboBoxItem Content="preluare"/>
+            <ComboBoxItem Content="sedinta"/>
+            <ComboBoxItem Content="apel"/>
+            <ComboBoxItem Content="mail"/>
+        </ComboBox>
+        <Label Content="Contact:" Background="White" Margin="32,81,216,310"/>
+        <ComboBox x:Name="cmbContact" Margin="180,81,25,310" />
+
+        <Label Content="Contact 2:" Background="White" Margin="32,129,216,262"/>
+        <ComboBox x:Name="cmbContact2" Margin="180,129,25,262" />
+
+        <Label Content="ID proprietate:" Background="White" Margin="32,177,216,214"/>
+        <ComboBox x:Name="cmbIdProp" Margin="180,177,25,214" />
+
+        <Label Content="Data:" Background="White" Margin="32,224,216,167"/>
+        <xctk:DateTimePicker x:Name="dtpData" Margin="180,224,25,167" Format="Custom" FormatString="yyyy-MM-dd HH:mm:ss" />
+
+        <Label Content="Detalii:" Background="White" Margin="32,275,216,116"/>
+        <TextBox x:Name="txtDetalii" Margin="180,275,25,81" TextWrapping="Wrap"/>
+
+        <Button x:Name="btnEditActivitate" Content="Salveaza" Margin="128,371,144,20" Click="btnEditActivitate_Click" />
+    </Grid>
+</Window>

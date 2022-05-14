@@ -111,6 +111,7 @@ namespace CRMAgentieImobiliara
                         {
                             idContact2 = null;
                         }
+
                         if (cmbIdProp.Text.Length > 0)
                         {
                             cmd.Parameters.AddWithValue("@IdProprietate", cmbIdProp.Text.ToString());
@@ -119,9 +120,24 @@ namespace CRMAgentieImobiliara
                         {
                             cmd.Parameters.AddWithValue("@IdProprietate", null);
                         }
-                        MessageBox.Show(dtpData.Text);
-                        cmd.Parameters.AddWithValue("@IdContact", Convert.ToInt32(idContact));
-                        cmd.Parameters.AddWithValue("@IdContact2", Convert.ToInt32(idContact2));
+
+                        if (idContact != null)
+                        {
+                            cmd.Parameters.AddWithValue("@IdContact", Convert.ToInt32(idContact));
+                        }
+                        else {
+                            cmd.Parameters.AddWithValue("@IdContact", DBNull.Value);
+                        }
+
+                        if (idContact2 != null)
+                        {
+                            cmd.Parameters.AddWithValue("@IdContact2", Convert.ToInt32(idContact2));
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@IdContact2", DBNull.Value);
+                        }
+
                         cmd.Parameters.AddWithValue("@Tip", cmbActivitate.Text.ToString());
 
                         cmd.Parameters.AddWithValue("@Data", dtpData.Text);
@@ -135,7 +151,7 @@ namespace CRMAgentieImobiliara
                         }
                         else
                         {
-                            MessageBox.Show("Adaugarea proprietatii a esuat!");
+                            MessageBox.Show("Adaugarea activitatii a esuat!");
                         }
 
                         this.Close();

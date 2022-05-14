@@ -40,46 +40,65 @@ namespace CRMAgentieImobiliara
                 {
                     txtTitle.Text = dr.GetString("tip").ToString().ToUpper();
                     txtData.Text = dr.GetDateTime("data").ToString("dddd, dd-MM-yyyy HH:mm");
-                    txtProprietate.Text = "ID="+dr.GetString("id_proprietate").ToString();
                     txtDetalii.Text = dr.GetString("detalii").ToString();
                     string numeContact;
                     string prenumeContact;
                     string nrTel;
                     MySqlConnection conContact = new MySqlConnection(connectionstring);
-                    string idContact = dr.GetString("id_contact").ToString();
-                    string queryContact = "select * from contacte where id_contact='" + idContact + "'";
-                    MySqlCommand cmdContact = new MySqlCommand(queryContact, conContact);
-                    MySqlDataReader drContact;
-                    conContact.Open();
-                    drContact = cmdContact.ExecuteReader();
-                    while (drContact.Read())
+                   // string idContact = dr.GetInt32("id_contact").ToString();
+                    if (!dr.IsDBNull(dr.GetOrdinal("id_contact")))
                     {
-                        numeContact = drContact.GetString("nume");
-                        prenumeContact = drContact.GetString("prenume");
-                        nrTel = drContact.GetString("nr_tel");
-                        txtContact.Text = numeContact + " " + prenumeContact + "(ID=" + idContact + ")\n " + nrTel;
+                        string idContact = dr.GetInt32("id_contact").ToString();
+                        if (idContact != "0")
+                        {
+                            string queryContact = "select * from contacte where id_contact='" + idContact + "'";
+                            MySqlCommand cmdContact = new MySqlCommand(queryContact, conContact);
+                            MySqlDataReader drContact;
+                            conContact.Open();
+                            drContact = cmdContact.ExecuteReader();
+                            while (drContact.Read())
+                            {
+                                numeContact = drContact.GetString("nume");
+                                prenumeContact = drContact.GetString("prenume");
+                                nrTel = drContact.GetString("nr_tel");
+                                txtContact.Text = numeContact + " " + prenumeContact + "(ID=" + idContact + ")\n " + nrTel;
+                            }
+                            conContact.Close();
+                        }
                     }
-                    conContact.Close();
-
-                    string idContact2 = dr.GetString("id_contact2").ToString();
-                    string queryContact2 = "select * from contacte where id_contact='" + idContact2 + "'";
-                    MySqlCommand cmdContact2 = new MySqlCommand(queryContact2, conContact);
-                    MySqlDataReader drContact2;
-                    conContact.Open();
-                    drContact2 = cmdContact2.ExecuteReader();
-                    while (drContact2.Read())
-                    {
-                        numeContact = drContact2.GetString("nume");
-                        prenumeContact = drContact2.GetString("prenume");
-                        nrTel = drContact2.GetString("nr_tel");
-                        txtContact2.Text = numeContact + " " + prenumeContact + "(ID=" + idContact2 + ")\n " + nrTel;
-                    }
-                    conContact.Close();
-
                    
+                    if (!dr.IsDBNull(dr.GetOrdinal("id_contact2")))
+                    {
+                        string idContact2 = dr.GetInt32("id_contact2").ToString();
+                        if (idContact2 != "0")
+                        {
+                            string queryContact2 = "select * from contacte where id_contact='" + idContact2 + "'";
+                            MySqlCommand cmdContact2 = new MySqlCommand(queryContact2, conContact);
+                            MySqlDataReader drContact2;
+                            conContact.Open();
+                            drContact2 = cmdContact2.ExecuteReader();
+                            while (drContact2.Read())
+                            {
+                                numeContact = drContact2.GetString("nume");
+                                prenumeContact = drContact2.GetString("prenume");
+                                nrTel = drContact2.GetString("nr_tel");
+                                txtContact2.Text = numeContact + " " + prenumeContact + "(ID=" + idContact2 + ")\n " + nrTel;
+                            }
+                            conContact.Close();
+                        }
+                    }
+                    //string idProprietate = dr.GetInt32("id_proprietate").ToString();
+                    if (!dr.IsDBNull(dr.GetOrdinal("id_proprietate"))) 
+                    {
+                        txtProprietate.Text = "ID=" + dr.GetString(("id_proprietate")).ToString();
+                    }
+            
                 }
+                con.Close();
             }
-            catch { }
+            catch (Exception ex) {
+               MessageBox.Show(ex.Source.ToString());
+            }
         }
     }
 }

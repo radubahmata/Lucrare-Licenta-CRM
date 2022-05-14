@@ -52,29 +52,7 @@ namespace CRMAgentieImobiliara
                 while (dr.Read())
                 {
                     string idProp = idEd;
-                    //string idProprietate = dr.GetInt32("id_proprietate").ToString();
-                    //MessageBox.Show("Urmeaza sa editati proprietatea cu ID intern"+idProp);
-                    /*string tipOferta = dr.GetString("tip_oferta");
-                    string tipProprietate = dr.GetString("tip_proprietate");
-                    */
                    
-                    /* string judet = dr.GetString("judet");
-                     string localitate = dr.GetString("localitate");
-                     string zona = dr.GetString("zona");
-                     string adresa = dr.GetString("adresa");
-                     string amplasament = dr.GetString("amplasament");
-                     string nrCamere = dr.GetInt32("nr_camere").ToString();
-                     string nrBai = dr.GetInt32("nr_bai").ToString();
-                     string etaj = dr.GetString("etaj");
-                     string etajeImobil = dr.GetString("nr_etaje_imobil");
-                     string sUtila = dr.GetDouble("suprafata_utila").ToString();
-                     string compartimentare = dr.GetString("compartimentare");
-                     string descriere = dr.GetString("descriere");
-                     string linkOferta = dr.GetString("link_oferta");
-                     string pret = dr.GetDouble("pret").ToString();
-                     string comision = dr.GetDouble("comision").ToString();
-                     // string nrParcari = dr.GetInt32("nr_parcari").ToString();
-                     */
                     
                     cmbIdEdit.Text = idProp;
                     cmbTipOferta.Text = dr.GetString("tip_oferta");
