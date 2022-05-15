@@ -1,0 +1,14 @@
+﻿<Window x:Class="CRMAgentieImobiliara.WindowConfirmContact"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CRMAgentieImobiliara"
+        mc:Ignorable="d"
+        Title="Confirmare contacte" Height="149.016" Width="628.852">
+    <Grid>
+        <TextBlock x:Name="txtConfirmContact"  TextAlignment="Center" TextWrapping="Wrap" FontSize="18" Margin="10,10,10.4,49.2" FontWeight="Bold"/>
+        <Button Name="btnDa" Click="btnDa_Click" Content="Contacte introduse" Margin="138,75,364.4,14.2"/>
+        <Button Name="btnNu" Click="btnNu_Click" Content="Contacte neintroduse" Margin="354,75,138.4,14.2"/>
+    </Grid>
+</Window>

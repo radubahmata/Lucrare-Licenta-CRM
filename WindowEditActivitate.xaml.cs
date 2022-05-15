@@ -25,7 +25,7 @@ namespace CRMAgentieImobiliara
         public WindowEditActivitate(string idEditat)
         {
             InitializeComponent();
-            MessageBox.Show(idEditat);
+            //MessageBox.Show(idEditat);
             idActivitateEdit = idEditat;
             fillComboIdContact();
             fillComboIdProp();
@@ -44,6 +44,7 @@ namespace CRMAgentieImobiliara
                 {
                     cmbActivitate.Text = dr.GetString("tip").ToString();
                     txtDetalii.Text = dr.GetString("detalii");
+                    cmbStadiu.Text = dr.GetString("stadiu");
                     dtpData.Value = Convert.ToDateTime(dr.GetDateTime("data").ToString());
                     if (!dr.IsDBNull(dr.GetOrdinal("id_proprietate")))
                     {
@@ -97,7 +98,7 @@ namespace CRMAgentieImobiliara
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("UPDATE `activitati` SET `tip`=@tip, `id_contact`=@idContact, `id_contact2`=@idContact2, `id_proprietate`=@idProprietate, `data`=@data, `detalii`=@detalii where id='" + idActivitateEdit + "'", con))
+                    using (var cmd = new MySqlCommand("UPDATE `activitati` SET `tip`=@tip, `id_contact`=@idContact, `id_contact2`=@idContact2, `id_proprietate`=@idProprietate, `data`=@data, `detalii`=@detalii, `stadiu`=@stadiu where id='" + idActivitateEdit + "'", con))
                     {
                         cmd.Connection = con;
                         string s = cmbContact.Text.ToString();
@@ -106,6 +107,7 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@data", dtpData.Text);
                         cmd.Parameters.AddWithValue("@detalii", txtDetalii.Text);
                         cmd.Parameters.AddWithValue("@tip", cmbActivitate.Text);
+                        cmd.Parameters.AddWithValue("@stadiu", cmbStadiu.Text);
 
                         if (index > 0)
                         {
@@ -144,12 +146,12 @@ namespace CRMAgentieImobiliara
                         con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
-                            MessageBox.Show("Record updated");
+                            MessageBox.Show("Activitate editata cu succes!");
                             this.Close();
                         }
                         else
                         {
-                            MessageBox.Show("Record failed");
+                            MessageBox.Show("Editarea activitatii a esuat!");
                         }
                     }
                 }

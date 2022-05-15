@@ -55,6 +55,8 @@ namespace CRMAgentieImobiliara
             connection.Close();
             activitatiDataGrid.DataContext = dtActivitati;
 
+           
+
             //MessageBox.Show(DateTime.Now.ToString("dddd, dd-MM-yyyy HH:mm"));
         }
 
@@ -64,9 +66,12 @@ namespace CRMAgentieImobiliara
 
         private void btnProprietateNoua_Click(object sender, RoutedEventArgs e)
         {
-         //   action = ActionState.New;
-            Window1 window = new Window1();
+            //   action = ActionState.New;
+            string request = "proprietate";
+            WindowConfirmContact window = new WindowConfirmContact(request);
             window.Show();
+           // Window1 window = new Window1();
+            //window.Show();
         }
 
         private void btnProprietateEdit_Click(object sender, RoutedEventArgs e)
@@ -105,13 +110,11 @@ namespace CRMAgentieImobiliara
                 dt.Load(refresh.ExecuteReader());
                 connection.Close();
                 proprietatiDataGrid.DataContext = dt;
-
             }
             else
             {
                 MessageBox.Show("Nu ati selectat nicio proprietate!");
             }
-
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
@@ -129,8 +132,7 @@ namespace CRMAgentieImobiliara
         private void btnViewContacte_Click(object sender, RoutedEventArgs e)
         {
             WindowContacte window = new WindowContacte();
-            window.Show();
-          
+            window.Show();          
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -141,8 +143,7 @@ namespace CRMAgentieImobiliara
                 string idDetalii = row_selected["id_proprietate"].ToString();
                 DetailsWindow windowDetalii = new DetailsWindow(idDetalii);
                 windowDetalii.Show();
-            }
-            
+            }            
         }
 
         private void activitatiDataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -153,14 +154,13 @@ namespace CRMAgentieImobiliara
                 string idActivitate = row_selected["id"].ToString();
                 DetaliiActivitate windowDetaliiActivitate = new DetaliiActivitate(idActivitate);
                 windowDetaliiActivitate.Show();
-               // DetailsWindow windowDetalii = new DetailsWindow(idDetalii);
-               // windowDetalii.Show();
             }
         }
 
         private void btnAddActivitate_Click(object sender, RoutedEventArgs e)
         {
-            WindowAddActivitate window = new WindowAddActivitate();
+            string request = "activitate";
+            WindowConfirmContact window = new WindowConfirmContact(request);
             window.Show();
         }
 
@@ -188,7 +188,7 @@ namespace CRMAgentieImobiliara
             }
             else
             {
-                MessageBox.Show("Nu ati selectat nicio proprietate!");
+                MessageBox.Show("Nu ati selectat nicio activitate!");
             }
         }
 
@@ -216,73 +216,82 @@ namespace CRMAgentieImobiliara
             }
             else
             {
-                MessageBox.Show("Nu ati selectat nicio proprietate!");
+                MessageBox.Show("Nu ati selectat nicio activitate!");
             }
         }
 
-        /* private void activitatiDataGridRow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-         {
+        private void btnToday_Click(object sender, RoutedEventArgs e)
+        {
+            txtIntro.Text = "Activitatile de astazi:";
+            var astazi = DateTime.Today;
+            var maine = astazi.AddDays(1);
+            var ieri = astazi.AddDays(-1);
+            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'"+maine.ToString("yyyy-MM-dd")+ "' AND stadiu='viitoare' ORDER BY data", connection);
+            connection.Open();
+            DataTable dtActivitatiSpecific = new DataTable();
+            dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
+            connection.Close();
+            activitatiDataGrid.DataContext = dtActivitatiSpecific;
+        }
 
-             DataRowView row_selected = activitatiDataGrid.SelectedItem as DataRowView;
-             if (row_selected != null)
-             {
-                 string idActivitate = row_selected["id"].ToString();
-                 btnEditActivitate.IsEnabled = true;
-                 btnDelActivitate.IsEnabled = true;
+        private void btnOneWeek_Click(object sender, RoutedEventArgs e)
+        {
+            txtIntro.Text = "Activitatile din urmatoarele 7 zile:";
+            var astazi = DateTime.Today;
+            var oneWeek = astazi.AddDays(8);
+            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneWeek.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", connection);
+            connection.Open();
+            DataTable dtActivitatiSpecific = new DataTable();
+            dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
+            connection.Close();
+            activitatiDataGrid.DataContext = dtActivitatiSpecific;
 
-                 string connectionstring = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-                 MySqlConnection con = new MySqlConnection(connectionstring);
-                 string query = "select * from activitati where id='" + idActivitate + "'";
-                 MySqlCommand cmd = new MySqlCommand(query, con);
-                 MySqlDataReader dr;
+        }
 
-                 try
-                 {
-                     con.Open();
-                     dr = cmd.ExecuteReader();
-                     while (dr.Read())
-                     {
-                         cmbActivitate.Text = dr.GetString("tip");
-                         string numeContact;
-                         string prenumeContact;
-                         string nrTel;
-                         MySqlConnection conContact = new MySqlConnection(connectionstring);
-                         string idContact = dr.GetString("id_contact").ToString();
-                         string queryContact = "select * from contacte where id_contact='" + idContact + "'";
-                         MySqlCommand cmdContact = new MySqlCommand(queryContact, conContact);
-                         MySqlDataReader drContact;
-                         conContact.Open();
-                         drContact = cmdContact.ExecuteReader();
-                         while (drContact.Read())
-                         {
-                             numeContact = drContact.GetString("nume");
-                             prenumeContact = drContact.GetString("prenume");
-                             nrTel = drContact.GetString("nr_tel");
-                             cmbContact.Text = numeContact + " " + prenumeContact + "(ID=" + idContact + ")\n " + nrTel;
-                         }
-                         conContact.Close();
+        private void btnOneMonth_Click(object sender, RoutedEventArgs e)
+        {
+            txtIntro.Text = "Activitatile din urmatoarele 30 de zile:";
+            var astazi = DateTime.Today;
+            var oneMonth = astazi.AddDays(31);
+            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneMonth.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", connection);
+            connection.Open();
+            DataTable dtActivitatiSpecific = new DataTable();
+            dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
+            connection.Close();
+            activitatiDataGrid.DataContext = dtActivitatiSpecific;
+        }
 
-                         string idContact2 = dr.GetString("id_contact2").ToString();
-                         string queryContact2 = "select * from contacte where id_contact='" + idContact2 + "'";
-                         MySqlCommand cmdContact2 = new MySqlCommand(queryContact2, conContact);
-                         MySqlDataReader drContact2;
-                         conContact.Open();
-                         drContact2 = cmdContact2.ExecuteReader();
-                         while (drContact2.Read())
-                         {
-                             numeContact = drContact2.GetString("nume");
-                             prenumeContact = drContact2.GetString("prenume");
-                             nrTel = drContact2.GetString("nr_tel");
-                             cmbContact2.Text = numeContact + " " + prenumeContact + "(ID=" + idContact2 + ")\n " + nrTel;
-                         }
-                         conContact.Close();
-                     }
-                 }
-                 catch { }
-             }
-         }*/
+        private void btnViitoareActivitati_Click(object sender, RoutedEventArgs e)
+        {
+            txtIntro.Text = "Toate activitatile viitoare:";
+            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", connection);
+            connection.Open();
+            DataTable dt = new DataTable();
+            dt.Load(cmd.ExecuteReader());
+            connection.Close();
+            activitatiDataGrid.DataContext = dt;
+        }
 
-
+        private void btnToateActivitati_Click(object sender, RoutedEventArgs e)
+        {
+            txtIntro.Text = "Toate activitatile:";
+            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand("SELECT * from activitati ORDER BY data", connection);
+            connection.Open();
+            DataTable dt = new DataTable();
+            dt.Load(cmd.ExecuteReader());
+            connection.Close();
+            activitatiDataGrid.DataContext = dt;
+        }
     }
 }
 

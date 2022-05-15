@@ -85,6 +85,9 @@
     <Compile Include="WindowAddActivitate.xaml.cs">
       <DependentUpon>WindowAddActivitate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WindowConfirmContact.xaml.cs">
+      <DependentUpon>WindowConfirmContact.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowContacte.xaml.cs">
       <DependentUpon>WindowContacte.xaml</DependentUpon>
     </Compile>
@@ -122,6 +125,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowAddActivitate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowConfirmContact.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

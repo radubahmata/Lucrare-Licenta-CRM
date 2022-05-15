@@ -58,7 +58,8 @@
                         <ColumnDefinition Width="365*"/>
                         <ColumnDefinition Width="423*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid Name="activitatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="26,34,0,122" Width="272" ItemsSource="{Binding}" CanUserResizeRows="True">
+                    <TextBlock Name="txtIntro"  TextAlignment="Center" FontWeight="Bold" Foreground="White" Text="Toate activitatile viitoare:" TextWrapping="Wrap" Margin="205,23,205,329" FontSize="18" Grid.ColumnSpan="2" Width="378" />
+                    <DataGrid Name="activitatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="254,68,0,88" Width="288" ItemsSource="{Binding}" CanUserResizeRows="True" Grid.ColumnSpan="2">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
 
@@ -69,18 +70,24 @@
                             <DataGridTextColumn Binding="{Binding Path=id}" Header="Id" Width="Auto" IsReadOnly="True"/>
                             <DataGridTextColumn Binding="{Binding Path=tip}" Header="Activitate" Width="Auto" IsReadOnly="True"/>
                             <DataGridTextColumn Binding="{Binding Path=data}" Header="Data" Width="Auto" IsReadOnly="True"/>
-
+                            <DataGridTextColumn Binding="{Binding Path=stadiu}" Header="Stadiu" Width="Auto" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <Button x:Name="btnAddActivitate" Content="Adauga" Margin="26,315,270.8,48" Click="btnAddActivitate_Click"/>
-                    <Button x:Name="btnEditActivitate" Content="Editeaza" Margin="130,315,166.8,48" Click="btnEditActivitate_Click"/>
-                    <Button x:Name="btnDelActivitate" Content="Sterge" Margin="230,315,66.8,48" Click="btnDelActivitate_Click"/>
-                    <Button Content="Refresh" Height="25" HorizontalAlignment="Left" Margin="230,4,0,0" x:Name="btnRefreshActivitati" VerticalAlignment="Top" Width="68" Click="btnRefreshActivitati_Click" />
+                    <Button x:Name="btnAddActivitate" Content="Adauga activitate:" Background="#FF23B923" FontWeight="DemiBold" Margin="32,94,204.8,269" Click="btnAddActivitate_Click"/>
+                    <Button x:Name="btnEditActivitate" Content="Editeaza activitate:" Background="#FFD6C530" FontWeight="DemiBold" Margin="32,149,204.8,214" Click="btnEditActivitate_Click"/>
+                    <Button x:Name="btnDelActivitate" Content="Sterge activitate:" Background="#FFC7190B" FontWeight="DemiBold" Margin="32,201,204.8,162" Click="btnDelActivitate_Click"/>
+                    <Button Content="Viitoare" Height="25" HorizontalAlignment="Left" Margin="254,339,0,0" x:Name="btnViitoareActivitati" VerticalAlignment="Top" Width="50" Click="btnViitoareActivitati_Click" />
+                    <Button x:Name="btnToday" Content="Astazi" Margin="254,303,10.8,60" Click="btnToday_Click" Width="100"/>
+                    <Button x:Name="btnOneWeek" Content="7 zile" Margin="353,303,343,60" Click="btnOneWeek_Click" Width="92" Grid.ColumnSpan="2"/>
+                    <Button x:Name="btnOneMonth" Content="1 luna" Margin="77.2,303,246,60" Click="btnOneMonth_Click" Width="100" Grid.Column="1"/>
+                    <Button Content="Toate" Height="25" HorizontalAlignment="Left" Margin="124.2,339,0,0" x:Name="btnToateActivitati" VerticalAlignment="Top" Width="53" Click="btnToateActivitati_Click" Grid.Column="1" />
                 </Grid>
             </TabItem>
             <TabItem Header="Cereri">
-                <Grid Background="#2e3137"/>
+                <Grid Background="#2e3137">
+                    <TextBlock Text="Introduceti criteriile de cautare:" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="212,10,213,329" FontSize="18"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Statistici">
                 <Grid Background="#2e3137"/>

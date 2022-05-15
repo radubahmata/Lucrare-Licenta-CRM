@@ -127,11 +127,7 @@ namespace CRMAgentieImobiliara
             
         }
 
-        private void btnViewContacte_Click(object sender, RoutedEventArgs e)
-        {
-            WindowContacte window = new WindowContacte();
-            window.Show();
-        }
+        
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {

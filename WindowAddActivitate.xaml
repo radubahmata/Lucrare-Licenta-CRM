@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="WindowAddActivitate" Height="450" Width="350">
     <Grid HorizontalAlignment="Left" Width="340">
-        <Label Content="Activitate:" Background="White" Margin="32,34,216,357"/>
+        <Label Content="Activitate:" Background="White" Margin="32,34,216,344"/>
         <ComboBox x:Name="cmbActivitate" Margin="180,34,25,357" >
             <ComboBoxItem Content="vizionare"/>
             <ComboBoxItem Content="intalnire"/>
@@ -18,19 +18,19 @@
             <ComboBoxItem Content="apel"/>
             <ComboBoxItem Content="mail"/>
         </ComboBox>
-        <Label Content="Contact:" Background="White" Margin="32,81,216,310"/>
+        <Label Content="Contact:" Background="White" Margin="32,81,216,296"/>
         <ComboBox x:Name="cmbContact" Margin="180,81,25,310" />
 
-        <Label Content="Contact 2:" Background="White" Margin="32,129,216,262"/>
+        <Label Content="Contact 2:" Background="White" Margin="32,129,216,248"/>
         <ComboBox x:Name="cmbContact2" Margin="180,129,25,262" />
 
-        <Label Content="ID proprietate:" Background="White" Margin="32,177,216,214"/>
+        <Label Content="ID proprietate:" Background="White" Margin="32,177,216,201"/>
         <ComboBox x:Name="cmbIdProp" Margin="180,177,25,214" />
 
-        <Label Content="Data:" Background="White" Margin="32,224,216,167"/>
+        <Label Content="Data:" Background="White" Margin="32,224,216,150"/>
         <xctk:DateTimePicker x:Name="dtpData" Margin="180,224,25,167" Format="Custom" FormatString="yyyy-MM-dd HH:mm:ss" />
 
-        <Label Content="Detalii:" Background="White" Margin="32,275,216,116"/>
+        <Label Content="Detalii:" Background="White" Margin="32,275,216,105"/>
         <TextBox x:Name="txtDetalii" Margin="180,275,25,81" TextWrapping="Wrap"/>
 
         <Button x:Name="btnAddActivitate" Content="Adauga" Margin="128,371,144,20" Click="btnAddActivitate_Click"/>
