@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         Title="Rezultatele cererii" Height="450" Width="800">
     <Grid>
-        <DataGrid Name="proprietatiDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,96.4" Width="768" ItemsSource="{Binding}" CanUserResizeRows="True" Grid.ColumnSpan="2" >
+        <Grid.Background>
+            <ImageBrush ImageSource="D:/FSEGA/Licenta/AplicatieLicenta/CRMAgentieImobiliara/images/wallpaper.jpg"></ImageBrush>
+        </Grid.Background>
+        <DataGrid Name="proprietatiDataGrid" Opacity="0.8" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,96.4" Width="768" ItemsSource="{Binding}" CanUserResizeRows="True" Grid.ColumnSpan="2" >
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
