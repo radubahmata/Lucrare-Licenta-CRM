@@ -26,7 +26,7 @@ namespace CRMAgentieImobiliara
     public partial class Window1 : Window
     {
         String connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
-        DataSet dataSet;
+       // DataSet dataSet;
         string stringName, imageName;
         public Window1()
         {

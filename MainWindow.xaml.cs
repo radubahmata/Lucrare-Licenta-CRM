@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Configuration;
-using System.Windows.Controls;
 
 namespace CRMAgentieImobiliara
 {
@@ -355,6 +355,155 @@ namespace CRMAgentieImobiliara
         {
             cmbLocalitate.Items.Clear();
         }
+
+        private void btnGenerate_Click(object sender, RoutedEventArgs e)
+        {
+            string queryRequest = "SELECT * FROM proprietati";
+            int n = 0;
+            string tranzactie,localitate,zona, compartimentare;
+            int pretMin, pretMax, sMin, sMax;
+            int etajMin, etajMax, nrCamMin,nrCamMax;
+            tranzactie = cmbTranzactie.Text.ToString();
+            if (tranzactie != null && tranzactie!="")
+            {
+                queryRequest = queryRequest + " WHERE tip_oferta='" + tranzactie + "'";
+                n++;
+            }
+            localitate = cmbLocalitate.Text.ToString();
+            if (localitate != null && localitate != "")
+            {
+                if (n == 0)
+                {
+                    queryRequest = queryRequest + " WHERE localitate='" + localitate + "'";
+                    n++;
+                }
+                else {
+                    queryRequest += " AND localitate='" + localitate + "'";
+                    n++;
+                } 
+            }
+            zona = cmbZona.Text.ToString();
+            if (zona != null && zona!="")
+            {
+                if (n == 0)
+                {
+                    queryRequest = queryRequest + " WHERE zona='" + zona + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND zona='" + zona + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtPretMin.Text, out pretMin)) 
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE pret>='" + pretMin + "'";
+                }
+                else {
+                    queryRequest += " AND pret>='" + pretMin + "'";
+                }
+            }
+            if (int.TryParse(txtPretMax.Text, out pretMax))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE pret<='" + pretMax + "'";
+                }
+                else {
+                    queryRequest += " AND pret<='" + pretMax + "'";
+                }
+            }
+            if (int.TryParse(txtSupMin.Text, out sMin)) 
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE suprafata_utila>='" + sMin + "'";
+                }
+                else
+                {
+                    queryRequest += " AND suprafata_utila>='" + sMin + "'";
+                }
+            }
+            if (int.TryParse(txtSupMax.Text, out sMax))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE suprafata_utila<='" + sMax + "'";
+                }
+                else
+                {
+                    queryRequest += " AND suprafata_utila<='" + sMax + "'";
+                }
+            }
+            if (int.TryParse(txtEtajMin.Text, out etajMin))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE etaj>='" + etajMin + "'";
+                }
+                else
+                {
+                    queryRequest += " AND etaj>='" + etajMin + "'";
+                }
+            }
+            if (int.TryParse(txtEtajMax.Text, out etajMax))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE etaj<='" + etajMax + "'";
+                }
+                else
+                {
+                    queryRequest += " AND etaj<='" + etajMax + "'";
+                }
+            }
+            compartimentare = cmbCompartimentare.Text.ToString();
+            if (compartimentare != null && compartimentare!="")
+            {
+                if (n == 0)
+                {
+                    queryRequest = queryRequest + " WHERE compartimentare='" + compartimentare + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND compartimentare='" + compartimentare + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtNrCamMin.Text, out nrCamMin))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE nr_camere>='" + nrCamMin + "'";
+                }
+                else
+                {
+                    queryRequest += " AND nr_camere>='" + nrCamMin + "'";
+                }
+            }
+            if (int.TryParse(txtNrCamMax.Text, out nrCamMax))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE nr_camere<='" + nrCamMax + "'";
+                }
+                else
+                {
+                    queryRequest += " AND nr_camere<='" + nrCamMax + "'";
+                }
+            }
+            MessageBox.Show(queryRequest);
+
+            WindowRezultateCerere window = new WindowRezultateCerere(queryRequest);
+            window.Show();
+
+        }
+
+       
     }
 }
 
