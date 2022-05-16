@@ -292,6 +292,69 @@ namespace CRMAgentieImobiliara
             connection.Close();
             activitatiDataGrid.DataContext = dt;
         }
+
+        void fillComboLocalitate()
+        {
+            String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection con = new MySqlConnection(connectionString);
+            
+           
+                con.Open();
+                string query = "select localitate, zona from proprietati";
+                MySqlCommand createCommand = new MySqlCommand(query, con);
+                MySqlDataReader dr = createCommand.ExecuteReader();
+               
+                int i = -1;
+                int nr = 0;
+                string[] localitati = new string[400];
+                while (dr.Read())
+                {
+                    string localitate = dr.GetString("localitate");
+                    if (i == -1)
+                    {
+                        i++;
+                        nr= i;
+                        localitati[i] = localitate;
+                    }
+                    else
+                    {
+                        int identic = 0;
+                        for (int j = 0; j < nr; j++)
+                        {
+                            if (localitati[j] == localitate) identic = 1;
+                        }
+                        if (identic == 0)
+                        {
+                            i++;
+                            nr = i;
+                            localitati[i] = localitate;
+                       
+                        }
+                    }    
+                }
+            for (i = 1; i <= nr; i++) cmbLocalitate.Items.Add(localitati[i]);
+                con.Close();
+           
+        }
+        private void Cereri_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            fillComboLocalitate();
+        }
+
+        private void ManagerActivitati_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            cmbLocalitate.Items.Clear();
+        }
+
+        private void lblPropContacte_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            cmbLocalitate.Items.Clear();
+        }
+
+        private void lblStatistici_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            cmbLocalitate.Items.Clear();
+        }
     }
 }
 
