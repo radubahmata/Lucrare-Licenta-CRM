@@ -9,11 +9,11 @@
 
     <Grid  Background="#2e3137">
 
-        <TabControl HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="794" Margin="0,0,-0.4,0">
+        <TabControl HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="794" Margin="0,-4,-0.4,0">
 
-            <TabItem>
+            <TabItem Height="25" Margin="-2,1,-2.2,-1.2">
                 <TabItem.Header>
-                    <Label Name="lblPropContacte" Content="Proprietati si contacte" MouseLeftButtonDown="lblPropContacte_MouseLeftButtonDown" HorizontalAlignment="Stretch"/>
+                    <Label Name="lblPropContacte" Content="Proprietati si contacte" MouseLeftButtonDown="lblPropContacte_MouseLeftButtonDown" HorizontalAlignment="Stretch" Height="24"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid.Background>
@@ -66,9 +66,9 @@
                 </Grid>
             </TabItem>
 
-            <TabItem>
+            <TabItem Height="25" Margin="-1.8,1,-2,-1.2">
                 <TabItem.Header>
-                    <Label Content="Manager Activitati"  MouseLeftButtonDown="ManagerActivitati_MouseLeftButtonDown" HorizontalAlignment="Stretch"/>
+                    <Label Content="Manager Activitati"  MouseLeftButtonDown="ManagerActivitati_MouseLeftButtonDown" HorizontalAlignment="Stretch" Height="25"/>
                 </TabItem.Header>
 
                 <Grid>
@@ -79,8 +79,8 @@
                         <ColumnDefinition Width="365*"/>
                         <ColumnDefinition Width="423*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Name="txtIntro"  TextAlignment="Center" FontWeight="Bold" Foreground="White" Text="Toate activitatile viitoare:" TextWrapping="Wrap" Margin="205,23,205,329" FontSize="18" Grid.ColumnSpan="2" Width="378" />
-                    <DataGrid Name="activitatiDataGrid" Opacity="0.8" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="254,68,0,88" Width="288" ItemsSource="{Binding}" CanUserResizeRows="True" Grid.ColumnSpan="2">
+                    <TextBlock Name="txtIntro" Background="#2e3137" Opacity="0.85" TextAlignment="Center" FontWeight="Bold" Foreground="White" Text="Toate activitatile viitoare:" TextWrapping="Wrap" Margin="280,27,280,334" FontSize="18" Grid.ColumnSpan="2" />
+                    <DataGrid Name="activitatiDataGrid" Opacity="0.8" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="253,68,0,88" Width="288" ItemsSource="{Binding}" CanUserResizeRows="True" Grid.ColumnSpan="2">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
 
@@ -105,9 +105,9 @@
                     <Button Content="Toate" Height="25" HorizontalAlignment="Left" Margin="124.2,339,0,0" x:Name="btnToateActivitati" VerticalAlignment="Top" Width="53" Click="btnToateActivitati_Click" Grid.Column="1" />
                 </Grid>
             </TabItem>
-            <TabItem>
+            <TabItem Height="25" Margin="-2,1,-2.2,-1.2">
                 <TabItem.Header>
-                    <Label Content="Cereri"  MouseLeftButtonDown="Cereri_MouseLeftButtonDown" HorizontalAlignment="Stretch"/>
+                    <Label Content="Cereri"  MouseLeftButtonDown="Cereri_MouseLeftButtonDown" HorizontalAlignment="Stretch" Height="25"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid.Background>
@@ -116,20 +116,20 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Introduceti criteriile de cautare:" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="238,12,257,341.4" FontSize="20" Background="#2e3137"/>
-                    <TextBlock Text="Pret:" Opacity="0.85" Background="#2e3137" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="482,65,195.8,293" FontSize="15"/>
+                    <TextBlock Text="Introduceti criteriile de cautare:" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="238,12,257,347" FontSize="20" Background="#2e3137"/>
+                    <TextBlock Text="Pret:" Opacity="0.85" Background="#2e3137" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="482,65,196,303" FontSize="15"/>
 
-                    <TextBlock Text="Suprafata:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="648,65,29.8,293" FontSize="15"/>
-                    <TextBlock Text="Nr. camere:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="517,144,160.8,214.4" FontSize="15"/>
-                    <TextBlock Text="Zona:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="330,65,347.8,293" FontSize="15"/>
-                    <TextBlock Text="Localitate:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="174,65,503.8,293" FontSize="15"/>
-                    <TextBlock Text="Tranzactie:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="27,65,650.8,293" FontSize="15"/>
+                    <TextBlock Text="Suprafata:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="648,65,30,303" FontSize="15"/>
+                    <TextBlock Text="Nr. camere:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="517,144,161,223" FontSize="15"/>
+                    <TextBlock Text="Zona:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="330,65,348,303" FontSize="15"/>
+                    <TextBlock Text="Localitate:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="174,65,504,303" FontSize="15"/>
+                    <TextBlock Text="Tranzactie:" Background="#2e3137" Opacity="0.85" TextAlignment="Center" TextWrapping="Wrap" Foreground="White" Margin="27,65,651,303" FontSize="15"/>
                     <ComboBox Name="cmbTranzactie" Margin="17,99,646.8,263">
                         <ComboBoxItem Content="vanzare"/>
                         <ComboBoxItem Content="inchiriere"/>
                     </ComboBox>
-                    <TextBlock Text="Etaj" TextAlignment="Center" Background="#2e3137" Opacity="0.85" TextWrapping="Wrap" Foreground="White" Margin="153,144,524.8,214.4" FontSize="15"/>
-                    <TextBlock TextAlignment="Center" Background="#2e3137" Opacity="0.85" TextWrapping="Wrap" Foreground="White" Margin="321,144,337,214.4" FontSize="15" Text="Compartimentare:"/>
+                    <TextBlock Text="Etaj" TextAlignment="Center" Background="#2e3137" Opacity="0.8" TextWrapping="Wrap" Foreground="White" Margin="153,144,525,223" FontSize="15"/>
+                    <TextBlock TextAlignment="Center" Background="#2e3137" Opacity="0.85" TextWrapping="Wrap" Foreground="White" Margin="321,144,337,223" FontSize="15" Text="Compartimentare:"/>
                     <ComboBox Name="cmbLocalitate" Margin="168,99,495.8,263"/>
                     <ComboBox Name="cmbZona" Margin="322,99,341.8,263"/>
                     <TextBox  Name="txtPretMin" Text="min" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray" Margin="460,99,252.8,263" FontSize="12" Height="30"/>
@@ -144,9 +144,9 @@
                     <ComboBox x:Name="cmbCompartimentare" Margin="323,177,341,179.4" RenderTransformOrigin="0.511,0.177"/>
                 </Grid>
             </TabItem>
-            <TabItem>
+            <TabItem Height="25" Margin="0.4,1,-4.2,-1.2">
                 <TabItem.Header>
-                    <Label Name="lblStatistici" Content="Statistici" MouseLeftButtonDown="lblStatistici_MouseLeftButtonDown" HorizontalAlignment="Stretch"/>
+                    <Label Name="lblStatistici" Content="Statistici" MouseLeftButtonDown="lblStatistici_MouseLeftButtonDown" HorizontalAlignment="Stretch" Height="25"/>
                 </TabItem.Header>
                 <Grid >
                     <Grid.Background>

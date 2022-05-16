@@ -42,8 +42,8 @@ namespace CRMAgentieImobiliara
             if (row_selected != null)
             {
                 string idProprietate = row_selected["id_proprietate"].ToString();
-                DetaliiActivitate windowDetaliiActivitate = new DetaliiActivitate(idProprietate);
-                windowDetaliiActivitate.Show();
+                DetailsWindow window = new DetailsWindow(idProprietate);
+                window.Show();
             }
         }
     }
