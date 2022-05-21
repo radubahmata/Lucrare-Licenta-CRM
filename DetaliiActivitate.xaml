@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="DetaliiActivitate" Height="372.38" Width="454.754">
     <Grid Margin="0,0,0,1.2">
+        <Grid.Background>
+            <ImageBrush ImageSource="D:/FSEGA/Licenta/AplicatieLicenta/CRMAgentieImobiliara/images/clocklogo.png" Stretch="Uniform" Opacity="0.2"></ImageBrush>
+        </Grid.Background>
         <TextBlock FontWeight="Bold" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="txtTitle" Margin="57,13,65,292.2" Height="36" RenderTransformOrigin="0.5,0.5" Width="326"/>
         <Label Content="Contact:" Margin="57,60,298,248.2" FontSize="14"/>
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtContact" Margin="212,54,0,248.2" Height="39" RenderTransformOrigin="0.5,0.5" Width="213"/>

@@ -130,8 +130,8 @@
                     </ComboBox>
                     <TextBlock Text="Etaj" TextAlignment="Center" Background="#2e3137" Opacity="0.8" TextWrapping="Wrap" Foreground="White" Margin="153,144,525,223" FontSize="15"/>
                     <TextBlock TextAlignment="Center" Background="#2e3137" Opacity="0.85" TextWrapping="Wrap" Foreground="White" Margin="321,144,337,223" FontSize="15" Text="Compartimentare:"/>
-                    <ComboBox Name="cmbLocalitate" Margin="168,99,495.8,263"/>
-                    <ComboBox Name="cmbZona" Margin="322,99,341.8,263"/>
+                    <ComboBox Name="cmbLocalitate" Margin="168,99,495.8,263" SelectionChanged="cmbLocalitate_SelectionChanged"/>
+                    <ComboBox Name="cmbZona" Margin="322,99,341.8,263" IsEnabled="False" />
                     <TextBox  Name="txtPretMin" Text="min" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray" Margin="460,99,252.8,263" FontSize="12" Height="30"/>
                     <TextBox  Name="txtPretMax" Text="max" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray" Margin="541,99,171.8,263" FontSize="12" Height="30"/>
                     <TextBox  x:Name="txtSupMin" Text="min" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray" Margin="626,99,86.8,263" FontSize="12" Height="30"/>
@@ -140,8 +140,13 @@
                     <TextBox  x:Name="txtEtajMax" Text="max" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray" Margin="210,177,503,181.4" FontSize="12" Height="24"/>
                     <TextBox  x:Name="txtNrCamMin" Text="min" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray" Margin="494,177,219,181.4" FontSize="12" Height="24"/>
                     <TextBox  x:Name="txtNrCamMax" Text="max" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray" Margin="574,177,138,181.4" FontSize="12" Height="24"/>
-                    <Button x:Name="btnGenerate" Click="btnGenerate_Click" Content="Genereaza cerere" Margin="322,257,346.8,95.4"/>
-                    <ComboBox x:Name="cmbCompartimentare" Margin="323,177,341,179.4" RenderTransformOrigin="0.511,0.177"/>
+                    <Button x:Name="btnGenerate" Click="btnGenerate_Click" Foreground="White" Opacity="0.90" Content="Genereaza cerere" Background="#2e3137"  Margin="322,257,346.8,95.4"/>
+                    <ComboBox x:Name="cmbCompartimentare" Margin="323,177,341,179.4" RenderTransformOrigin="0.511,0.177">
+                        <ComboBoxItem Content="decomandat"/>
+                        <ComboBoxItem Content="semidecomandat"/>
+                        <ComboBoxItem Content="circular"/>
+                        <ComboBoxItem Content="vagon"/>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem Height="25" Margin="0.4,1,-4.2,-1.2">

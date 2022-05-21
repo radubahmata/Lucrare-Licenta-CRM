@@ -25,6 +25,10 @@ namespace CRMAgentieImobiliara
         string idDetalii;
         public DetailsWindow(string idDet)
         {
+            PrintDialog printDlg = new PrintDialog();
+
+            // printDlg.PrintVisual(this, "Window Printing.");
+            printDlg.ShowDialog();
             idDetalii = idDet;
             InitializeComponent();
             //MessageBox.Show(idDet);

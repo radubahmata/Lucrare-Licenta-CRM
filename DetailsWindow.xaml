@@ -7,8 +7,11 @@
         mc:Ignorable="d"
         Title="Detalii" Height="450" Width="800">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="D:/FSEGA/Licenta/AplicatieLicenta/CRMAgentieImobiliara/images/homelogo.jpg" Stretch="Uniform"  Opacity="0.2"></ImageBrush>
+        </Grid.Background>
         <TextBlock FontWeight="Bold" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="txtTitle" Margin="56,13,54.6,352" Height="55" RenderTransformOrigin="0.5,0.5" Width="683"/>
-        <Image Name="imgThumb" Margin="404,62,35.6,200"/>
+        <Image Name="imgThumb" Margin="535,41,9.6,221"/>
         <Label Content="ID:" Margin="29,68,657.6,320" FontSize="14"/>
         <Label Content="Proprietar:" Margin="29,106,657.6,275" FontSize="14"/>
         <Label Content="Adresă:" Margin="29,156,657.6,232" FontSize="14"/>
@@ -29,8 +32,8 @@
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtCompartimentare" Margin="166,329,0,66" Height="25" RenderTransformOrigin="0.5,0.5" Width="171"/>
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtNrBai" Margin="166,372,0,23" Height="25" RenderTransformOrigin="0.5,0.5" Width="171"/>
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtComision" Margin="535,238,0,157" Height="25" RenderTransformOrigin="0.5,0.5" Width="171"/>
-        <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtDescriere" Margin="535,269,0,57" Height="94" RenderTransformOrigin="0.5,0.5" Width="223" TextWrapping="Wrap"/>
-        <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtLinkOferta" Margin="535,372,0,23" Height="25" RenderTransformOrigin="0.5,0.5" Width="223" TextWrapping="Wrap"/>
+        <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="8" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtDescriere" Margin="535,269,0,57" Height="94" RenderTransformOrigin="0.5,0.5" Width="223" TextWrapping="Wrap"/>
+        <TextBox FontWeight="Bold" TextAlignment="Left" FontSize="8" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtLinkOferta" Margin="535,368,0,10" Height="42" RenderTransformOrigin="0.5,0.5" Width="223" TextWrapping="Wrap" IsReadOnly="True"/>
 
     </Grid>
 </Window>

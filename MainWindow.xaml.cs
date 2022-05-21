@@ -33,13 +33,13 @@ namespace CRMAgentieImobiliara
     public partial class MainWindow : Window
     {
         //ActionState action = ActionState.Nothing;
-       
+        string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
         public MainWindow()
         {
             InitializeComponent();
            
 
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+           // string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmd = new MySqlCommand("select * from proprietati", connection);
             connection.Open();
@@ -95,7 +95,7 @@ namespace CRMAgentieImobiliara
             DataRowView row_selected = proprietatiDataGrid.SelectedItem as DataRowView;
             if (row_selected != null)
             {
-                string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+                //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
                 MySqlConnection connection = new MySqlConnection(ConnectionString);
                 string idSters = row_selected["id_proprietate"].ToString();
                 string query = "DELETE from proprietati where id_proprietate='" + idSters + "'";
@@ -119,7 +119,7 @@ namespace CRMAgentieImobiliara
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmd = new MySqlCommand("select * from proprietati", connection);
             connection.Open();
@@ -166,7 +166,7 @@ namespace CRMAgentieImobiliara
 
         private void btnRefreshActivitati_Click(object sender, RoutedEventArgs e)
         {
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data >= '"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
             connection.Open();
@@ -197,7 +197,7 @@ namespace CRMAgentieImobiliara
             DataRowView row_selected = activitatiDataGrid.SelectedItem as DataRowView;
             if (row_selected != null)
             {
-                string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+                //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
                 MySqlConnection connection = new MySqlConnection(ConnectionString);
                 string idSters = row_selected["id"].ToString();
                 string query = "DELETE from activitati where id='" + idSters + "'";
@@ -226,7 +226,7 @@ namespace CRMAgentieImobiliara
             var astazi = DateTime.Today;
             var maine = astazi.AddDays(1);
             var ieri = astazi.AddDays(-1);
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'"+maine.ToString("yyyy-MM-dd")+ "' AND stadiu='viitoare' ORDER BY data", connection);
             connection.Open();
@@ -241,7 +241,7 @@ namespace CRMAgentieImobiliara
             txtIntro.Text = "Activitatile din urmatoarele 7 zile:";
             var astazi = DateTime.Today;
             var oneWeek = astazi.AddDays(8);
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneWeek.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", connection);
             connection.Open();
@@ -257,7 +257,7 @@ namespace CRMAgentieImobiliara
             txtIntro.Text = "Activitatile din urmatoarele 30 de zile:";
             var astazi = DateTime.Today;
             var oneMonth = astazi.AddDays(31);
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneMonth.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", connection);
             connection.Open();
@@ -270,7 +270,7 @@ namespace CRMAgentieImobiliara
         private void btnViitoareActivitati_Click(object sender, RoutedEventArgs e)
         {
             txtIntro.Text = "Toate activitatile viitoare:";
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+           // string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", connection);
             connection.Open();
@@ -283,7 +283,7 @@ namespace CRMAgentieImobiliara
         private void btnToateActivitati_Click(object sender, RoutedEventArgs e)
         {
             txtIntro.Text = "Toate activitatile:";
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+           // string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmd = new MySqlCommand("SELECT * from activitati ORDER BY data", connection);
             connection.Open();
@@ -295,47 +295,144 @@ namespace CRMAgentieImobiliara
 
         void fillComboLocalitate()
         {
-            String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-            MySqlConnection con = new MySqlConnection(connectionString);
+            //String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            //cmbLocalitate.Items.Clear();
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+
+            
+            con.Open();
+            string query = "select localitate, zona from proprietati";
+            MySqlCommand createCommand = new MySqlCommand(query, con);
+            MySqlDataReader dr = createCommand.ExecuteReader();
+               
+            int iLocalitati = -1;
+            
+            int nrLoc = 0;
+            
+            string[] localitati = new string[400];
+            
+            while (dr.Read())
+            {
+                string localitate = dr.GetString("localitate");
+                //string zona = dr.GetString("zona");
+                if (iLocalitati == -1)
+                {
+                    iLocalitati++;
+                    nrLoc = iLocalitati+1;
+                    localitati[iLocalitati] = localitate;
+                   
+                }
+                else
+                {
+                    int identic = 0;
+                    for (int j = 0; j < nrLoc; j++)
+                    {
+                        if (localitati[j] == localitate) identic = 1;
+                    }
+                    if (identic == 0)
+                    {
+                        iLocalitati++;
+                        nrLoc = iLocalitati+1;
+                        localitati[iLocalitati] = localitate;
+
+                    }
+                }
+               
+
+            }
+            for (iLocalitati = 0; iLocalitati < nrLoc; iLocalitati++) cmbLocalitate.Items.Add(localitati[iLocalitati]);
             
            
-                con.Open();
-                string query = "select localitate, zona from proprietati";
-                MySqlCommand createCommand = new MySqlCommand(query, con);
-                MySqlDataReader dr = createCommand.ExecuteReader();
-               
-                int i = -1;
-                int nr = 0;
-                string[] localitati = new string[400];
-                while (dr.Read())
+        }
+
+        private void cmbLocalitate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            cmbZona.IsEnabled = true;
+            cmbZona.Items.Clear();
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+            string localitate = (sender as ComboBox).SelectedItem as string;
+            con.Open();
+            string query = "select zona from proprietati where localitate='" + localitate + "'";
+            MySqlCommand createCommand = new MySqlCommand(query, con);
+            MySqlDataReader dr = createCommand.ExecuteReader();
+
+            int iZone = -1;
+            int nrZon = 0;
+            string[] zone = new string[1200];
+            
+            while (dr.Read())
+            {
+                string zona = dr.GetString("zona");
+
+                if (iZone == -1)
                 {
-                    string localitate = dr.GetString("localitate");
-                    if (i == -1)
+                    iZone++;
+                    nrZon = iZone+1;
+                    zone[iZone] = zona;
+                }
+                else
+                {
+                    int identic = 0;
+                    for (int j = 0; j < nrZon; j++)
+                    {
+                        if (zone[j] == zona) identic = 1;
+                    }
+                    if (identic == 0)
+                    {
+                        iZone++;
+                        nrZon = iZone+1;
+                        zone[iZone] = zona;
+
+                    }
+                }
+            }
+            for (iZone = 0; iZone < nrZon; iZone++) cmbZona.Items.Add(zone[iZone]);
+            con.Close();
+        }
+        /*void fillComboZona()
+        {
+            //String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+
+
+            con.Open();
+            string query = "select localitate, zona from proprietati";
+            MySqlCommand createCommand = new MySqlCommand(query, con);
+            MySqlDataReader dr = createCommand.ExecuteReader();
+
+            int i = -1;
+            int nr = 0;
+            string[] localitati = new string[400];
+            while (dr.Read())
+            {
+                string localitate = dr.GetString("localitate");
+                if (i == -1)
+                {
+                    i++;
+                    nr = i;
+                    localitati[i] = localitate;
+                }
+                else
+                {
+                    int identic = 0;
+                    for (int j = 0; j < nr; j++)
+                    {
+                        if (localitati[j] == localitate) identic = 1;
+                    }
+                    if (identic == 0)
                     {
                         i++;
-                        nr= i;
+                        nr = i;
                         localitati[i] = localitate;
+
                     }
-                    else
-                    {
-                        int identic = 0;
-                        for (int j = 0; j < nr; j++)
-                        {
-                            if (localitati[j] == localitate) identic = 1;
-                        }
-                        if (identic == 0)
-                        {
-                            i++;
-                            nr = i;
-                            localitati[i] = localitate;
-                       
-                        }
-                    }    
                 }
+            }
             for (i = 1; i <= nr; i++) cmbLocalitate.Items.Add(localitati[i]);
-                con.Close();
-           
-        }
+            con.Close();
+
+        }*/
+
         private void Cereri_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             fillComboLocalitate();
