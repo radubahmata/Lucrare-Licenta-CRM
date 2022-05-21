@@ -99,8 +99,14 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@Amplasament", cmbAmplasament.Text.ToString());
                         cmd.Parameters.AddWithValue("@NrCamere", Convert.ToInt32(nrCamereTextBox.Text.ToString()));
                         cmd.Parameters.AddWithValue("@NrBai", Convert.ToInt32(nrBaiTextBox.Text.ToString()));
-                        cmd.Parameters.AddWithValue("@Etaj", Convert.ToInt32(etajTextBox.Text.ToString()));
-                        cmd.Parameters.AddWithValue("@EtajeImobil", Convert.ToInt32(etajeimobilTextBox.Text.ToString()));
+                        cmd.Parameters.AddWithValue("@Etaj", etajTextBox.Text.ToString());
+                        if (etajTextBox.Text.ToString() == "P")
+                        {
+                            cmd.Parameters.AddWithValue("@EtajeImobil", "0"); 
+                        }
+                        else {
+                            cmd.Parameters.AddWithValue("@EtajeImobil", Convert.ToInt32(etajeimobilTextBox.Text.ToString()));
+                        }
                         cmd.Parameters.AddWithValue("@SUtila", float.Parse((suprafataUtilaTextBox.Text.ToString()), CultureInfo.InvariantCulture.NumberFormat));
                         cmd.Parameters.AddWithValue("@Compartimentare", cmbCompartimentare.Text.ToString());
                         cmd.Parameters.AddWithValue("@Descriere", descriereTextBox.Text.ToString());
@@ -112,7 +118,10 @@ namespace CRMAgentieImobiliara
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Proprietate adaugata!");
+                            
+               
                             this.Close();
+                           
                         }
                         else {
                             MessageBox.Show("Adaugarea proprietatii a esuat!");

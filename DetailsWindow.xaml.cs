@@ -72,6 +72,7 @@ namespace CRMAgentieImobiliara
                     string comision = dr.GetDouble("comision").ToString();
                     string suprafata = dr.GetDouble("suprafata_utila").ToString();
                     string etaj = dr.GetString("etaj").ToString();
+                    if (etaj == "0") etaj = "P";
                     string etajeImobil = dr.GetString("nr_etaje_imobil").ToString();
                     string compartimentare = dr.GetString("compartimentare").ToString();
                     string nrBai = dr.GetString("nr_bai").ToString();

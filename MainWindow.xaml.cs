@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 
@@ -41,13 +42,13 @@ namespace CRMAgentieImobiliara
 
            // string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand("select * from proprietati", connection);
-            connection.Open();
-            DataTable dt = new DataTable();
-            dt.Load(cmd.ExecuteReader());
-            connection.Close();
-            proprietatiDataGrid.DataContext = dt;
-
+            /* MySqlCommand cmd = new MySqlCommand("select * from proprietati where stadiu ='activa'", connection);
+             connection.Open();
+             DataTable dt = new DataTable();
+             dt.Load(cmd.ExecuteReader());
+             connection.Close();
+             proprietatiDataGrid.DataContext = dt;
+             */
             MySqlCommand cmdActivitati = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
             connection.Open();
             DataTable dtActivitati = new DataTable();
@@ -345,7 +346,58 @@ namespace CRMAgentieImobiliara
            
         }
 
-        private void cmbLocalitate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        void fillComboLocalitateStatistici()
+        {
+            //String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+            //cmbLocalitate.Items.Clear();
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+
+
+            con.Open();
+            string query = "select localitate, zona from proprietati";
+            MySqlCommand createCommand = new MySqlCommand(query, con);
+            MySqlDataReader dr = createCommand.ExecuteReader();
+
+            int iLocalitati = -1;
+
+            int nrLoc = 0;
+
+            string[] localitati = new string[400];
+
+            while (dr.Read())
+            {
+                string localitate = dr.GetString("localitate");
+                //string zona = dr.GetString("zona");
+                if (iLocalitati == -1)
+                {
+                    iLocalitati++;
+                    nrLoc = iLocalitati + 1;
+                    localitati[iLocalitati] = localitate;
+
+                }
+                else
+                {
+                    int identic = 0;
+                    for (int j = 0; j < nrLoc; j++)
+                    {
+                        if (localitati[j] == localitate) identic = 1;
+                    }
+                    if (identic == 0)
+                    {
+                        iLocalitati++;
+                        nrLoc = iLocalitati + 1;
+                        localitati[iLocalitati] = localitate;
+
+                    }
+                }
+
+
+            }
+            for (iLocalitati = 0; iLocalitati < nrLoc; iLocalitati++) cmbLocalitateStatistici.Items.Add(localitati[iLocalitati]);
+        }
+
+
+            private void cmbLocalitate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             cmbZona.IsEnabled = true;
             cmbZona.Items.Clear();
@@ -436,23 +488,125 @@ namespace CRMAgentieImobiliara
         private void Cereri_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             fillComboLocalitate();
+            cmbLocalitateStatistici.Items.Clear();
         }
 
         private void ManagerActivitati_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             cmbLocalitate.Items.Clear();
+            cmbLocalitateStatistici.Items.Clear();
         }
 
         private void lblPropContacte_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             cmbLocalitate.Items.Clear();
+            cmbLocalitateStatistici.Items.Clear();
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand("select * from proprietati where stadiu ='activa'", connection);
+            connection.Open();
+            DataTable dt = new DataTable();
+            dt.Load(cmd.ExecuteReader());
+            connection.Close();
+            proprietatiDataGrid.DataContext = dt; 
         }
 
         private void lblStatistici_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             cmbLocalitate.Items.Clear();
+            fillComboLocalitateStatistici();
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+            string queryVanzareActiv = "SELECT suprafata_utila, pret from proprietati where tip_oferta ='vanzare' and stadiu = 'activa' and localitate='Cluj-Napoca'";
+            string queryVanzareTranzactionat = "SELECT suprafata_utila, pret_tranzactionare, data_tranzactionare from proprietati where tip_oferta ='vanzare' and stadiu = 'tranzactionata' and localitate='Cluj-Napoca'";
+            string queryInchiriereActiv = "SELECT nr_camere, pret from proprietati where tip_oferta ='inchiriere' and stadiu = 'activa' and localitate='Cluj-Napoca'";
+            string queryInchiriereTranz = "SELECT nr_camere, pret_tranzactionare from proprietati where tip_oferta ='inchiriere' and stadiu = 'tranzactionata' and localitate='Cluj-Napoca'";
+            con.Open();
+            MySqlCommand cmdVanzareActiv = new MySqlCommand(queryVanzareActiv, con);
+            
+            MySqlDataReader drVanzareActiv = cmdVanzareActiv.ExecuteReader();
+            
+            double suma = 0, nr=0, pret=0, pretMediu=0, suprafataUtila=0, pretMediuCurent=0;
+            while (drVanzareActiv.Read())
+            {
+                pret = drVanzareActiv.GetDouble("pret");
+                suprafataUtila = drVanzareActiv.GetDouble("suprafata_utila");
+                pretMediuCurent = pret / suprafataUtila;
+                suma = suma + pretMediuCurent;
+                nr++;
+            }
+            pretMediu = suma / nr;
+            txtVanzariActive.Text = Math.Round(pretMediu, 2).ToString();
+            con.Close();
+            suma = 0;
+            nr = 0;
+            
+            con.Open();
+            MySqlCommand cmdVanzareTranzactionat = new MySqlCommand(queryVanzareTranzactionat, con);
+            MySqlDataReader drVanzareTranzactionat = cmdVanzareTranzactionat.ExecuteReader();
+            while (drVanzareTranzactionat.Read())
+            {
+                pret = drVanzareTranzactionat.GetDouble("pret_tranzactionare");
+                suprafataUtila = drVanzareTranzactionat.GetDouble("suprafata_utila");
+                pretMediuCurent = pret / suprafataUtila;
+                suma = suma + pretMediuCurent;
+                nr++;
+            }
+            pretMediu = suma / nr;
+            txtPropVandute.Text = Math.Round(pretMediu, 2).ToString();
+            con.Close();
+
+            con.Open();
+            MySqlCommand cmdInchiriereActiv = new MySqlCommand(queryInchiriereActiv, con);
+
+            MySqlDataReader drInchiriereActiv = cmdInchiriereActiv.ExecuteReader();
+
+            suma = 0;
+            nr = 0;
+            int nrCamere;
+            while (drInchiriereActiv.Read())
+            {
+                pret = drInchiriereActiv.GetDouble("pret");
+                nrCamere = drInchiriereActiv.GetInt32("nr_camere");
+                pretMediuCurent = pret / nrCamere;
+                suma = suma + pretMediuCurent;
+                nr++;
+            }
+            pretMediu = suma / nr;
+            txtChiriiActive.Text = Math.Round(pretMediu, 2).ToString();
+            con.Close();
+
+            con.Open();
+            MySqlCommand cmdInchiriereTranz = new MySqlCommand(queryInchiriereTranz, con);
+
+            MySqlDataReader drInchiriereTranz = cmdInchiriereTranz.ExecuteReader();
+            suma = 0;
+            nr = 0;
+            
+            while (drInchiriereTranz.Read())
+            {
+                pret = drInchiriereTranz.GetDouble("pret_tranzactionare");
+                nrCamere = drInchiriereTranz.GetInt32("nr_camere");
+                pretMediuCurent = pret / nrCamere;
+                suma = suma + pretMediuCurent;
+                nr++;
+            }
+            pretMediu = suma / nr;
+            txtPropInchiriate.Text = Math.Round(pretMediu, 2).ToString();
+            con.Close();
+
         }
 
+        public void refresh()
+        {
+           
+                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                MySqlCommand cmd = new MySqlCommand("select * from proprietati where stadiu ='activa'", connection);
+                connection.Open();
+                DataTable dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                connection.Close();
+                proprietatiDataGrid.DataContext = dt;
+           
+        }
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
             string queryRequest = "SELECT * FROM proprietati";
@@ -593,14 +747,230 @@ namespace CRMAgentieImobiliara
                     queryRequest += " AND nr_camere<='" + nrCamMax + "'";
                 }
             }
-            MessageBox.Show(queryRequest);
+            //MessageBox.Show(queryRequest);
 
             WindowRezultateCerere window = new WindowRezultateCerere(queryRequest);
             window.Show();
 
         }
 
-       
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                RebindData();
+                SetTimer();
+            }
+            catch (MySqlException exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+
+        protected void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            RebindData();
+        }
+
+        private void RebindData()
+        {
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            String query = "select * from proprietati where stadiu ='activa' ";
+            MySqlDataAdapter da = new MySqlDataAdapter(query, connection);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            proprietatiDataGrid.ItemsSource = ds.Tables[0].DefaultView;
+        }
+
+        //Set and start the timer
+        private void SetTimer()
+        {
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 60);
+            dispatcherTimer.Start();
+        }
+
+        private void cmbLocalitateStatistici_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+            string localitate = (sender as ComboBox).SelectedItem as string;
+            
+
+           
+            string queryVanzareActiv = "SELECT suprafata_utila, pret from proprietati where tip_oferta ='vanzare' and stadiu = 'activa' and localitate='"+localitate+"'";
+            string queryVanzareTranzactionat = "SELECT suprafata_utila, pret_tranzactionare, data_tranzactionare from proprietati where tip_oferta ='vanzare' and stadiu = 'tranzactionata' and localitate='" + localitate + "'";
+            string queryInchiriereActiv = "SELECT nr_camere, pret from proprietati where tip_oferta ='inchiriere' and stadiu = 'activa' and localitate='" + localitate + "'";
+            string queryInchiriereTranz = "SELECT nr_camere, pret_tranzactionare from proprietati where tip_oferta ='inchiriere' and stadiu = 'tranzactionata' and localitate='" + localitate + "'";
+            con.Open();
+            MySqlCommand cmdVanzareActiv = new MySqlCommand(queryVanzareActiv, con);
+
+            MySqlDataReader drVanzareActiv = cmdVanzareActiv.ExecuteReader();
+
+            double suma = 0, nr = 0, pret = 0, pretMediu = 0, suprafataUtila = 0, pretMediuCurent = 0;
+            while (drVanzareActiv.Read())
+            {
+                pret = drVanzareActiv.GetDouble("pret");
+                suprafataUtila = drVanzareActiv.GetDouble("suprafata_utila");
+                pretMediuCurent = pret / suprafataUtila;
+                suma = suma + pretMediuCurent;
+                nr++;
+            }
+            pretMediu = suma / nr;
+            txtVanzariActive.Text = Math.Round(pretMediu, 2).ToString();
+            con.Close();
+            suma = 0;
+            nr = 0;
+
+            con.Open();
+            MySqlCommand cmdVanzareTranzactionat = new MySqlCommand(queryVanzareTranzactionat, con);
+            MySqlDataReader drVanzareTranzactionat = cmdVanzareTranzactionat.ExecuteReader();
+            while (drVanzareTranzactionat.Read())
+            {
+                pret = drVanzareTranzactionat.GetDouble("pret_tranzactionare");
+                suprafataUtila = drVanzareTranzactionat.GetDouble("suprafata_utila");
+                pretMediuCurent = pret / suprafataUtila;
+                suma = suma + pretMediuCurent;
+                nr++;
+            }
+            pretMediu = suma / nr;
+            txtPropVandute.Text = Math.Round(pretMediu, 2).ToString();
+            con.Close();
+
+            con.Open();
+            MySqlCommand cmdInchiriereActiv = new MySqlCommand(queryInchiriereActiv, con);
+
+            MySqlDataReader drInchiriereActiv = cmdInchiriereActiv.ExecuteReader();
+
+            suma = 0;
+            nr = 0;
+            int nrCamere;
+            while (drInchiriereActiv.Read())
+            {
+                pret = drInchiriereActiv.GetDouble("pret");
+                nrCamere = drInchiriereActiv.GetInt32("nr_camere");
+                pretMediuCurent = pret / nrCamere;
+                suma = suma + pretMediuCurent;
+                nr++;
+            }
+            pretMediu = suma / nr;
+            txtChiriiActive.Text = Math.Round(pretMediu, 2).ToString();
+            con.Close();
+
+            con.Open();
+            MySqlCommand cmdInchiriereTranz = new MySqlCommand(queryInchiriereTranz, con);
+
+            MySqlDataReader drInchiriereTranz = cmdInchiriereTranz.ExecuteReader();
+            suma = 0;
+            nr = 0;
+
+            while (drInchiriereTranz.Read())
+            {
+                pret = drInchiriereTranz.GetDouble("pret_tranzactionare");
+                nrCamere = drInchiriereTranz.GetInt32("nr_camere");
+                pretMediuCurent = pret / nrCamere;
+                suma = suma + pretMediuCurent;
+                nr++;
+            }
+            pretMediu = suma / nr;
+            txtPropInchiriate.Text = Math.Round(pretMediu, 2).ToString();
+            con.Close();
+        }
+
+        private void btnVenit_Click(object sender, RoutedEventArgs e)
+        {
+            using (MySqlConnection con = new MySqlConnection(ConnectionString))
+            {
+
+                try
+                {
+                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`) VALUES ( 'venit', @suma, @data )"))
+                    {
+                        cmd.Connection = con;
+
+                        cmd.Parameters.AddWithValue("@suma", Convert.ToDouble(txtVenit.Text));
+                        cmd.Parameters.AddWithValue("@data", dpVenit.SelectedDate.Value.ToString("yyyy-MM-dd"));
+
+                        con.Open();
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Venit adaugat!");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Adaugarea venitului a esuat!");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        private void btnCheltuiala_Click(object sender, RoutedEventArgs e)
+        {
+            using (MySqlConnection con = new MySqlConnection(ConnectionString))
+            {
+
+                try
+                {
+                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`) VALUES ( 'cheltuiala', @suma, @data )"))
+                    {
+                        cmd.Connection = con;
+
+                        cmd.Parameters.AddWithValue("@suma", Convert.ToDouble(txtCheltuiala.Text));
+                        cmd.Parameters.AddWithValue("@data", dpCheltuiala.SelectedDate.Value.ToString("yyyy-MM-dd"));
+
+                        con.Open();
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Cheltuiala adaugata!");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Adaugarea cheltuielii a esuat!");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void btnCalcTotal_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+
+
+            con.Open();
+            string query = "select * from cash";
+            MySqlCommand createCommand = new MySqlCommand(query, con);
+            MySqlDataReader dr = createCommand.ExecuteReader();
+            double venituri = 0, cheltuieli = 0, profit;
+            while (dr.Read())
+            {
+                string operatie = dr.GetString("operatie");
+                if (operatie == "venit")
+                {
+                    double venit = dr.GetDouble("suma");
+                    venituri += venit;
+                }
+                else {
+                    double cheltuiala = dr.GetDouble("suma");
+                    cheltuieli += cheltuiala;
+                }
+            }
+            profit = venituri - cheltuieli;
+            txtProfitTotal.Text = profit.ToString();
+        }
+
+        private void btnCalcPeriodic_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
 

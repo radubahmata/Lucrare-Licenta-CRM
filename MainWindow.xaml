@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CRMAgentieImobiliara"
         mc:Ignorable="d"
+        Loaded="MainWindow_Loaded"
         Title="Estate Buddy" Height="450" Width="800">
 
     <Grid  Background="#2e3137">
@@ -55,9 +56,11 @@
 
 
                             <DataGridTextColumn Binding="{Binding Path=pret}" Header="Pret" Width="Auto" IsReadOnly="True" />
+                            <DataGridTextColumn Binding="{Binding Path=stadiu}" Header="Stadiu" Width="Auto" IsReadOnly="True" />
+
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Refresh" Height="25" HorizontalAlignment="Left" Margin="504,291,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="100" Click="btnRefresh_Click" Grid.Column="1" />
+                    <Button Content="Vezi tot" Height="25" HorizontalAlignment="Left" Margin="504,291,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="100" Click="btnRefresh_Click" Grid.Column="1" />
 
                     <Button x:Name="btnProprietateNoua" Click="btnProprietateNoua_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Adauga" Margin="17,291,100,68.4"/>
                     <Button x:Name="btnProprietateEdit" Click="btnProprietateEdit_Click" Background="#FFD6C530" FontFamily="Times New Roman" Content="Editeaza" Margin="79,291,34,68.4"/>
@@ -151,12 +154,59 @@
             </TabItem>
             <TabItem Height="25" Margin="0.4,1,-4.2,-1.2">
                 <TabItem.Header>
-                    <Label Name="lblStatistici" Content="Statistici" MouseLeftButtonDown="lblStatistici_MouseLeftButtonDown" HorizontalAlignment="Stretch" Height="25"/>
+                    <Label Content="Statistici" Name="lblStatistici" MouseLeftButtonDown="lblStatistici_MouseLeftButtonDown" HorizontalAlignment="Stretch" Height="25"/>
                 </TabItem.Header>
                 <Grid >
                     <Grid.Background>
                         <ImageBrush ImageSource="D:/FSEGA/Licenta/AplicatieLicenta/CRMAgentieImobiliara/images/wallpaper.jpg"></ImageBrush>
                     </Grid.Background>
+                    <GroupBox Header="Preturi medii" Foreground="White" Margin="14,34,404,129">
+                        <GroupBox.Background>
+                            <SolidColorBrush Color="#2e3137" Opacity="0.8"></SolidColorBrush>
+                        </GroupBox.Background>
+                        <Canvas>
+                            <TextBlock Text="Proprietati vandute (EUR/mp) " Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="10" Canvas.Top="10" Width="126"/>
+                            <TextBox x:Name="txtPropVandute" IsReadOnly="True" TextAlignment="Center" Width="89" Canvas.Left="23" Canvas.Top="47"/>
+                            <TextBlock Text="Proprietati active vanzare (EUR/mp)" Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="17" Canvas.Top="77" Height="33" Width="102"/>
+                            <TextBlock Text="Proprietati inchiriate (EUR/camera)" Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="214" Canvas.Top="10" Width="113"/>
+                            <TextBlock Text="Proprietati active inchiriere (EUR/camera)" Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="208" Canvas.Top="77" Width="131"/>
+                            <TextBox x:Name="txtVanzariActive" IsReadOnly="True" TextAlignment="Center" Width="89" Canvas.Left="23" Canvas.Top="121"/>
+                            <TextBox x:Name="txtPropInchiriate" IsReadOnly="True" TextAlignment="Center" Width="89" Canvas.Left="226" Canvas.Top="47"/>
+                            <TextBox x:Name="txtChiriiActive" IsReadOnly="True" TextAlignment="Center" Width="89" Canvas.Left="226" Canvas.Top="121"/>
+                            <ComboBox x:Name="cmbLocalitateStatistici" SelectedValue="Cluj-Napoca" SelectionChanged="cmbLocalitateStatistici_SelectionChanged"  Height="26" Width="100" Canvas.Left="120" Canvas.Top="166"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox Header="Inregistrare venituri si cheluieli" Foreground="White" Margin="408,34,10,129">
+                        <GroupBox.Background>
+                            <SolidColorBrush Color="#2e3137" Opacity="0.8"></SolidColorBrush>
+                        </GroupBox.Background>
+                        <Canvas Margin="0,0,-1.6,-4.6">
+                            <TextBlock Text="Inregistrare venit" Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="10" Canvas.Top="10" Width="126" Height="20"/>
+                            <TextBox x:Name="txtVenit"  TextAlignment="Center" Width="89" Canvas.Left="23" Canvas.Top="43"/>
+                            <TextBlock Text="Inregistrare cheltuiala" Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="17" Canvas.Top="114" Height="21" Width="119"/>
+                            <TextBox x:Name="txtCheltuiala"  TextAlignment="Center" Width="89" Canvas.Left="23" Canvas.Top="146"/>
+                            <DatePicker x:Name="dpVenit"  Width="106" Canvas.Left="23" Canvas.Top="69"/>
+                            <Button x:Name="btnVenit" Click="btnVenit_Click" Content="Inregistreaza" Height="22" Width="77" Canvas.Left="174" Canvas.Top="53"/>
+                            <Button x:Name="btnCheltuiala" Click="btnCheltuiala_Click" Content="Inregistreaza" Height="22" Width="77" Canvas.Left="174" Canvas.Top="153"/>
+                            <DatePicker x:Name="dpCheltuiala"  Width="106" Canvas.Left="22" Canvas.Top="170"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox Header="Rezultate agent" Foreground="White" Margin="14,255,10,10">
+                        <GroupBox.Background>
+                            <SolidColorBrush Color="#2e3137" Opacity="0.8"/>
+                        </GroupBox.Background>
+                        <Canvas>
+                            <TextBlock Text="Profit total " Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="10" Canvas.Top="10" Width="126"/>
+                            <TextBox x:Name="txtProfitTotal" IsReadOnly="True" TextAlignment="Center" Width="89" Canvas.Left="32" Canvas.Top="37"/>
+                            <TextBlock Text="Profit pe perioada:" Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="293" Canvas.Top="10" Width="113"/>
+                            <TextBox x:Name="txtProfitPeriodic" IsReadOnly="True" TextAlignment="Center" Width="89" Canvas.Left="422" Canvas.Top="10"/>
+                            <TextBox x:Name="txtChiriiActive1" IsReadOnly="True" TextAlignment="Center" Width="89" Canvas.Left="226" Canvas.Top="121"/>
+                            <DatePicker x:Name="dpStart"  Width="106" Canvas.Left="300" Canvas.Top="31"/>
+                            <DatePicker x:Name="dpEnd"  Width="106" Canvas.Left="300" Canvas.Top="61"/>
+                            <Button x:Name="btnCalcTotal" Click="btnCalcTotal_Click"  Content="Calculeaza" Height="22" Width="89" Canvas.Left="32" Canvas.Top="65"/>
+                            <Button x:Name="btnCalcPeriodic" Click="btnCalcPeriodic_Click"  Content="Calculeaza" Height="22" Width="89" Canvas.Left="422" Canvas.Top="61"/>
+                        </Canvas>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>

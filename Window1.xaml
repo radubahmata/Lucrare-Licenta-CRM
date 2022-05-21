@@ -121,7 +121,7 @@
         <Label VerticalAlignment="Center" Margin="23,186,0,203" HorizontalAlignment="Left" Content="Localitate:" Width="87" Height="31"/>
         <TextBox x:Name="localitateTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Oras, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="121,189,0,208" Height="23" HorizontalAlignment="Left"/>
 
-        <Button x:Name="btnAddProprietateNoua" Click="btnAddProprietateNoua_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Adauga proprietate" Margin="676,377,9.6,10"/>
+        <Button x:Name="btnAddProprietateNoua" UseLayoutRounding="True" Click="btnAddProprietateNoua_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Adauga proprietate" Margin="676,377,9.6,10"/>
         <Label VerticalAlignment="Center" Margin="584,39,0,354" HorizontalAlignment="Left" Grid.Column="0" Content="Imagine:" RenderTransformOrigin="0.69,-0.183" Height="27"/>
         <Button Name="btnBrowse" Content="Browse" Margin="664,41,9.6,355" Click="btnBrowse_Click"/>
     </Grid>

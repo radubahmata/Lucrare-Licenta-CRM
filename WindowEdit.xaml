@@ -8,6 +8,9 @@
         Title="WindowEdit" Height="464.203" Width="853.115"
         Loaded="WindowEdit_Loaded">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="D:/FSEGA/Licenta/AplicatieLicenta/CRMAgentieImobiliara/images/editlogo.png" Stretch="Uniform" Opacity="0.2"></ImageBrush>
+        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="362*"/>
             <ColumnDefinition Width="61*"/>
@@ -55,8 +58,8 @@
         <Label VerticalAlignment="Center" Margin="299,179,0,226.4" HorizontalAlignment="Left" Grid.Column="0" Content="Etaje imobil:" RenderTransformOrigin="0.509,0" Width="104" Height="29"/>
         <TextBox x:Name="etajeimobilTextBox" Width="120" VerticalAlignment="Center" Margin="418,184,0,226.4" Height="24" HorizontalAlignment="Left"/>
 
-        <Image Name="imgThumb" Margin="584,219,60.4,116.4" Grid.ColumnSpan="2"/>
-        <Button Name="btChange" Content="Schimba" Margin="584,325,78,71.4" Click="btChange_Click" RenderTransformOrigin="0.326,2.068"/>
+        <Image Name="imgThumb" Margin="664,219,60.4,153.4" Grid.ColumnSpan="2"/>
+        <Button Name="btChange" Content="Schimba" Margin="584,214,78,194.4" Click="btChange_Click" RenderTransformOrigin="0.326,2.068"/>
 
         <Label VerticalAlignment="Center" Margin="31,212,0,196.4" HorizontalAlignment="Left" Grid.Column="0" Content="Judet:" Height="26" Width="42"/>
         <ComboBox Name="cmbJudet" Margin="123,214,478,194.4">
@@ -136,6 +139,8 @@
         <TextBox x:Name="localitateTextBox" Width="120" VerticalAlignment="Center" Margin="124,257,0,154.4" Height="23" HorizontalAlignment="Left"/>
 
         <Button x:Name="btnUpdateProprietate" Click="btnUpdateProprietate_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Actualizeaza" Margin="30,391,10.4,10.4" Grid.Column="1"/>
-
+        <Button x:Name="btnTranzactionat" Click="btnTranzactionat_Click"  Background="#FF23B923" Opacity="0.75" FontFamily="Times New Roman" Content="Tranzactionata" Margin="584,316,58,85.4" RenderTransformOrigin="0.515,1.285"/>
+        <Button x:Name="btnRetras" Click="btnRetras_Click"  Background="Gray" FontFamily="Times New Roman" Content="Retrasa" Opacity="0.75" Margin="584,352,58,49.4"/>
+        <Button x:Name="btnPierdut" Click="btnPierdut_Click"  Background="Red" FontFamily="Times New Roman" Content="Pierduta" Opacity="0.75" Margin="584,390,58,11.4"/>
     </Grid>
 </Window>

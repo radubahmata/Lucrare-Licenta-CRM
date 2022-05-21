@@ -1,0 +1,19 @@
+﻿<Window x:Class="CRMAgentieImobiliara.WindowTranzactie"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CRMAgentieImobiliara"
+        mc:Ignorable="d"
+        Title="WindowTranzactie" Height="220.905" Width="422.295">
+    <Grid>
+        <TextBlock Text="Pret tranzactionare:"  Margin="56,35,244,125.2"/>
+        <TextBox Name="txtPretTranzactie" Margin="207,29,71,132.2"/>
+        <TextBlock Text="Comision incasat:" TextAlignment="Left"  Margin="56,71,252,72"/>
+        <TextBox x:Name="txtComisionIncasat" Margin="207,64,71,92.2"/>
+        <TextBlock Text="Data tranzactionare:" TextAlignment="Left" Margin="56,108,252,35"/>
+        <DatePicker Name="dataTranzactie" Margin="207,104,71,54.2"/>
+        <Button Content="Gata!" Background="LimeGreen" x:Name="btnSubmit" Click="btnSubmit_Click" Margin="169,157,179,10.2"/>
+
+    </Grid>
+</Window>

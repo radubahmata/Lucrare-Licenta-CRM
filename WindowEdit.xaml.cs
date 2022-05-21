@@ -186,7 +186,13 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@amplasament", cmbAmplasament.Text.ToString());
                         cmd.Parameters.AddWithValue("@nrCamere", Convert.ToInt32(nrCamereTextBox.Text.ToString()));
                         cmd.Parameters.AddWithValue("@nrBai", Convert.ToInt32(nrBaiTextBox.Text.ToString()));
-                        cmd.Parameters.AddWithValue("@etaj", etajTextBox.Text.ToString());
+                        if (etajTextBox.Text.ToString() != "P")
+                        {
+                            cmd.Parameters.AddWithValue("@etaj", etajTextBox.Text.ToString());
+                        }
+                        else {
+                            cmd.Parameters.AddWithValue("@etaj", "0");
+                        }
                         cmd.Parameters.AddWithValue("@etajeImobil", etajeimobilTextBox.Text.ToString());
                         cmd.Parameters.AddWithValue("@sUtila", float.Parse((suprafataUtilaTextBox.Text.ToString()), CultureInfo.InvariantCulture.NumberFormat));
                         cmd.Parameters.AddWithValue("@compartimentare", cmbCompartimentare.Text.ToString());
@@ -259,6 +265,67 @@ namespace CRMAgentieImobiliara
                  cmbIdEdit.DisplayMemberPath = "id_proprietate";
                  */
             }
+
+        private void btnTranzactionat_Click(object sender, RoutedEventArgs e)
+        {
+            WindowTranzactie window = new WindowTranzactie(idEd);
+            window.Show();
+            this.Close();
+        }
+
+        private void btnRetras_Click(object sender, RoutedEventArgs e)
+        {
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `stadiu`='retrasa' where id_proprietate='" + idEd + "'", con))
+                    {
+                        cmd.Connection = con;
+                        con.Open();
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Proprietate retrasa!");
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nu s-au modificat date!");
+                        }
+
+                        this.Close();
+                    }
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
+            }
+        }
+
+        private void btnPierdut_Click(object sender, RoutedEventArgs e)
+        {
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `stadiu`='pierduta' where id_proprietate='" + idEd + "'", con))
+                    {
+                        cmd.Connection = con;
+                        con.Open();
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Proprietate pierduta!");
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nu s-au modificat date!");
+                        }
+
+                        this.Close();
+                    }
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
+            }
+        }
 
         private void btChange_Click(object sender, RoutedEventArgs e)
         {
