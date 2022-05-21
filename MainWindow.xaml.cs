@@ -969,7 +969,95 @@ namespace CRMAgentieImobiliara
 
         private void btnCalcPeriodic_Click(object sender, RoutedEventArgs e)
         {
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+            con.Open();
+            string query;
+            string dataStart="", dataEnd="";
+            if (dpStart.SelectedDate!=null)
+            { 
+                dataStart = dpStart.SelectedDate.Value.ToString("yyyy-MM-dd");
+            }
+            if (dpStart.SelectedDate!=null)
+            {
+                dataEnd = dpEnd.SelectedDate.Value.ToString("yyyy-MM-dd");
+            }
+            
+            double venituri = 0, cheltuieli = 0, profitPer;
+            
+            if (dataStart != "")
+            {
+                if (dataEnd != "")
+                {
+                    query = "select operatie, suma from cash where data>='" + dataStart + "' and data<='" + dataEnd + "'";
+                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    MySqlDataReader dr = cmd.ExecuteReader();
 
+                    while (dr.Read())
+                    {
+                        string operatie = dr.GetString("operatie");
+                        if (operatie == "venit")
+                        {
+                            double venit = dr.GetDouble("suma");
+                            venituri += venit;
+                        }
+                        else
+                        {
+                            double cheltuiala = dr.GetDouble("suma");
+                            cheltuieli += cheltuiala;
+                        }
+
+                        profitPer = venituri - cheltuieli;
+                        txtProfitPeriodic.Text = profitPer.ToString();
+                    }
+                }
+                else
+                {
+                    query = "select operatie, suma from cash where data>='" + dataStart + "'";
+                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    MySqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        string operatie = dr.GetString("operatie");
+                        if (operatie == "venit")
+                        {
+                            double venit = dr.GetDouble("suma");
+                            venituri += venit;
+                        }
+                        else
+                        {
+                            double cheltuiala = dr.GetDouble("suma");
+                            cheltuieli += cheltuiala;
+                        }
+
+                        profitPer = venituri - cheltuieli;
+                        txtProfitPeriodic.Text = profitPer.ToString();
+                    }
+                }
+            }
+            else {
+                query = "select operatie, suma from cash";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                MySqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    string operatie = dr.GetString("operatie");
+                    if (operatie == "venit")
+                    {
+                        double venit = dr.GetDouble("suma");
+                        venituri += venit;
+                    }
+                    else
+                    {
+                        double cheltuiala = dr.GetDouble("suma");
+                        cheltuieli += cheltuiala;
+                    }
+
+                    profitPer = venituri - cheltuieli;
+                    txtProfitPeriodic.Text = profitPer.ToString();
+                }
+            }
         }
     }
 }

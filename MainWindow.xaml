@@ -82,7 +82,7 @@
                         <ColumnDefinition Width="365*"/>
                         <ColumnDefinition Width="423*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Name="txtIntro" Background="#2e3137" Opacity="0.85" TextAlignment="Center" FontWeight="Bold" Foreground="White" Text="Toate activitatile viitoare:" TextWrapping="Wrap" Margin="280,27,280,334" FontSize="18" Grid.ColumnSpan="2" />
+                    <TextBlock Name="txtIntro" Width="Auto" Background="#2e3137" Opacity="0.85" TextAlignment="Center" FontWeight="Bold" Foreground="White" Text="Toate activitatile viitoare:" TextWrapping="Wrap" Margin="215,27,204,334"  FontSize="18" Grid.ColumnSpan="2" />
                     <DataGrid Name="activitatiDataGrid" Opacity="0.8" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="253,68,0,88" Width="288" ItemsSource="{Binding}" CanUserResizeRows="True" Grid.ColumnSpan="2">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
