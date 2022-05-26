@@ -21,6 +21,8 @@ namespace CRMAgentieImobiliara
     /// </summary>
     public partial class WindowContacte : Window
     {
+        string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+
         public WindowContacte()
         {
             InitializeComponent();
@@ -62,7 +64,7 @@ namespace CRMAgentieImobiliara
                             dt.Load(command.ExecuteReader());
                             connection.Close();
                             contacteDataGrid.DataContext = dt;
-                            
+
                             //this.Close();
                         }
                         else
@@ -90,33 +92,86 @@ namespace CRMAgentieImobiliara
             contacteDataGrid.DataContext = dt;
         }
 
-        private void btnDelContact_Click(object sender, RoutedEventArgs e)
+       
+
+        private void btnEditContact_Click(object sender, RoutedEventArgs e)
         {
             DataRowView row_selected = contacteDataGrid.SelectedItem as DataRowView;
+            string idEditat = row_selected["id_contact"].ToString();
             if (row_selected != null)
             {
-                string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-                MySqlConnection connection = new MySqlConnection(ConnectionString);
-                string idSters = row_selected["id_contact"].ToString();
-                string query = "DELETE from contacte where id_contact='" + idSters + "'";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                connection.Open();
-                cmd.ExecuteNonQuery();
-                connection.Close();
-                MessageBox.Show("Contact sters!");
-                MySqlCommand refresh = new MySqlCommand("select * from contacte", connection);
-                connection.Open();
-                DataTable dt = new DataTable();
-                dt.Load(refresh.ExecuteReader());
-                connection.Close();
-                contacteDataGrid.DataContext = dt;
+               
+                using (MySqlConnection con = new MySqlConnection(ConnectionString))
+                {
+                    try
+                    {
+                        using (var cmd = new MySqlCommand("UPDATE `contacte` SET `nume`=@nume, `prenume`=@prenume, `nr_tel`=@nrTel, `nr_tel2`=@nrTel2, `mail`=@mail where id_contact='" + idEditat + "'", con))
+                        {
+                            cmd.Connection = con;
+
+                            cmd.Parameters.AddWithValue("@nume", txtNume.Text);
+                            cmd.Parameters.AddWithValue("@prenume", txtPrenume.Text);
+                            cmd.Parameters.AddWithValue("@nrTel", txtNrTel.Text);
+                            cmd.Parameters.AddWithValue("@nrTel2", txtNrTel2.Text);
+                            cmd.Parameters.AddWithValue("@mail", txtMail.Text);
+
+
+                            con.Open();
+                            if (cmd.ExecuteNonQuery() > 0)
+                            {
+                                MessageBox.Show("Contact editat cu succes!");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Editarea contactului a esuat!");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+
+                }
 
             }
             else
             {
-                MessageBox.Show("Nu ati selectat nicio proprietate!");
+                MessageBox.Show("Nu ati selectat nicio activitate!");
             }
+            
+        }
 
+        private void contacteDataGrid_Selected(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+            MySqlConnection conContact = new MySqlConnection(ConnectionString);
+            DataRowView row_selected = contacteDataGrid.SelectedItem as DataRowView;
+            string idEditat = row_selected["id_contact"].ToString();
+            string query = "select * from contacte where id_contact='" + idEditat + "';";
+            MySqlCommand cmd = new MySqlCommand(query, con);
+            MySqlDataReader dr;
+
+            try
+            {
+                con.Open();
+                conContact.Open();
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    txtNume.Text = dr.GetString("nume").ToString();
+                    txtPrenume.Text = dr.GetString("prenume");
+                    txtNrTel.Text = dr.GetString("nr_tel");
+                    txtNrTel2.Text = dr.GetString("nr_tel2");
+                    txtMail.Text = dr.GetString("mail"); 
+                }
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Contacte" Height="443.5" Width="518.197">
     <Grid Margin="0,0,4,4.4">
-        <DataGrid Name="contacteDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,163.2" Width="310" ItemsSource="{Binding}" CanUserResizeRows="True">
+        <DataGrid Name="contacteDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="10,10,0,163.2" Width="310" ItemsSource="{Binding}" CanUserResizeRows="True" DataGridCell.Selected="contacteDataGrid_Selected">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=id_contact}" Header="ID" Width="Auto" IsReadOnly="True" />
                 <DataGridTextColumn Binding="{Binding Path=nume}" Header="Nume" Width="Auto" IsReadOnly="True" />
@@ -28,8 +28,7 @@
         <Label Content="Adresa de mail:" Margin="352,325,27,54.2" FontSize="9" />
         <TextBox Name="txtMail" Margin="352,369,27,16.2"/>
         <Button x:Name="btnAddContact" Click="btnAddContact_Click" Content="Adauga" Margin="10,279,434,101.2"/>
-        <Button x:Name="btnEditContact" Click="btnAddContact_Click" Content="Editeaza" Margin="10,313,434,68.2"/>
-        <Button x:Name="btnDelContact" Click="btnDelContact_Click" Content="Sterge" Margin="10,346,434,35.2"/>
+        <Button x:Name="btnEditContact" Click="btnEditContact_Click"  Content="Editeaza" Margin="10,313,434,68.2"/>
         <Button Content="Refresh" Height="18" HorizontalAlignment="Left" Margin="285,246,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="35" Click="btnRefresh_Click" FontSize="8" />
 
     </Grid>
