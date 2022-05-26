@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CRMAgentieImobiliara"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="CRMAgentieImobiliara.WindowAddActivitate"
         mc:Ignorable="d"
-        Title="WindowAddActivitate" Height="450" Width="350">
+        Title="Adaugare activitate" Height="450" Width="350">
     <Grid HorizontalAlignment="Left" Width="340">
         <Label Content="Activitate:" Background="White" Margin="32,34,216,344"/>
         <ComboBox x:Name="cmbActivitate" Margin="180,34,25,357" >
