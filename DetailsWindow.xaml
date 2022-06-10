@@ -34,6 +34,9 @@
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtComision" Margin="535,238,0,157" Height="25" RenderTransformOrigin="0.5,0.5" Width="171"/>
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="8" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtDescriere" Margin="535,269,0,57" Height="94" RenderTransformOrigin="0.5,0.5" Width="223" TextWrapping="Wrap"/>
         <TextBox FontWeight="Bold" TextAlignment="Left" FontSize="8" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtLinkOferta" Margin="535,368,0,10" Height="42" RenderTransformOrigin="0.5,0.5" Width="223" TextWrapping="Wrap" IsReadOnly="True"/>
-
+        <Button Name="buttonPrint" Content="Genereaza PDF" 
+                Height="26"  Width="100" Margin="395,105,0,0"
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Click="buttonPrint_Click" />
     </Grid>
 </Window>

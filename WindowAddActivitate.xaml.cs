@@ -20,8 +20,10 @@ namespace CRMAgentieImobiliara
     /// </summary>
     public partial class WindowAddActivitate : Window
     {
-        public WindowAddActivitate()
+        string userId;
+        public WindowAddActivitate(string idUser)
         {
+            userId = idUser;
             InitializeComponent();
             fillComboContact();
             fillComboIdPRop();
@@ -62,7 +64,7 @@ namespace CRMAgentieImobiliara
             try
             {
                 con.Open();
-                string query = "select id_proprietate from proprietati where 1";
+                string query = "select id_proprietate from proprietati where userId=" + userId + "";
                 MySqlCommand createCommand = new MySqlCommand(query, con);
                 MySqlDataReader dr = createCommand.ExecuteReader();
 
@@ -85,7 +87,7 @@ namespace CRMAgentieImobiliara
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `activitati` ( `tip`, `id_contact`, `id_contact2`, `id_proprietate`, `data`, `detalii`) VALUES (@Tip, @IdContact, @IdContact2, @IdProprietate, @Data, @Detalii)"))
+                    using (var cmd = new MySqlCommand("INSERT INTO `activitati` ( `tip`, `id_contact`, `id_contact2`, `id_proprietate`, `data`, `detalii`, `userId`) VALUES (@Tip, @IdContact, @IdContact2, @IdProprietate, @Data, @Detalii, @userId)"))
                     {
                         cmd.Connection = con;
                         string idContact, idContact2;
@@ -100,7 +102,7 @@ namespace CRMAgentieImobiliara
                             idContact = null;
                         }
 
-
+                        cmd.Parameters.AddWithValue("@userId", userId);
                         s = cmbContact2.Text.ToString();
                         index = s.IndexOf(' ');
                         if (index > 0)

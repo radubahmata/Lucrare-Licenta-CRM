@@ -25,10 +25,10 @@ namespace CRMAgentieImobiliara
         string idDetalii;
         public DetailsWindow(string idDet)
         {
-            PrintDialog printDlg = new PrintDialog();
+            
 
             // printDlg.PrintVisual(this, "Window Printing.");
-            printDlg.ShowDialog();
+           
             idDetalii = idDet;
             InitializeComponent();
             //MessageBox.Show(idDet);
@@ -116,6 +116,21 @@ namespace CRMAgentieImobiliara
                 }
             } 
             catch { }
+        }
+
+        private void buttonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            PrintDialog dlg = new PrintDialog();
+
+            Window currentMainWindow = Application.Current.MainWindow;
+
+            Application.Current.MainWindow = this;
+
+            if ((bool)dlg.ShowDialog().GetValueOrDefault())
+            {
+                Application.Current.MainWindow = currentMainWindow; // do it early enough if the 'if' is entered
+                dlg.PrintVisual(this, "Oferta-");
+            }
         }
     }
 }

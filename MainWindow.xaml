@@ -57,6 +57,7 @@
 
                             <DataGridTextColumn Binding="{Binding Path=pret}" Header="Pret" Width="Auto" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Path=stadiu}" Header="Stadiu" Width="Auto" IsReadOnly="True" />
+                            <DataGridTextColumn Binding="{Binding Path=userId}" Header="Agent" Width="Auto" IsReadOnly="True" />
 
                         </DataGrid.Columns>
                     </DataGrid>

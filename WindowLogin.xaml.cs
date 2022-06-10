@@ -22,6 +22,7 @@ namespace CRMAgentieImobiliara
     /// </summary>
     public partial class WindowLogin : Window
     {
+        string userId;
         public WindowLogin()
         {
             InitializeComponent();
@@ -32,6 +33,8 @@ namespace CRMAgentieImobiliara
             ///conectare sql
             string connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
             MySqlConnection sqlCon = new MySqlConnection(connectionString);
+            MySqlCommand cmd;
+            MySqlDataReader dr;
             try
             {
                 if (sqlCon.State == ConnectionState.Closed)
@@ -44,12 +47,24 @@ namespace CRMAgentieImobiliara
                 int count = Convert.ToInt32(sqlCmd.ExecuteScalar());
                 if (count == 1)
                 {
-                    MainWindow dashboard = new MainWindow();
+                    cmd = new MySqlCommand("select * from login where `UserName`='"+txtloginUsername.Text+"'", sqlCon);
+                    try
+                    {
+                        dr = cmd.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            userId=dr.GetString("UserId");
+                            string tip = dr.GetString("Type");
+                            if (tip == "administrator") userId = "`userID`";
+                        }
+                    }
+                    catch(Exception ex) { MessageBox.Show(ex.Message); }
+                    MainWindow dashboard = new MainWindow(userId);
                     dashboard.Show();
                     this.Close();
                 }
                 else {
-                    MessageBox.Show("Wrong username or password!");
+                    MessageBox.Show("Nume de utilizator sau parola incorecte!");
                 }
             }
             catch(Exception ex)
@@ -60,6 +75,13 @@ namespace CRMAgentieImobiliara
                 sqlCon.Close();
             }
            
+        }
+
+        private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
+        {
+            WindowCreareCont window = new WindowCreareCont();
+            window.Show();
+            this.Close();
         }
     }
 }

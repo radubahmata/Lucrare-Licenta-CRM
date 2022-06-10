@@ -35,21 +35,15 @@ namespace CRMAgentieImobiliara
     {
         //ActionState action = ActionState.Nothing;
         string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-        public MainWindow()
+        string userId;
+        public MainWindow(string idUser)
         {
             InitializeComponent();
-           
+            userId = idUser;
 
-           // string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            /* MySqlCommand cmd = new MySqlCommand("select * from proprietati where stadiu ='activa'", connection);
-             connection.Open();
-             DataTable dt = new DataTable();
-             dt.Load(cmd.ExecuteReader());
-             connection.Close();
-             proprietatiDataGrid.DataContext = dt;
-             */
-            MySqlCommand cmdActivitati = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
+           
+            MySqlCommand cmdActivitati = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId="+userId+" AND data>='"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
             connection.Open();
             DataTable dtActivitati = new DataTable();
             dtActivitati.Load(cmdActivitati.ExecuteReader());
@@ -69,7 +63,7 @@ namespace CRMAgentieImobiliara
         {
             //   action = ActionState.New;
             string request = "proprietate";
-            WindowConfirmContact window = new WindowConfirmContact(request);
+            WindowConfirmContact window = new WindowConfirmContact(request, userId);
             window.Show();
            // Window1 window = new Window1();
             //window.Show();
@@ -105,7 +99,7 @@ namespace CRMAgentieImobiliara
                 cmd.ExecuteNonQuery();
                 connection.Close();
                 MessageBox.Show("Proprietate stearsa!");
-                MySqlCommand refresh = new MySqlCommand("select * from proprietati", connection);
+                MySqlCommand refresh = new MySqlCommand("select * from proprietati WHERE userId=" + userId + "", connection);
                 connection.Open();
                 DataTable dt = new DataTable();
                 dt.Load(refresh.ExecuteReader());
@@ -122,7 +116,7 @@ namespace CRMAgentieImobiliara
         {
             //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand("select * from proprietati", connection);
+            MySqlCommand cmd = new MySqlCommand("select * from proprietati WHERE userId=" + userId + "", connection);
             connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
@@ -161,7 +155,7 @@ namespace CRMAgentieImobiliara
         private void btnAddActivitate_Click(object sender, RoutedEventArgs e)
         {
             string request = "activitate";
-            WindowConfirmContact window = new WindowConfirmContact(request);
+            WindowConfirmContact window = new WindowConfirmContact(request, userId);
             window.Show();
         }
 
@@ -169,7 +163,7 @@ namespace CRMAgentieImobiliara
         {
             //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data >= '"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
+            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data >= '" + DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
             connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
@@ -207,7 +201,7 @@ namespace CRMAgentieImobiliara
                 cmd.ExecuteNonQuery();
                 connection.Close();
                 MessageBox.Show("Activitate stearsa!");
-                MySqlCommand refresh = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", connection);
+                MySqlCommand refresh = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data>='" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", connection);
                 connection.Open();
                 DataTable dt = new DataTable();
                 dt.Load(refresh.ExecuteReader());
@@ -229,7 +223,7 @@ namespace CRMAgentieImobiliara
             var ieri = astazi.AddDays(-1);
             //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'"+maine.ToString("yyyy-MM-dd")+ "' AND stadiu='viitoare' ORDER BY data", connection);
+            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'"+maine.ToString("yyyy-MM-dd")+ "' AND stadiu='viitoare' ORDER BY data", connection);
             connection.Open();
             DataTable dtActivitatiSpecific = new DataTable();
             dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
@@ -244,7 +238,7 @@ namespace CRMAgentieImobiliara
             var oneWeek = astazi.AddDays(8);
             //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneWeek.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", connection);
+            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneWeek.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", connection);
             connection.Open();
             DataTable dtActivitatiSpecific = new DataTable();
             dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
@@ -260,7 +254,7 @@ namespace CRMAgentieImobiliara
             var oneMonth = astazi.AddDays(31);
             //string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneMonth.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", connection);
+            MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneMonth.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", connection);
             connection.Open();
             DataTable dtActivitatiSpecific = new DataTable();
             dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
@@ -273,7 +267,7 @@ namespace CRMAgentieImobiliara
             txtIntro.Text = "Toate activitatile viitoare:";
            // string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE data >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", connection);
+            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", connection);
             connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
@@ -286,7 +280,7 @@ namespace CRMAgentieImobiliara
             txtIntro.Text = "Toate activitatile:";
            // string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand("SELECT * from activitati ORDER BY data", connection);
+            MySqlCommand cmd = new MySqlCommand("SELECT * from activitati WHERE userId=" + userId + " ORDER BY data", connection);
             connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
@@ -302,7 +296,7 @@ namespace CRMAgentieImobiliara
 
             
             con.Open();
-            string query = "select localitate, zona from proprietati";
+            string query = "select localitate, zona from proprietati WHERE userId=" + userId + "";
             MySqlCommand createCommand = new MySqlCommand(query, con);
             MySqlDataReader dr = createCommand.ExecuteReader();
                
@@ -354,7 +348,7 @@ namespace CRMAgentieImobiliara
 
 
             con.Open();
-            string query = "select localitate, zona from proprietati";
+            string query = "select localitate, zona from proprietati WHERE userId=" + userId + "";
             MySqlCommand createCommand = new MySqlCommand(query, con);
             MySqlDataReader dr = createCommand.ExecuteReader();
 
@@ -404,7 +398,7 @@ namespace CRMAgentieImobiliara
             MySqlConnection con = new MySqlConnection(ConnectionString);
             string localitate = (sender as ComboBox).SelectedItem as string;
             con.Open();
-            string query = "select zona from proprietati where localitate='" + localitate + "'";
+            string query = "select zona from proprietati where userId=" + userId + " AND localitate='" + localitate + "'";
             MySqlCommand createCommand = new MySqlCommand(query, con);
             MySqlDataReader dr = createCommand.ExecuteReader();
 
@@ -502,7 +496,7 @@ namespace CRMAgentieImobiliara
             cmbLocalitate.Items.Clear();
             cmbLocalitateStatistici.Items.Clear();
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand("select * from proprietati where stadiu ='activa'", connection);
+            MySqlCommand cmd = new MySqlCommand("select * from proprietati where userId=" + userId + " AND stadiu ='activa'", connection);
             connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
@@ -599,7 +593,7 @@ namespace CRMAgentieImobiliara
         {
            
                 MySqlConnection connection = new MySqlConnection(ConnectionString);
-                MySqlCommand cmd = new MySqlCommand("select * from proprietati where stadiu ='activa'", connection);
+                MySqlCommand cmd = new MySqlCommand("select * from proprietati where userId=" + userId + " AND stadiu ='activa'", connection);
                 connection.Open();
                 DataTable dt = new DataTable();
                 dt.Load(cmd.ExecuteReader());
@@ -609,7 +603,7 @@ namespace CRMAgentieImobiliara
         }
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            string queryRequest = "SELECT * FROM proprietati";
+            string queryRequest = "SELECT * FROM proprietati ";
             int n = 0;
             string tranzactie,localitate,zona, compartimentare;
             int pretMin, pretMax, sMin, sMax;
@@ -775,7 +769,7 @@ namespace CRMAgentieImobiliara
         private void RebindData()
         {
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-            String query = "select * from proprietati where stadiu ='activa' ";
+            String query = "select * from proprietati where userId=" + userId + " AND stadiu ='activa' ";
             MySqlDataAdapter da = new MySqlDataAdapter(query, connection);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -884,12 +878,13 @@ namespace CRMAgentieImobiliara
 
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`) VALUES ( 'venit', @suma, @data )"))
+                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`, `userId`) VALUES ( 'venit', @suma, @data, @userId )"))
                     {
                         cmd.Connection = con;
 
                         cmd.Parameters.AddWithValue("@suma", Convert.ToDouble(txtVenit.Text));
                         cmd.Parameters.AddWithValue("@data", dpVenit.SelectedDate.Value.ToString("yyyy-MM-dd"));
+                        cmd.Parameters.AddWithValue("@userId", userId);
 
                         con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
@@ -915,12 +910,13 @@ namespace CRMAgentieImobiliara
 
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`) VALUES ( 'cheltuiala', @suma, @data )"))
+                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`, `userId`) VALUES ( 'cheltuiala', @suma, @data, @userId )"))
                     {
                         cmd.Connection = con;
 
                         cmd.Parameters.AddWithValue("@suma", Convert.ToDouble(txtCheltuiala.Text));
                         cmd.Parameters.AddWithValue("@data", dpCheltuiala.SelectedDate.Value.ToString("yyyy-MM-dd"));
+                        cmd.Parameters.AddWithValue("@userId", userId);
 
                         con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
@@ -946,7 +942,7 @@ namespace CRMAgentieImobiliara
 
 
             con.Open();
-            string query = "select * from cash";
+            string query = "select * from cash WHERE userId=" + userId + "";
             MySqlCommand createCommand = new MySqlCommand(query, con);
             MySqlDataReader dr = createCommand.ExecuteReader();
             double venituri = 0, cheltuieli = 0, profit;
@@ -988,7 +984,7 @@ namespace CRMAgentieImobiliara
             {
                 if (dataEnd != "")
                 {
-                    query = "select operatie, suma from cash where data>='" + dataStart + "' and data<='" + dataEnd + "'";
+                    query = "select operatie, suma from cash where userId=" + userId + " AND data>='" + dataStart + "' and data<='" + dataEnd + "'";
                     MySqlCommand cmd = new MySqlCommand(query, con);
                     MySqlDataReader dr = cmd.ExecuteReader();
 
@@ -1012,7 +1008,7 @@ namespace CRMAgentieImobiliara
                 }
                 else
                 {
-                    query = "select operatie, suma from cash where data>='" + dataStart + "'";
+                    query = "select operatie, suma from cash where userId=" + userId + " AND data>='" + dataStart + "'";
                     MySqlCommand cmd = new MySqlCommand(query, con);
                     MySqlDataReader dr = cmd.ExecuteReader();
 
@@ -1036,7 +1032,7 @@ namespace CRMAgentieImobiliara
                 }
             }
             else {
-                query = "select operatie, suma from cash";
+                query = "select operatie, suma from cash WHERE userId=" + userId + "";
                 MySqlCommand cmd = new MySqlCommand(query, con);
                 MySqlDataReader dr = cmd.ExecuteReader();
 

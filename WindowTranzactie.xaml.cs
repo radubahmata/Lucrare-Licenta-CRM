@@ -39,7 +39,7 @@ namespace CRMAgentieImobiliara
                         cmd.Connection = con;
                         double pretTranz = Convert.ToDouble (txtPretTranzactie.Text);
                         double comisionIncasat = Convert.ToDouble(txtComisionIncasat.Text);
-                        string data = dataTranzactie.Text;
+                        string data = dataTranzactie.SelectedDate.Value.ToString("yyyy-MM-dd");
                         cmd.Parameters.AddWithValue("@dataTranz", data);
                         cmd.Parameters.AddWithValue("@comisionIncasat", comisionIncasat);
                         cmd.Parameters.AddWithValue("@pretTranz", pretTranz);
