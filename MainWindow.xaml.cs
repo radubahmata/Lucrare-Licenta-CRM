@@ -36,13 +36,20 @@ namespace CRMAgentieImobiliara
         //ActionState action = ActionState.Nothing;
         string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
         string userId;
-        public MainWindow(string idUser)
+        int userIdInt;
+        public MainWindow(string idUser, int IdUserInt)
         {
             InitializeComponent();
             userId = idUser;
-
+            userIdInt = IdUserInt;
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-           
+            connection.Open();
+            string queryProprietati = "select * from proprietati where userId=" + userId + " AND stadiu ='activa'";
+            MySqlCommand cmd = new MySqlCommand(queryProprietati, connection);
+            DataTable dt = new DataTable();
+            dt.Load(cmd.ExecuteReader());
+            connection.Close();
+            proprietatiDataGrid.DataContext = dt;
             MySqlCommand cmdActivitati = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId="+userId+" AND data>='"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
             connection.Open();
             DataTable dtActivitati = new DataTable();
@@ -63,7 +70,7 @@ namespace CRMAgentieImobiliara
         {
             //   action = ActionState.New;
             string request = "proprietate";
-            WindowConfirmContact window = new WindowConfirmContact(request, userId);
+            WindowConfirmContact window = new WindowConfirmContact(request, userId, userIdInt);
             window.Show();
            // Window1 window = new Window1();
             //window.Show();
@@ -126,7 +133,7 @@ namespace CRMAgentieImobiliara
 
         private void btnViewContacte_Click(object sender, RoutedEventArgs e)
         {
-            WindowContacte window = new WindowContacte();
+            WindowContacte window = new WindowContacte(userIdInt);
             window.Show();          
         }
 
@@ -155,7 +162,7 @@ namespace CRMAgentieImobiliara
         private void btnAddActivitate_Click(object sender, RoutedEventArgs e)
         {
             string request = "activitate";
-            WindowConfirmContact window = new WindowConfirmContact(request, userId);
+            WindowConfirmContact window = new WindowConfirmContact(request, userId, userIdInt);
             window.Show();
         }
 
@@ -747,44 +754,44 @@ namespace CRMAgentieImobiliara
             window.Show();
 
         }
+        /*
+                private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+                {
+                    try
+                    {
+                        RebindData();
+                        SetTimer();
+                    }
+                    catch (MySqlException exception)
+                    {
+                        Console.WriteLine(exception.Message);
+                    }
+                }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                RebindData();
-                SetTimer();
-            }
-            catch (MySqlException exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-        }
+                protected void dispatcherTimer_Tick(object sender, EventArgs e)
+                {
+                    RebindData();
+                }
 
-        protected void dispatcherTimer_Tick(object sender, EventArgs e)
-        {
-            RebindData();
-        }
+                private void RebindData()
+                {
+                    MySqlConnection connection = new MySqlConnection(ConnectionString);
+                    String query = "select * from proprietati where userId=" + userId + " AND stadiu ='activa' ";
+                    MySqlDataAdapter da = new MySqlDataAdapter(query, connection);
+                    DataSet ds = new DataSet();
+                    da.Fill(ds);
+                    proprietatiDataGrid.ItemsSource = ds.Tables[0].DefaultView;
+                }
 
-        private void RebindData()
-        {
-            MySqlConnection connection = new MySqlConnection(ConnectionString);
-            String query = "select * from proprietati where userId=" + userId + " AND stadiu ='activa' ";
-            MySqlDataAdapter da = new MySqlDataAdapter(query, connection);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-            proprietatiDataGrid.ItemsSource = ds.Tables[0].DefaultView;
-        }
-
-        //Set and start the timer
-        private void SetTimer()
-        {
-            DispatcherTimer dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 60);
-            dispatcherTimer.Start();
-        }
-
+                //Set and start the timer
+                private void SetTimer()
+                {
+                    DispatcherTimer dispatcherTimer = new DispatcherTimer();
+                    dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+                    dispatcherTimer.Interval = new TimeSpan(0, 0, 60);
+                    dispatcherTimer.Start();
+                }
+                */
         private void cmbLocalitateStatistici_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MySqlConnection con = new MySqlConnection(ConnectionString);
@@ -878,13 +885,13 @@ namespace CRMAgentieImobiliara
 
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`, `userId`) VALUES ( 'venit', @suma, @data, @userId )"))
+                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`, `userId`) VALUES ( 'venit', @suma, @data, "+userIdInt+")"))
                     {
                         cmd.Connection = con;
 
                         cmd.Parameters.AddWithValue("@suma", Convert.ToDouble(txtVenit.Text));
                         cmd.Parameters.AddWithValue("@data", dpVenit.SelectedDate.Value.ToString("yyyy-MM-dd"));
-                        cmd.Parameters.AddWithValue("@userId", userId);
+                        
 
                         con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
@@ -910,13 +917,13 @@ namespace CRMAgentieImobiliara
 
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`, `userId`) VALUES ( 'cheltuiala', @suma, @data, @userId )"))
+                    using (var cmd = new MySqlCommand("INSERT INTO `cash` ( `operatie` , `suma` , `data`, `userId`) VALUES ( 'cheltuiala', @suma, @data, "+userIdInt+" )"))
                     {
                         cmd.Connection = con;
 
                         cmd.Parameters.AddWithValue("@suma", Convert.ToDouble(txtCheltuiala.Text));
                         cmd.Parameters.AddWithValue("@data", dpCheltuiala.SelectedDate.Value.ToString("yyyy-MM-dd"));
-                        cmd.Parameters.AddWithValue("@userId", userId);
+                       
 
                         con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
@@ -969,14 +976,16 @@ namespace CRMAgentieImobiliara
             con.Open();
             string query;
             string dataStart="", dataEnd="";
-            if (dpStart.SelectedDate!=null)
-            { 
+            if (dpStart.SelectedDate != null)
+            {
                 dataStart = dpStart.SelectedDate.Value.ToString("yyyy-MM-dd");
             }
-            if (dpStart.SelectedDate!=null)
+            else dataStart = DBNull.Value.ToString();
+            if (dpEnd.SelectedDate != null)
             {
                 dataEnd = dpEnd.SelectedDate.Value.ToString("yyyy-MM-dd");
             }
+            else dataEnd = "9999-12-31";
             
             double venituri = 0, cheltuieli = 0, profitPer;
             
@@ -1054,6 +1063,36 @@ namespace CRMAgentieImobiliara
                     txtProfitPeriodic.Text = profitPer.ToString();
                 }
             }
+        }
+
+        private void btnTranzactii_Click(object sender, RoutedEventArgs e)
+        {
+            WindowTranzactii window = new WindowTranzactii(userId);
+            window.Show();
+        }
+
+        private void btnOperatiuni_Click(object sender, RoutedEventArgs e)
+        {
+            WindowOperatiuni window = new WindowOperatiuni(userId);
+            window.Show();
+        }
+
+        private void CmbStadiuProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string queryProprietatiCombo;
+            string stadiu = (sender as ComboBox).SelectedItem.ToString();
+            //MessageBox.Show(stadiu);
+            if (stadiu == "System.Windows.Controls.ComboBoxItem: Active") queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='activa'";
+            else if (stadiu == "System.Windows.Controls.ComboBoxItem: Pierdute") queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='pierduta'";
+            else queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='retrasa'";
+
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+            MySqlCommand cmd = new MySqlCommand(queryProprietatiCombo, con);
+            con.Open();
+            DataTable dt = new DataTable();
+            dt.Load(cmd.ExecuteReader());
+            con.Close();
+            proprietatiDataGrid.DataContext = dt;
         }
     }
 }

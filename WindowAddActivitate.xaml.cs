@@ -21,8 +21,10 @@ namespace CRMAgentieImobiliara
     public partial class WindowAddActivitate : Window
     {
         string userId;
-        public WindowAddActivitate(string idUser)
+        int userIdInt;
+        public WindowAddActivitate(string idUser,int IdUserInt)
         {
+            userIdInt = IdUserInt;
             userId = idUser;
             InitializeComponent();
             fillComboContact();
@@ -87,7 +89,7 @@ namespace CRMAgentieImobiliara
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `activitati` ( `tip`, `id_contact`, `id_contact2`, `id_proprietate`, `data`, `detalii`, `userId`) VALUES (@Tip, @IdContact, @IdContact2, @IdProprietate, @Data, @Detalii, @userId)"))
+                    using (var cmd = new MySqlCommand("INSERT INTO `activitati` ( `tip`, `id_contact`, `id_contact2`, `id_proprietate`, `data`, `detalii`, `userId`) VALUES (@Tip, @IdContact, @IdContact2, @IdProprietate, @Data, @Detalii, "+userIdInt+")"))
                     {
                         cmd.Connection = con;
                         string idContact, idContact2;
@@ -102,7 +104,7 @@ namespace CRMAgentieImobiliara
                             idContact = null;
                         }
 
-                        cmd.Parameters.AddWithValue("@userId", userId);
+                        
                         s = cmbContact2.Text.ToString();
                         index = s.IndexOf(' ');
                         if (index > 0)

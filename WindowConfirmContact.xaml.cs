@@ -20,9 +20,12 @@ namespace CRMAgentieImobiliara
     public partial class WindowConfirmContact : Window
     {
         string cerere,userId;
-        public WindowConfirmContact(string request, string idUser)
+        int userIdInt;
+        public WindowConfirmContact(string request, string idUser, int IdUserInt)
         {
+
             InitializeComponent();
+            userIdInt = IdUserInt;
             cerere = request;
             userId = idUser;
             if (cerere == "proprietate")
@@ -40,13 +43,13 @@ namespace CRMAgentieImobiliara
             if (cerere == "proprietate")
             {
                
-                Window1 window = new Window1(userId);
+                Window1 window = new Window1(userId, userIdInt);
                 window.Show();
                 this.Close();
             }
             else if (cerere == "activitate") 
             { 
-                WindowAddActivitate window = new WindowAddActivitate(userId);
+                WindowAddActivitate window = new WindowAddActivitate(userId, userIdInt);
                 window.Show();
                 this.Close();
             }
@@ -55,7 +58,7 @@ namespace CRMAgentieImobiliara
         private void btnNu_Click(object sender, RoutedEventArgs e)
         {
            
-            WindowContacte window = new WindowContacte();
+            WindowContacte window = new WindowContacte(userIdInt);
             window.Show();
             this.Close();
         }

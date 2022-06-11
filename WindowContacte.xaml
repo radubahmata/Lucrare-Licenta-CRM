@@ -29,7 +29,7 @@
         <TextBox Name="txtMail" Margin="352,369,27,16.2"/>
         <Button x:Name="btnAddContact" Click="btnAddContact_Click" Content="Adauga" Margin="10,279,434,101.2"/>
         <Button x:Name="btnEditContact" Click="btnEditContact_Click"  Content="Editeaza" Margin="10,313,434,68.2"/>
-        <Button Content="Refresh" Height="18" HorizontalAlignment="Left" Margin="285,246,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="35" Click="btnRefresh_Click" FontSize="8" />
+       
 
     </Grid>
 </Window>

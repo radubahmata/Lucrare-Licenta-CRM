@@ -22,7 +22,8 @@ namespace CRMAgentieImobiliara
     /// </summary>
     public partial class WindowLogin : Window
     {
-        string userId;
+        string userId; 
+        int userIdInt;
         public WindowLogin()
         {
             InitializeComponent();
@@ -54,12 +55,13 @@ namespace CRMAgentieImobiliara
                         while (dr.Read())
                         {
                             userId=dr.GetString("UserId");
+                            userIdInt = Convert.ToInt32(userId);
                             string tip = dr.GetString("Type");
                             if (tip == "administrator") userId = "`userID`";
                         }
                     }
                     catch(Exception ex) { MessageBox.Show(ex.Message); }
-                    MainWindow dashboard = new MainWindow(userId);
+                    MainWindow dashboard = new MainWindow(userId, userIdInt);
                     dashboard.Show();
                     this.Close();
                 }

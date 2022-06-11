@@ -130,11 +130,17 @@
     <Compile Include="WindowLogin.xaml.cs">
       <DependentUpon>WindowLogin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WindowOperatiuni.xaml.cs">
+      <DependentUpon>WindowOperatiuni.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowRezultateCerere.xaml.cs">
       <DependentUpon>WindowRezultateCerere.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowTranzactie.xaml.cs">
       <DependentUpon>WindowTranzactie.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowTranzactii.xaml.cs">
+      <DependentUpon>WindowTranzactii.xaml</DependentUpon>
     </Compile>
     <Page Include="DetailsWindow.xaml">
       <SubType>Designer</SubType>
@@ -188,11 +194,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WindowOperatiuni.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowRezultateCerere.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowTranzactie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowTranzactii.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

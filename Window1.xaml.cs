@@ -29,9 +29,11 @@ namespace CRMAgentieImobiliara
        // DataSet dataSet;
         string stringName, imageName;
         string userId;
-        public Window1(string idUser)
+        int userIdInt;
+        public Window1(string idUser, int IdUserInt)
         {
             userId = idUser;
+            userIdInt = IdUserInt; 
             InitializeComponent();
             fillComboIdContact();
         }
@@ -68,7 +70,7 @@ namespace CRMAgentieImobiliara
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `proprietati` ( `id_contact`, `tip_oferta`, `tip_proprietate`, `judet`, `localitate`, `zona`, `adresa`, `amplasament`, `nr_camere`, `nr_bai`, `etaj`, `nr_etaje_imobil`, `suprafata_utila`, `compartimentare`, `descriere`, `link_oferta`, `pret`, `comision`,`imagini`,`userId`) VALUES (@Contact, @Oferta, @TipProprietate, @Judet, @Localitate, @Zona, @Adresa, @Amplasament, @NrCamere, @NrBai, @Etaj, @EtajeImobil, @SUtila, @Compartimentare, @Descriere, @LinkOferta, @Pret, @Comision, @Img, @userId)"))
+                    using (var cmd = new MySqlCommand("INSERT INTO `proprietati` ( `id_contact`, `tip_oferta`, `tip_proprietate`, `judet`, `localitate`, `zona`, `adresa`, `amplasament`, `nr_camere`, `nr_bai`, `etaj`, `nr_etaje_imobil`, `suprafata_utila`, `compartimentare`, `descriere`, `link_oferta`, `pret`, `comision`,`imagini`,`userId`) VALUES (@Contact, @Oferta, @TipProprietate, @Judet, @Localitate, @Zona, @Adresa, @Amplasament, @NrCamere, @NrBai, @Etaj, @EtajeImobil, @SUtila, @Compartimentare, @Descriere, @LinkOferta, @Pret, @Comision, @Img, "+userIdInt+")"))
                     {
                         cmd.Connection = con;
                         string s = cmbContact.Text.ToString();
@@ -94,7 +96,7 @@ namespace CRMAgentieImobiliara
                             MessageBox.Show(ex.Message);
                         }
 
-                        cmd.Parameters.AddWithValue("@userId", userId);
+                        
                         cmd.Parameters.AddWithValue("@Contact", Convert.ToInt32(idContactFinal));
                         cmd.Parameters.AddWithValue("@Oferta", cmbTipOferta.Text.ToString());
                         cmd.Parameters.AddWithValue("@TipProprietate", cmbTipProprietate.Text.ToString());

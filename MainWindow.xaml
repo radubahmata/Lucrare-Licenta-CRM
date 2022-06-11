@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CRMAgentieImobiliara"
         mc:Ignorable="d"
-        Loaded="MainWindow_Loaded"
+        
         Title="Estate Buddy" Height="450" Width="800">
 
     <Grid  Background="#2e3137">
@@ -61,7 +61,11 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Vezi tot" Height="25" HorizontalAlignment="Left" Margin="504,291,0,0" Name="btnRefresh" VerticalAlignment="Top" Width="100" Click="btnRefresh_Click" Grid.Column="1" />
+                    <ComboBox Name="cmbStadiuProp"  SelectedValue="Active" SelectionChanged="CmbStadiuProp_SelectionChanged" Margin="47,293,442.4,68" Grid.Column="1">
+                        <ComboBoxItem Content="Active"/>
+                        <ComboBoxItem Content="Pierdute"/>
+                        <ComboBoxItem Content="Retrase"/>
+                    </ComboBox>
 
                     <Button x:Name="btnProprietateNoua" Click="btnProprietateNoua_Click" Background="#FF23B923" FontFamily="Times New Roman" Content="Adauga" Margin="17,291,100,68.4"/>
                     <Button x:Name="btnProprietateEdit" Click="btnProprietateEdit_Click" Background="#FFD6C530" FontFamily="Times New Roman" Content="Editeaza" Margin="79,291,34,68.4"/>
@@ -187,9 +191,11 @@
                             <TextBlock Text="Inregistrare cheltuiala" Background="#2e3137" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="17" Canvas.Top="114" Height="21" Width="119"/>
                             <TextBox x:Name="txtCheltuiala"  TextAlignment="Center" Width="89" Canvas.Left="23" Canvas.Top="146"/>
                             <DatePicker x:Name="dpVenit"  Width="106" Canvas.Left="23" Canvas.Top="69"/>
-                            <Button x:Name="btnVenit" Click="btnVenit_Click" Content="Inregistreaza" Height="22" Width="77" Canvas.Left="174" Canvas.Top="53"/>
-                            <Button x:Name="btnCheltuiala" Click="btnCheltuiala_Click" Content="Inregistreaza" Height="22" Width="77" Canvas.Left="174" Canvas.Top="153"/>
+                            <Button x:Name="btnVenit" Click="btnVenit_Click" Content="Inregistreaza" Height="22" Width="77" Canvas.Left="153" Canvas.Top="53"/>
+                            <Button x:Name="btnCheltuiala" Click="btnCheltuiala_Click" Content="Inregistreaza" Height="22" Width="77" Canvas.Left="153" Canvas.Top="153"/>
                             <DatePicker x:Name="dpCheltuiala"  Width="106" Canvas.Left="22" Canvas.Top="170"/>
+                            <Button x:Name="btnTranzactii" Click="btnTranzactii_Click" Content="Lista Tranzactii" Height="22" Width="86" Canvas.Left="264" Canvas.Top="53"/>
+                            <Button x:Name="btnOperatiuni" Click="btnOperatiuni_Click" Content="Lista Operatiuni" Height="24" Width="86" Canvas.Left="264" Canvas.Top="80"/>
                         </Canvas>
                     </GroupBox>
                     <GroupBox Header="Rezultate agent" Foreground="White" Margin="14,255,10,10">

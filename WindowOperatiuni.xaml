@@ -1,0 +1,20 @@
+﻿<Window x:Class="CRMAgentieImobiliara.WindowOperatiuni"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CRMAgentieImobiliara"
+        mc:Ignorable="d"
+        Title="Lista operatiuni" Height="264.099" Width="285.083">
+    <Grid Background="#2e3137">
+        <DataGrid Name="operatiuniDataGrid" Opacity="0.7" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="0,0,0,0.4" Width="278" ItemsSource="{Binding}" CanUserResizeRows="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=operatie}" Header="Operatiune" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Path=suma}" Header="Suma" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Path=data}" Header="Data" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Path=userId}" Header="Agent" Width="Auto" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

@@ -22,11 +22,12 @@ namespace CRMAgentieImobiliara
     public partial class WindowContacte : Window
     {
         string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-
-        public WindowContacte()
+        int userIdInt;
+        public WindowContacte(int idUserInt)
         {
+            userIdInt = idUserInt;
             InitializeComponent();
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
+           
             MySqlConnection connection = new MySqlConnection(ConnectionString);
             MySqlCommand cmd = new MySqlCommand("select * from contacte", connection);
             connection.Open();
@@ -38,60 +39,73 @@ namespace CRMAgentieImobiliara
 
         private void btnAddContact_Click(object sender, RoutedEventArgs e)
         {
-            String connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+
+            using (MySqlConnection con = new MySqlConnection(ConnectionString))
             {
                 try
                 {
-                    using (var cmd = new MySqlCommand("INSERT INTO `contacte` ( `nume`, `prenume`, `nr_tel`, `nr_tel2`, `mail`) VALUES (@Nume, @Prenume, @NrTel, @NrTel2, @Mail)"))
+                    using (var cmdVerificare = new MySqlCommand("SELECT * FROM `contacte` WHERE nr_tel='" + txtNrTel.Text.ToString() + "' OR nr_tel2='" + txtNrTel.Text.ToString() + "' OR nr_tel2 = '" + txtNrTel2.Text.ToString() + "'"))
                     {
-                        cmd.Connection = con;
-                        cmd.Parameters.AddWithValue("@Nume", txtNume.Text.ToString());
-                        cmd.Parameters.AddWithValue("@Prenume", txtPrenume.Text.ToString());
-                        cmd.Parameters.AddWithValue("@NrTel", txtNrTel.Text.ToString());
-                        cmd.Parameters.AddWithValue("@NrTel2", txtNrTel2.Text.ToString());
-                        cmd.Parameters.AddWithValue("@Mail", txtMail.Text.ToString());
-
-                        con.Open();
-                        if (cmd.ExecuteNonQuery() > 0)
+                        using (MySqlConnection conVerificare = new MySqlConnection(ConnectionString))
                         {
-                            MessageBox.Show("Contact adaugat");
-                            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-                            MySqlConnection connection = new MySqlConnection(ConnectionString);
-                            MySqlCommand command = new MySqlCommand("select * from contacte", connection);
-                            connection.Open();
-                            DataTable dt = new DataTable();
-                            dt.Load(command.ExecuteReader());
-                            connection.Close();
-                            contacteDataGrid.DataContext = dt;
+                            cmdVerificare.Connection = con;
+                            con.Open();
+                            if (cmdVerificare.ExecuteNonQuery() == 0)
+                            {
+                                try
+                                {
+                                    using (var cmd = new MySqlCommand("INSERT INTO `contacte` ( `nume`, `prenume`, `nr_tel`, `nr_tel2`, `mail`,`userId`) VALUES (@Nume, @Prenume, @NrTel, @NrTel2, @Mail, " + userIdInt + ")"))
+                                    {
+                                        cmd.Connection = con;
+                                        string nrTel = txtNrTel.Text.ToString();
+                                        string nrTel2 = txtNrTel2.Text.ToString();
+                                        if ((nrTel.Length == 10 && nrTel[0] == '0' && nrTel2.Length > 0) || (nrTel.Length == 0 && nrTel2.Length > 0) || (nrTel.Length == 10 && nrTel[0] == '0' && nrTel2.Length == 0))
+                                        {
 
-                            //this.Close();
+                                            cmd.Parameters.AddWithValue("@Nume", txtNume.Text.ToString());
+                                            cmd.Parameters.AddWithValue("@Prenume", txtPrenume.Text.ToString());
+                                            cmd.Parameters.AddWithValue("@NrTel", txtNrTel.Text.ToString());
+                                            cmd.Parameters.AddWithValue("@NrTel2", txtNrTel2.Text.ToString());
+                                            cmd.Parameters.AddWithValue("@Mail", txtMail.Text.ToString());
+
+                                            con.Open();
+                                            if (cmd.ExecuteNonQuery() > 0)
+                                            {
+                                                MessageBox.Show("Contact adaugat");
+                                                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                                                MySqlCommand command = new MySqlCommand("select * from contacte", connection);
+                                                connection.Open();
+                                                DataTable dt = new DataTable();
+                                                dt.Load(command.ExecuteReader());
+                                                connection.Close();
+                                                contacteDataGrid.DataContext = dt;
+
+                                                //this.Close();
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Adaugare esuata");
+                                            }
+                                        }
+                                        else MessageBox.Show("Introduceti cel putin un numar de telefon! Formatul numarului de telefon principal trebuie sa fie cel de Romania. In cazul unui numar de strainatate introduceti in caseta Numar Telefon Alternativ!");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Eroare la inserare: " + ex.Message);
+                                }
+                            }
+                            else MessageBox.Show("Numarul de telefon apartine deja unui contact!");
                         }
-                        else
-                        {
-                            MessageBox.Show("Adaugare esuata");
-                        }
+
+
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Eroare la inserare: " + ex.Message);
-                }
+                } catch (Exception ex) { }
+                
             }
         }
 
-        private void btnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-            MySqlConnection connection = new MySqlConnection(ConnectionString);
-            MySqlCommand cmd = new MySqlCommand("select * from contacte", connection);
-            connection.Open();
-            DataTable dt = new DataTable();
-            dt.Load(cmd.ExecuteReader());
-            connection.Close();
-            contacteDataGrid.DataContext = dt;
-        }
-
+     
        
 
         private void btnEditContact_Click(object sender, RoutedEventArgs e)
@@ -120,6 +134,13 @@ namespace CRMAgentieImobiliara
                             if (cmd.ExecuteNonQuery() > 0)
                             {
                                 MessageBox.Show("Contact editat cu succes!");
+                                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                                MySqlCommand command = new MySqlCommand("select * from contacte", connection);
+                                connection.Open();
+                                DataTable dt = new DataTable();
+                                dt.Load(command.ExecuteReader());
+                                connection.Close();
+                                contacteDataGrid.DataContext = dt;
                             }
                             else
                             {
