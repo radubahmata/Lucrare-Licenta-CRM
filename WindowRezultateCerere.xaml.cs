@@ -22,14 +22,15 @@ namespace CRMAgentieImobiliara
     public partial class WindowRezultateCerere : Window
     {
         string queryDemand;
-        string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-        public WindowRezultateCerere(string queryRequest)
+        MySqlConnection con;
+        public WindowRezultateCerere(string queryRequest, MySqlConnection connection)
         {
+            con = connection;
             InitializeComponent();
             queryDemand = queryRequest;
-            MySqlConnection connection = new MySqlConnection(connectionString);
             MySqlCommand cmd = new MySqlCommand(queryDemand, connection);
-            connection.Open();
+            if (connection.State == ConnectionState.Closed)
+                connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             connection.Close();
@@ -42,7 +43,7 @@ namespace CRMAgentieImobiliara
             if (row_selected != null)
             {
                 string idProprietate = row_selected["id_proprietate"].ToString();
-                DetailsWindow window = new DetailsWindow(idProprietate);
+                DetailsWindow window = new DetailsWindow(idProprietate,con);
                 window.Show();
             }
         }

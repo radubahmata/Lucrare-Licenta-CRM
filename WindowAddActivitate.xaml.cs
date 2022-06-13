@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +23,10 @@ namespace CRMAgentieImobiliara
     {
         string userId;
         int userIdInt;
-        public WindowAddActivitate(string idUser,int IdUserInt)
+        MySqlConnection con;
+        public WindowAddActivitate(string idUser,int IdUserInt, MySqlConnection connection)
         {
+            con = connection;
             userIdInt = IdUserInt;
             userId = idUser;
             InitializeComponent();
@@ -33,11 +36,10 @@ namespace CRMAgentieImobiliara
 
         void fillComboContact()
         {
-            String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-            MySqlConnection con = new MySqlConnection(connectionString);
             try
             {
-                con.Open();
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
                 string query = "select * from contacte";
                 MySqlCommand createCommand = new MySqlCommand(query, con);
                 MySqlDataReader dr = createCommand.ExecuteReader();
@@ -61,10 +63,9 @@ namespace CRMAgentieImobiliara
 
         void fillComboIdPRop()
         {
-            String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-            MySqlConnection con = new MySqlConnection(connectionString);
             try
             {
+                if(con.State==ConnectionState.Closed)
                 con.Open();
                 string query = "select id_proprietate from proprietati where userId=" + userId + "";
                 MySqlCommand createCommand = new MySqlCommand(query, con);
@@ -84,13 +85,13 @@ namespace CRMAgentieImobiliara
         }
         private void btnAddActivitate_Click(object sender, RoutedEventArgs e)
         {
-            string connectionString = "SERVER = localhost; DATABASE = crmagentie_db; UID = root; PASSWORD =; ";
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (con)
             {
                 try
                 {
                     using (var cmd = new MySqlCommand("INSERT INTO `activitati` ( `tip`, `id_contact`, `id_contact2`, `id_proprietate`, `data`, `detalii`, `userId`) VALUES (@Tip, @IdContact, @IdContact2, @IdProprietate, @Data, @Detalii, "+userIdInt+")"))
                     {
+                        
                         cmd.Connection = con;
                         string idContact, idContact2;
                         string s = cmbContact.Text.ToString();
@@ -147,7 +148,8 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@Data", dtpData.Text);
                         cmd.Parameters.AddWithValue("@Detalii", txtDetalii.Text);
 
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Activitate adaugata!");

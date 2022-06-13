@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,9 +50,9 @@ namespace CRMAgentieImobiliara
                         
                        
                         cmd.Parameters.AddWithValue("@UserName", txtloginUsername.Text.ToString());
-                       
 
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Cont de utilizator creat!");

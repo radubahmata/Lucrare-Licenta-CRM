@@ -22,7 +22,6 @@ namespace CRMAgentieImobiliara
     public partial class WindowTranzactii : Window
     {
         string userId;
-        string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
         MySqlConnection con;
 
         public WindowTranzactii(string idUser, MySqlConnection connection)
@@ -32,7 +31,8 @@ namespace CRMAgentieImobiliara
             string queryDemand = "SELECT * FROM `proprietati` WHERE `stadiu` = 'tranzactionata' AND `userID`=" + userId + " ORDER BY data_tranzactionare";
             InitializeComponent();
             MySqlCommand cmd = new MySqlCommand(queryDemand, connection);
-            connection.Open();
+            if (connection.State == ConnectionState.Closed)
+                connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             connection.Close();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,11 @@ namespace CRMAgentieImobiliara
     public partial class DetaliiActivitate : Window
     {
         string idDetalii;
-        MySqlConnection conContact;
+        string connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
+       
         public DetaliiActivitate(string idActivitate, MySqlConnection connection)
         {
+            MySqlConnection conContact = new MySqlConnection(connectionString);
             InitializeComponent();
             idDetalii = idActivitate;
             string query = "select * from activitati where id='" + idDetalii + "'";
@@ -32,7 +35,8 @@ namespace CRMAgentieImobiliara
 
             try
             {
-                connection.Open();
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -42,7 +46,7 @@ namespace CRMAgentieImobiliara
                     string numeContact;
                     string prenumeContact;
                     string nrTel;
-                    conContact = connection;
+                    //conContact = connection;
                     if (!dr.IsDBNull(dr.GetOrdinal("id_contact")))
                     {
                         string idContact = dr.GetInt32("id_contact").ToString();
@@ -51,7 +55,8 @@ namespace CRMAgentieImobiliara
                             string queryContact = "select * from contacte where id_contact='" + idContact + "'";
                             MySqlCommand cmdContact = new MySqlCommand(queryContact, conContact);
                             MySqlDataReader drContact;
-                            conContact.Open();
+                            if (conContact.State == ConnectionState.Closed)
+                                conContact.Open();
                             drContact = cmdContact.ExecuteReader();
                             while (drContact.Read())
                             {
@@ -60,9 +65,11 @@ namespace CRMAgentieImobiliara
                                 nrTel = drContact.GetString("nr_tel");
                                 txtContact.Text = numeContact + " " + prenumeContact + "(ID=" + idContact + ")\n " + nrTel;
                             }
+                            drContact.Close();
                             conContact.Close();
                         }
                     }
+                    
                    
                     if (!dr.IsDBNull(dr.GetOrdinal("id_contact2")))
                     {
@@ -72,7 +79,8 @@ namespace CRMAgentieImobiliara
                             string queryContact2 = "select * from contacte where id_contact='" + idContact2 + "'";
                             MySqlCommand cmdContact2 = new MySqlCommand(queryContact2, conContact);
                             MySqlDataReader drContact2;
-                            conContact.Open();
+                            if (conContact.State == ConnectionState.Closed)
+                                conContact.Open();
                             drContact2 = cmdContact2.ExecuteReader();
                             while (drContact2.Read())
                             {
@@ -81,6 +89,7 @@ namespace CRMAgentieImobiliara
                                 nrTel = drContact2.GetString("nr_tel");
                                 txtContact2.Text = numeContact + " " + prenumeContact + "(ID=" + idContact2 + ")\n " + nrTel;
                             }
+                            drContact2.Close();
                             conContact.Close();
                         }
                     }
@@ -90,6 +99,7 @@ namespace CRMAgentieImobiliara
                     }
             
                 }
+                dr.Close();
                 connection.Close();
             }
             catch (Exception ex) {

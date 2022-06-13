@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -23,38 +24,29 @@ namespace CRMAgentieImobiliara
     public partial class DetailsWindow : Window
     {
         string idDetalii;
-        MySqlConnection conContact;
+        MySqlConnection con;
         public DetailsWindow(string idDet, MySqlConnection connection)
         {  
             idDetalii = idDet;
+            con = connection;
+            con.Close();
             InitializeComponent();
-            string query = "select * from proprietati where id_proprietate='" + idDetalii + "'";
+            string query = "select * from proprietati JOIN contacte  ON proprietati.id_contact=contacte.id_contact where proprietati.id_proprietate='" + idDetalii + "'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dr;
             try {
-                connection.Open();
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    string numeContact;
-                    string prenumeContact;
-                    string nrTel;
-                    conContact = connection;
                     string idContact = dr.GetString("id_contact").ToString();
-                    string queryContact = "select * from contacte where id_contact='" + idContact + "'";
-                    MySqlCommand cmdContact = new MySqlCommand(queryContact, conContact);
-                    MySqlDataReader drContact;
-                    conContact.Open();
-                    drContact = cmdContact.ExecuteReader();
-                    while (drContact.Read())
-                    {
-                        numeContact = drContact.GetString("nume");
-                        prenumeContact = drContact.GetString("prenume");
-                        nrTel = drContact.GetString("nr_tel");
-                        txtProprietar.Text = numeContact + " " + prenumeContact + "(ID="+idContact+")\n " + nrTel;
-                    }
-                    conContact.Close();
-
+                    string numeContact = dr.GetString("nume");
+                    string prenumeContact = dr.GetString("prenume");
+                    string nrTel = dr.GetString("nr_tel");
+                    txtProprietar.Text = numeContact + " " + prenumeContact + "(ID=" + idContact + ")\n " + nrTel;
                     string tipOferta = dr.GetString("tip_oferta").ToUpper();
                     string tipProprietate = dr.GetString("tip_proprietate").ToUpper();
                     string nrCamere = dr.GetInt32("nr_camere").ToString();
@@ -108,8 +100,10 @@ namespace CRMAgentieImobiliara
                     bi.EndInit();
                     imgThumb.Source = bi;
                 }
+                dr.Close();
             } 
-            catch { }
+            catch (Exception ex){ MessageBox.Show(ex.Message); }
+            connection.Close();
         }
 
         private void buttonPrint_Click(object sender, RoutedEventArgs e)

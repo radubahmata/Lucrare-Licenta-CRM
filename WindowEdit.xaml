@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CRMAgentieImobiliara"
         mc:Ignorable="d"
-        Title="WindowEdit" Height="464.203" Width="853.115"
-        Loaded="WindowEdit_Loaded">
+        Title="WindowEdit" Height="464.203" Width="853.115">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="D:/FSEGA/Licenta/AplicatieLicenta/CRMAgentieImobiliara/images/editlogo.png" Stretch="Uniform" Opacity="0.2"></ImageBrush>

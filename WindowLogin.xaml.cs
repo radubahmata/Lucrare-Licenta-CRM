@@ -61,6 +61,7 @@ namespace CRMAgentieImobiliara
                         }
                     }
                     catch(Exception ex) { MessageBox.Show(ex.Message); }
+                    con.Close();
                     MainWindow dashboard = new MainWindow(userId, userIdInt, con);
                     dashboard.Show();
                     this.Close();

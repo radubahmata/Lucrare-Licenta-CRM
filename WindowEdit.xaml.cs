@@ -30,30 +30,31 @@ namespace CRMAgentieImobiliara
         string idEd;
         string stringName, imageName;
         byte[] imgDB;
-        public WindowEdit(string idEditat)
+        MySqlConnection con;
+        public WindowEdit(string idEditat, MySqlConnection connection)
         {
-
+            con = connection;
             InitializeComponent();
-           // fillComboId();
             fillComboIdContact();
             idEd = idEditat;
-
-            string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-            MySqlConnection con = new MySqlConnection(connectionString);
-            MySqlConnection conContact = new MySqlConnection(connectionString);
-            string query = "select * from proprietati where id_proprietate='" + idEd + "';";
-            MySqlCommand cmd = new MySqlCommand(query, con);
+            string query = "select * from proprietati JOIN contacte  ON proprietati.id_contact=contacte.id_contact where proprietati.id_proprietate='" + idEd + "'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dr;
             try
             {
-                con.Open();
-                conContact.Open();
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
                     string idProp = idEd;
-                   
-                    
+
+                    string idContact = dr.GetString("id_contact");
+                    String Id = dr.GetString("id_contact");
+                    String nume = dr.GetString("nume");
+                    String prenume = dr.GetString("prenume");
+                    cmbContact.Text = Id + " " + nume + " " + prenume;
+
                     cmbIdEdit.Text = idProp;
                     cmbTipOferta.Text = dr.GetString("tip_oferta");
                     cmbTipProprietate.Text = dr.GetString("tip_proprietate");
@@ -73,7 +74,6 @@ namespace CRMAgentieImobiliara
                     linkOfertaTextBox.Text = dr.GetString("link_oferta");
                     pretTextBox.Text = dr.GetDouble("pret").ToString();
                     comisionTextBox.Text = dr.GetDouble("comision").ToString();
-                    //locuriParcareTextBox.Text = nrParcari;
 
                     byte[] imgblob = (byte[])dr["imagini"];
                     
@@ -94,25 +94,13 @@ namespace CRMAgentieImobiliara
                         bi.EndInit();
                         imgThumb.Source = bi;
                     }
-                    string idContact = dr.GetString("id_contact");
-                    string queryContact = "select * from contacte where id_contact='" + idContact + "'";
-                    MySqlCommand cmdJoinContact = new MySqlCommand(queryContact, conContact);
-                    MySqlDataReader drContact = cmdJoinContact.ExecuteReader();
-                    while (drContact.Read())
-                    {
-                        String Id = drContact.GetString("id_contact");
-                        String nume = drContact.GetString("nume");
-                        String prenume = drContact.GetString("prenume");
-                        cmbContact.Text = Id + " " + nume + " " + prenume;
-
-                    }
-                    drContact.Close();
-                    conContact.Close();
+                    
+                   
                     
 
                 }
                 dr.Close();
-                con.Close();
+                connection.Close();
 
             }
             catch (Exception ex)
@@ -121,32 +109,10 @@ namespace CRMAgentieImobiliara
             }
             
         }
-        string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-
-       /* void fillComboId()
-        {
-            MySqlConnection con = new MySqlConnection(connectionString);
-            try {
-                con.Open();
-                string query = "select * from proprietati";
-                MySqlCommand createCommand = new MySqlCommand(query, con);
-                MySqlDataReader dr = createCommand.ExecuteReader();
-
-                while (dr.Read()) {
-                    int Id = dr.GetInt32("id_proprietate");
-                    cmbIdEdit.Items.Add(Id);
-                }
-                dr.Close();
-                con.Close();
-            }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message);
-            }
-        }*/
 
         private void btnUpdateProprietate_Click(object sender, RoutedEventArgs e)
         {
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (con)
             {
                 try
                 {
@@ -201,7 +167,8 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@pret", float.Parse((pretTextBox.Text.ToString()), CultureInfo.InvariantCulture.NumberFormat));
                         cmd.Parameters.AddWithValue("@comision", float.Parse((comisionTextBox.Text.ToString()), CultureInfo.InvariantCulture.NumberFormat));
 
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Record updated");
@@ -222,11 +189,10 @@ namespace CRMAgentieImobiliara
 
             void fillComboIdContact()
             {
-                String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-                MySqlConnection con = new MySqlConnection(connectionString);
                 try
                 {
-                    con.Open();
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
                     string query = "select * from contacte";
                     MySqlCommand cmd = new MySqlCommand(query, con);
                     MySqlDataReader dr = cmd.ExecuteReader();
@@ -249,40 +215,26 @@ namespace CRMAgentieImobiliara
 
 
 
-        private void WindowEdit_Loaded(object sender, RoutedEventArgs e)
-            {
-                /* 
-                 MySqlConnection connection = new MySqlConnection(connectionString);
-                 connection.Open();
-
-                 MySqlCommand cmd = new MySqlCommand("Select * from proprietati", connection);
-                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                 DataSet ds = new DataSet();
-                 da.Fill(ds);
-                 cmd.ExecuteNonQuery();
-                 connection.Close();
-                 cmbIdEdit.DataContext = ds.Tables[0];
-                 cmbIdEdit.DisplayMemberPath = "id_proprietate";
-                 */
-            }
+       
 
         private void btnTranzactionat_Click(object sender, RoutedEventArgs e)
         {
-            WindowTranzactie window = new WindowTranzactie(idEd);
+            WindowTranzactie window = new WindowTranzactie(idEd, con);
             window.Show();
             this.Close();
         }
 
         private void btnRetras_Click(object sender, RoutedEventArgs e)
         {
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (con)
             {
                 try
                 {
                     using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `stadiu`='retrasa' where id_proprietate='" + idEd + "'", con))
                     {
                         cmd.Connection = con;
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Proprietate retrasa!");
@@ -302,14 +254,15 @@ namespace CRMAgentieImobiliara
 
         private void btnPierdut_Click(object sender, RoutedEventArgs e)
         {
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (con)
             {
                 try
                 {
                     using (var cmd = new MySqlCommand("UPDATE `proprietati` SET `stadiu`='pierduta' where id_proprietate='" + idEd + "'", con))
                     {
                         cmd.Connection = con;
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Proprietate pierduta!");

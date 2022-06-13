@@ -45,7 +45,7 @@ namespace CRMAgentieImobiliara
             if (cerere == "proprietate")
             {
                
-                Window1 window = new WindowAddProprietate(userId, userIdInt, con);
+                WindowAddProprietate window = new WindowAddProprietate(userId, userIdInt, con);
                 window.Show();
                 this.Close();
             }

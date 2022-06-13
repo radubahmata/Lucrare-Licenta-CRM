@@ -34,7 +34,6 @@ namespace CRMAgentieImobiliara
     public partial class MainWindow : Window
     {
         MySqlConnection con;
-        string ConnectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
         string userId;
         int userIdInt;
         public MainWindow(string idUser, int IdUserInt, MySqlConnection connection)
@@ -43,7 +42,8 @@ namespace CRMAgentieImobiliara
             InitializeComponent();
             userId = idUser;
             userIdInt = IdUserInt;
-            connection.Open();
+            if (connection.State == ConnectionState.Closed)
+                connection.Open();
             string queryProprietati = "select * from proprietati where userId=" + userId + " AND stadiu ='activa'";
             MySqlCommand cmd = new MySqlCommand(queryProprietati, connection);
             DataTable dt = new DataTable();
@@ -51,7 +51,8 @@ namespace CRMAgentieImobiliara
             connection.Close();
             proprietatiDataGrid.DataContext = dt;
             MySqlCommand cmdActivitati = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId="+userId+" AND data>='"+DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", connection);
-            connection.Open();
+            if (connection.State == ConnectionState.Closed)
+                connection.Open();
             DataTable dtActivitati = new DataTable();
             dtActivitati.Load(cmdActivitati.ExecuteReader());
             connection.Close();
@@ -61,7 +62,7 @@ namespace CRMAgentieImobiliara
         private void btnProprietateNoua_Click(object sender, RoutedEventArgs e)
         {
             string request = "proprietate";
-            WindowConfirmContact window = new WindowConfirmContact(request, userId, userIdInt);
+            WindowConfirmContact window = new WindowConfirmContact(request, userId, userIdInt, con);
             window.Show();
         }
 
@@ -71,7 +72,7 @@ namespace CRMAgentieImobiliara
             if (row_selected != null)
             {
                 string idEditat = row_selected["id_proprietate"].ToString();
-                WindowEdit window = new WindowEdit(idEditat);
+                WindowEdit window = new WindowEdit(idEditat, con);
                 window.Show();
             }
             else {
@@ -87,12 +88,14 @@ namespace CRMAgentieImobiliara
                 string idSters = row_selected["id_proprietate"].ToString();
                 string query = "DELETE from proprietati where id_proprietate='" + idSters + "'";
                 MySqlCommand cmd = new MySqlCommand(query,con);
-                con.Open();
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Proprietate stearsa!");
                 MySqlCommand refresh = new MySqlCommand("select * from proprietati WHERE userId=" + userId + "", con);
-                con.Open();
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
                 DataTable dt = new DataTable();
                 dt.Load(refresh.ExecuteReader());
                 con.Close();
@@ -107,7 +110,8 @@ namespace CRMAgentieImobiliara
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             MySqlCommand cmd = new MySqlCommand("select * from proprietati WHERE userId=" + userId + "", con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             con.Close();
@@ -116,7 +120,7 @@ namespace CRMAgentieImobiliara
 
         private void btnViewContacte_Click(object sender, RoutedEventArgs e)
         {
-            WindowContacte window = new WindowContacte(userIdInt);
+            WindowContacte window = new WindowContacte(userIdInt, con);
             window.Show();          
         }
 
@@ -152,7 +156,8 @@ namespace CRMAgentieImobiliara
         private void btnRefreshActivitati_Click(object sender, RoutedEventArgs e)
         {
             MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data >= '" + DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             con.Close();
@@ -183,12 +188,14 @@ namespace CRMAgentieImobiliara
                 string idSters = row_selected["id"].ToString();
                 string query = "DELETE from activitati where id='" + idSters + "'";
                 MySqlCommand cmd = new MySqlCommand(query, con);
-                con.Open();
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Activitate stearsa!");
                 MySqlCommand refresh = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data>='" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", con);
-                con.Open();
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
                 DataTable dt = new DataTable();
                 dt.Load(refresh.ExecuteReader());
                 con.Close();
@@ -208,7 +215,8 @@ namespace CRMAgentieImobiliara
             var maine = astazi.AddDays(1);
             var ieri = astazi.AddDays(-1);
             MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'"+maine.ToString("yyyy-MM-dd")+ "' AND stadiu='viitoare' ORDER BY data", con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dtActivitatiSpecific = new DataTable();
             dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
             con.Close();
@@ -221,7 +229,8 @@ namespace CRMAgentieImobiliara
             var astazi = DateTime.Today;
             var oneWeek = astazi.AddDays(8);
             MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneWeek.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dtActivitatiSpecific = new DataTable();
             dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
             con.Close();
@@ -235,7 +244,8 @@ namespace CRMAgentieImobiliara
             var astazi = DateTime.Today;
             var oneMonth = astazi.AddDays(31);
             MySqlCommand cmdActivitatiOneDay = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data>='" + astazi.ToString("yyyy-MM-dd") + "' AND data<'" + oneMonth.ToString("yyyy-MM-dd") + "' AND stadiu='viitoare' ORDER BY data", con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dtActivitatiSpecific = new DataTable();
             dtActivitatiSpecific.Load(cmdActivitatiOneDay.ExecuteReader());
             con.Close();
@@ -246,7 +256,8 @@ namespace CRMAgentieImobiliara
         {
             txtIntro.Text = "Toate activitatile viitoare:";
             MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             con.Close();
@@ -257,7 +268,8 @@ namespace CRMAgentieImobiliara
         {
             txtIntro.Text = "Toate activitatile:";
             MySqlCommand cmd = new MySqlCommand("SELECT * from activitati WHERE userId=" + userId + " ORDER BY data", con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             con.Close();
@@ -266,7 +278,8 @@ namespace CRMAgentieImobiliara
 
         void fillComboLocalitate()
         {
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             string query = "select localitate, zona from proprietati WHERE userId=" + userId + "";
             MySqlCommand createCommand = new MySqlCommand(query, con);
             MySqlDataReader dr = createCommand.ExecuteReader();
@@ -297,12 +310,15 @@ namespace CRMAgentieImobiliara
                     }
                 }
             }
+            dr.Close();
+            con.Close();
             for (iLocalitati = 0; iLocalitati < nrLoc; iLocalitati++) cmbLocalitate.Items.Add(localitati[iLocalitati]);
         }
 
         void fillComboLocalitateStatistici()
         {
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             string query = "select localitate, zona from proprietati WHERE userId=" + userId + "";
             MySqlCommand createCommand = new MySqlCommand(query, con);
             MySqlDataReader dr = createCommand.ExecuteReader();
@@ -333,6 +349,7 @@ namespace CRMAgentieImobiliara
                     }
                 }
             }
+            dr.Close();
             for (iLocalitati = 0; iLocalitati < nrLoc; iLocalitati++) cmbLocalitateStatistici.Items.Add(localitati[iLocalitati]);
         }
 
@@ -341,7 +358,8 @@ namespace CRMAgentieImobiliara
             cmbZona.IsEnabled = true;
             cmbZona.Items.Clear();
             string localitate = (sender as ComboBox).SelectedItem as string;
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             string query = "select zona from proprietati where userId=" + userId + " AND localitate='" + localitate + "'";
             MySqlCommand createCommand = new MySqlCommand(query, con);
             MySqlDataReader dr = createCommand.ExecuteReader();
@@ -373,6 +391,7 @@ namespace CRMAgentieImobiliara
                     }
                 }
             }
+            dr.Close();
             for (iZone = 0; iZone < nrZon; iZone++) cmbZona.Items.Add(zone[iZone]);
             con.Close();
         }
@@ -394,7 +413,8 @@ namespace CRMAgentieImobiliara
             cmbLocalitate.Items.Clear();
             cmbLocalitateStatistici.Items.Clear();
             MySqlCommand cmd = new MySqlCommand("select * from proprietati where userId=" + userId + " AND stadiu ='activa'", con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             con.Close();
@@ -409,8 +429,8 @@ namespace CRMAgentieImobiliara
             string queryVanzareTranzactionat = "SELECT suprafata_utila, pret_tranzactionare, data_tranzactionare from proprietati where tip_oferta ='vanzare' and stadiu = 'tranzactionata' and localitate='Cluj-Napoca'";
             string queryInchiriereActiv = "SELECT nr_camere, pret from proprietati where tip_oferta ='inchiriere' and stadiu = 'activa' and localitate='Cluj-Napoca'";
             string queryInchiriereTranz = "SELECT nr_camere, pret_tranzactionare from proprietati where tip_oferta ='inchiriere' and stadiu = 'tranzactionata' and localitate='Cluj-Napoca'";
-
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             MySqlCommand cmdVanzareActiv = new MySqlCommand(queryVanzareActiv, con);
             MySqlDataReader drVanzareActiv = cmdVanzareActiv.ExecuteReader();
 
@@ -428,8 +448,8 @@ namespace CRMAgentieImobiliara
             con.Close();
             suma = 0;
             nr = 0;
-
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             MySqlCommand cmdVanzareTranzactionat = new MySqlCommand(queryVanzareTranzactionat, con);
             MySqlDataReader drVanzareTranzactionat = cmdVanzareTranzactionat.ExecuteReader();
 
@@ -444,8 +464,8 @@ namespace CRMAgentieImobiliara
             pretMediu = suma / nr;
             txtPropVandute.Text = Math.Round(pretMediu, 2).ToString();
             con.Close();
-
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             MySqlCommand cmdInchiriereActiv = new MySqlCommand(queryInchiriereActiv, con);
             MySqlDataReader drInchiriereActiv = cmdInchiriereActiv.ExecuteReader();
 
@@ -463,8 +483,8 @@ namespace CRMAgentieImobiliara
             pretMediu = suma / nr;
             txtChiriiActive.Text = Math.Round(pretMediu, 2).ToString();
             con.Close();
-
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             MySqlCommand cmdInchiriereTranz = new MySqlCommand(queryInchiriereTranz, con);
             MySqlDataReader drInchiriereTranz = cmdInchiriereTranz.ExecuteReader();
 
@@ -486,6 +506,7 @@ namespace CRMAgentieImobiliara
         public void refresh()
         {
                 MySqlCommand cmd = new MySqlCommand("select * from proprietati where userId=" + userId + " AND stadiu ='activa'", con);
+            if (con.State == ConnectionState.Closed)
                 con.Open();
                 DataTable dt = new DataTable();
                 dt.Load(cmd.ExecuteReader());
@@ -537,9 +558,11 @@ namespace CRMAgentieImobiliara
                 if (n == 0)
                 {
                     queryRequest += " WHERE pret>='" + pretMin + "'";
+                    n++;
                 }
                 else {
                     queryRequest += " AND pret>='" + pretMin + "'";
+                    n++;
                 }
             }
             if (int.TryParse(txtPretMax.Text, out pretMax))
@@ -547,9 +570,11 @@ namespace CRMAgentieImobiliara
                 if (n == 0)
                 {
                     queryRequest += " WHERE pret<='" + pretMax + "'";
+                    n++;
                 }
                 else {
                     queryRequest += " AND pret<='" + pretMax + "'";
+                    n++;
                 }
             }
             if (int.TryParse(txtSupMin.Text, out sMin)) 
@@ -557,10 +582,12 @@ namespace CRMAgentieImobiliara
                 if (n == 0)
                 {
                     queryRequest += " WHERE suprafata_utila>='" + sMin + "'";
+                    n++;
                 }
                 else
                 {
                     queryRequest += " AND suprafata_utila>='" + sMin + "'";
+                    n++;
                 }
             }
             if (int.TryParse(txtSupMax.Text, out sMax))
@@ -568,10 +595,12 @@ namespace CRMAgentieImobiliara
                 if (n == 0)
                 {
                     queryRequest += " WHERE suprafata_utila<='" + sMax + "'";
+                    n++;
                 }
                 else
                 {
                     queryRequest += " AND suprafata_utila<='" + sMax + "'";
+                    n++;
                 }
             }
             if (int.TryParse(txtEtajMin.Text, out etajMin))
@@ -579,10 +608,12 @@ namespace CRMAgentieImobiliara
                 if (n == 0)
                 {
                     queryRequest += " WHERE etaj>='" + etajMin + "'";
+                    n++;
                 }
                 else
                 {
                     queryRequest += " AND etaj>='" + etajMin + "'";
+                    n++;
                 }
             }
             if (int.TryParse(txtEtajMax.Text, out etajMax))
@@ -590,10 +621,12 @@ namespace CRMAgentieImobiliara
                 if (n == 0)
                 {
                     queryRequest += " WHERE etaj<='" + etajMax + "'";
+                    n++;
                 }
                 else
                 {
                     queryRequest += " AND etaj<='" + etajMax + "'";
+                    n++;
                 }
             }
             compartimentare = cmbCompartimentare.Text.ToString();
@@ -615,10 +648,12 @@ namespace CRMAgentieImobiliara
                 if (n == 0)
                 {
                     queryRequest += " WHERE nr_camere>='" + nrCamMin + "'";
+                    n++;
                 }
                 else
                 {
                     queryRequest += " AND nr_camere>='" + nrCamMin + "'";
+                    n++;
                 }
             }
             if (int.TryParse(txtNrCamMax.Text, out nrCamMax))
@@ -626,13 +661,15 @@ namespace CRMAgentieImobiliara
                 if (n == 0)
                 {
                     queryRequest += " WHERE nr_camere<='" + nrCamMax + "'";
+                    n++;
                 }
                 else
                 {
                     queryRequest += " AND nr_camere<='" + nrCamMax + "'";
+                    n++;
                 }
             }
-            WindowRezultateCerere window = new WindowRezultateCerere(queryRequest);
+            WindowRezultateCerere window = new WindowRezultateCerere(queryRequest, con);
             window.Show();
 
         }
@@ -644,8 +681,8 @@ namespace CRMAgentieImobiliara
             string queryVanzareTranzactionat = "SELECT suprafata_utila, pret_tranzactionare, data_tranzactionare from proprietati where tip_oferta ='vanzare' and stadiu = 'tranzactionata' and localitate='" + localitate + "'";
             string queryInchiriereActiv = "SELECT nr_camere, pret from proprietati where tip_oferta ='inchiriere' and stadiu = 'activa' and localitate='" + localitate + "'";
             string queryInchiriereTranz = "SELECT nr_camere, pret_tranzactionare from proprietati where tip_oferta ='inchiriere' and stadiu = 'tranzactionata' and localitate='" + localitate + "'";
-            
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             MySqlCommand cmdVanzareActiv = new MySqlCommand(queryVanzareActiv, con);
             MySqlDataReader drVanzareActiv = cmdVanzareActiv.ExecuteReader();
 
@@ -660,11 +697,13 @@ namespace CRMAgentieImobiliara
             }
             pretMediu = suma / nr;
             txtVanzariActive.Text = Math.Round(pretMediu, 2).ToString();
+            drVanzareActiv.Close();
             con.Close();
             suma = 0;
             nr = 0;
 
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             MySqlCommand cmdVanzareTranzactionat = new MySqlCommand(queryVanzareTranzactionat, con);
             MySqlDataReader drVanzareTranzactionat = cmdVanzareTranzactionat.ExecuteReader();
 
@@ -678,9 +717,10 @@ namespace CRMAgentieImobiliara
             }
             pretMediu = suma / nr;
             txtPropVandute.Text = Math.Round(pretMediu, 2).ToString();
+            drVanzareTranzactionat.Close();
             con.Close();
-
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             MySqlCommand cmdInchiriereActiv = new MySqlCommand(queryInchiriereActiv, con);
             MySqlDataReader drInchiriereActiv = cmdInchiriereActiv.ExecuteReader();
 
@@ -697,9 +737,10 @@ namespace CRMAgentieImobiliara
             }
             pretMediu = suma / nr;
             txtChiriiActive.Text = Math.Round(pretMediu, 2).ToString();
+            drInchiriereActiv.Close();
             con.Close();
-
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             MySqlCommand cmdInchiriereTranz = new MySqlCommand(queryInchiriereTranz, con);
             MySqlDataReader drInchiriereTranz = cmdInchiriereTranz.ExecuteReader();
 
@@ -715,6 +756,7 @@ namespace CRMAgentieImobiliara
             }
             pretMediu = suma / nr;
             txtPropInchiriate.Text = Math.Round(pretMediu, 2).ToString();
+            drInchiriereTranz.Close();
             con.Close();
         }
 
@@ -729,8 +771,8 @@ namespace CRMAgentieImobiliara
                         cmd.Connection = con;
                         cmd.Parameters.AddWithValue("@suma", Convert.ToDouble(txtVenit.Text));
                         cmd.Parameters.AddWithValue("@data", dpVenit.SelectedDate.Value.ToString("yyyy-MM-dd"));
-
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Venit adaugat!");
@@ -758,9 +800,9 @@ namespace CRMAgentieImobiliara
                         cmd.Connection = con;
                         cmd.Parameters.AddWithValue("@suma", Convert.ToDouble(txtCheltuiala.Text));
                         cmd.Parameters.AddWithValue("@data", dpCheltuiala.SelectedDate.Value.ToString("yyyy-MM-dd"));
-                       
 
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Cheltuiala adaugata!");
@@ -780,7 +822,8 @@ namespace CRMAgentieImobiliara
 
         private void btnCalcTotal_Click(object sender, RoutedEventArgs e)
         {
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             string query = "select * from cash WHERE userId=" + userId + "";
             MySqlCommand createCommand = new MySqlCommand(query, con);
             MySqlDataReader dr = createCommand.ExecuteReader();
@@ -799,13 +842,15 @@ namespace CRMAgentieImobiliara
                     cheltuieli += cheltuiala;
                 }
             }
+            dr.Close();
             profit = venituri - cheltuieli;
             txtProfitTotal.Text = profit.ToString();
         }
 
         private void btnCalcPeriodic_Click(object sender, RoutedEventArgs e)
         {
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             string query;
             string dataStart="", dataEnd="";
             if (dpStart.SelectedDate != null)
@@ -845,7 +890,7 @@ namespace CRMAgentieImobiliara
 
                         profitPer = venituri - cheltuieli;
                         txtProfitPeriodic.Text = profitPer.ToString();
-                    }
+                    }dr.Close();
                 }
                 else
                 {
@@ -869,7 +914,7 @@ namespace CRMAgentieImobiliara
 
                         profitPer = venituri - cheltuieli;
                         txtProfitPeriodic.Text = profitPer.ToString();
-                    }
+                    }dr.Close();
                 }
             }
             else {
@@ -893,7 +938,7 @@ namespace CRMAgentieImobiliara
 
                     profitPer = venituri - cheltuieli;
                     txtProfitPeriodic.Text = profitPer.ToString();
-                }
+                }dr.Close();
             }
         }
 
@@ -918,7 +963,8 @@ namespace CRMAgentieImobiliara
             else queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='retrasa'";
 
             MySqlCommand cmd = new MySqlCommand(queryProprietatiCombo, con);
-            con.Open();
+            if (con.State == ConnectionState.Closed)
+                con.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             con.Close();

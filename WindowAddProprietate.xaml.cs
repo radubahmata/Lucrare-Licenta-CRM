@@ -23,15 +23,15 @@ namespace CRMAgentieImobiliara
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class WindowAddProprietate : Window
     {
-        String connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
-       // DataSet dataSet;
         string stringName, imageName;
         string userId;
         int userIdInt;
-        public Window1(string idUser, int IdUserInt)
+        MySqlConnection con;
+        public WindowAddProprietate(string idUser, int IdUserInt, MySqlConnection connection)
         {
+            con = connection;
             userId = idUser;
             userIdInt = IdUserInt; 
             InitializeComponent();
@@ -39,11 +39,10 @@ namespace CRMAgentieImobiliara
         }
         void fillComboIdContact()
         {
-            String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-            MySqlConnection con = new MySqlConnection(connectionString);
             try
             {
-                con.Open();
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
                 string query = "select * from contacte";
                 MySqlCommand createCommand = new MySqlCommand(query, con);
                 MySqlDataReader dr = createCommand.ExecuteReader();
@@ -66,7 +65,7 @@ namespace CRMAgentieImobiliara
         private void btnAddProprietateNoua_Click(object sender, RoutedEventArgs e)
         {
             
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (con)
             {
                 try
                 {
@@ -121,8 +120,8 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@LinkOferta", linkOfertaTextBox.Text.ToString());
                         cmd.Parameters.AddWithValue("@Pret", float.Parse((pretTextBox.Text.ToString()),CultureInfo.InvariantCulture.NumberFormat));
                         cmd.Parameters.AddWithValue("@Comision", float.Parse((comisionTextBox.Text.ToString()), CultureInfo.InvariantCulture.NumberFormat));
-                        
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Proprietate adaugata!");
@@ -144,11 +143,12 @@ namespace CRMAgentieImobiliara
             
         }
 
-        
+
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            try {
+            try
+            {
                 FileDialog dialog = new OpenFileDialog();
                 dialog.InitialDirectory = Environment.SpecialFolder.MyPictures.ToString();
                 dialog.Filter = "Imagine (*.jpg;*.png;*.jpeg)|*.jpg;*.png;*.jpeg";
@@ -157,38 +157,13 @@ namespace CRMAgentieImobiliara
                     stringName = dialog.SafeFileName;
                     imageName = dialog.FileName;
                     ImageSourceConverter isc = new ImageSourceConverter();
-                    ///image1.SetVa
                 }
                 dialog = null;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message.ToString());
             }
-        }
-
-      /*  private void insertImgData()
-        {
-            try {
-                if (imageName != null)
-                {
-                    FileStream fs = new FileStream(imageName, FileMode.Open, FileAccess.Read);
-                    byte[] imageByteArray = new byte[fs.Length];
-                    fs.Read(imageByteArray, 0, Convert.ToInt32(fs.Length));
-                    fs.Close();
-                    using (MySqlConnection imgcon = new MySqlConnection(connectionString))
-                    {
-                        imgcon.Open();
-                        string instructiune = "insert into proprietati (imagini) values @img";
-                        using (MySqlCommand imgcmd = new MySqlCommand(instructiune, imgcon))
-                        { 
-                            imgcmd.Parameters.
-                        }
-                    }
-                }
-            }
-            catch (Exception e) {
-                MessageBox.Show(e.Message);
-            }
-        }*/
+        }       
     }
 }

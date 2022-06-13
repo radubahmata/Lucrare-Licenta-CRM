@@ -29,7 +29,8 @@ namespace CRMAgentieImobiliara
             string queryDemand = "SELECT * FROM `cash` WHERE `userID`=" + userId + " ORDER BY data";
             InitializeComponent();
             MySqlCommand cmd = new MySqlCommand(queryDemand, connection);
-            connection.Open();
+            if (connection.State == ConnectionState.Closed)
+                connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             connection.Close();

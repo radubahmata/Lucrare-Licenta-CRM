@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,16 +22,17 @@ namespace CRMAgentieImobiliara
     public partial class WindowTranzactie : Window
     {
         string idEd;
-        String connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-        public WindowTranzactie(string idEditat)
+        MySqlConnection con;
+        public WindowTranzactie(string idEditat, MySqlConnection connection)
         {
+            con = connection;
             idEd = idEditat;
             InitializeComponent();
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (con)
             {
                 try
                 {
@@ -43,7 +45,8 @@ namespace CRMAgentieImobiliara
                         cmd.Parameters.AddWithValue("@dataTranz", data);
                         cmd.Parameters.AddWithValue("@comisionIncasat", comisionIncasat);
                         cmd.Parameters.AddWithValue("@pretTranz", pretTranz);
-                        con.Open();
+                        if (con.State == ConnectionState.Closed)
+                            con.Open();
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Felicitari!");
