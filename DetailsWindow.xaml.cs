@@ -23,29 +23,23 @@ namespace CRMAgentieImobiliara
     public partial class DetailsWindow : Window
     {
         string idDetalii;
-        public DetailsWindow(string idDet)
-        {
-            
-
-            // printDlg.PrintVisual(this, "Window Printing.");
-           
+        MySqlConnection conContact;
+        public DetailsWindow(string idDet, MySqlConnection connection)
+        {  
             idDetalii = idDet;
             InitializeComponent();
-            //MessageBox.Show(idDet);
-            string connectionstring = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-            MySqlConnection con = new MySqlConnection(connectionstring);
             string query = "select * from proprietati where id_proprietate='" + idDetalii + "'";
-            MySqlCommand cmd = new MySqlCommand(query, con);
+            MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dr;
             try {
-                con.Open();
+                connection.Open();
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
                     string numeContact;
                     string prenumeContact;
                     string nrTel;
-                    MySqlConnection conContact = new MySqlConnection(connectionstring);
+                    conContact = connection;
                     string idContact = dr.GetString("id_contact").ToString();
                     string queryContact = "select * from contacte where id_contact='" + idContact + "'";
                     MySqlCommand cmdContact = new MySqlCommand(queryContact, conContact);
@@ -128,7 +122,7 @@ namespace CRMAgentieImobiliara
 
             if ((bool)dlg.ShowDialog().GetValueOrDefault())
             {
-                Application.Current.MainWindow = currentMainWindow; // do it early enough if the 'if' is entered
+                Application.Current.MainWindow = currentMainWindow;
                 dlg.PrintVisual(this, "Oferta-");
             }
         }

@@ -20,15 +20,16 @@ namespace CRMAgentieImobiliara
     /// </summary>
     public partial class WindowCreareCont : Window
     {
-        String connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
-        public WindowCreareCont()
+        MySqlConnection con;
+        public WindowCreareCont(MySqlConnection connection)
         {
+            con = connection;
             InitializeComponent();
         }
 
         private void btnRegisterSubmit_Click(object sender, RoutedEventArgs e)
         {
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (con)
             {
                 try
                 {
@@ -54,11 +55,9 @@ namespace CRMAgentieImobiliara
                         if (cmd.ExecuteNonQuery() > 0)
                         {
                             MessageBox.Show("Cont de utilizator creat!");
-
                             WindowLogin window = new WindowLogin();
                             window.Show();
                             this.Close();
-
                         }
                         else
                         {

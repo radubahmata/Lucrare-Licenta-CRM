@@ -21,20 +21,18 @@ namespace CRMAgentieImobiliara
     public partial class DetaliiActivitate : Window
     {
         string idDetalii;
-        public DetaliiActivitate(string idActivitate)
+        MySqlConnection conContact;
+        public DetaliiActivitate(string idActivitate, MySqlConnection connection)
         {
             InitializeComponent();
             idDetalii = idActivitate;
-
-            string connectionstring = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-            MySqlConnection con = new MySqlConnection(connectionstring);
             string query = "select * from activitati where id='" + idDetalii + "'";
-            MySqlCommand cmd = new MySqlCommand(query, con);
+            MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dr;
 
             try
             {
-                con.Open();
+                connection.Open();
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -44,8 +42,7 @@ namespace CRMAgentieImobiliara
                     string numeContact;
                     string prenumeContact;
                     string nrTel;
-                    MySqlConnection conContact = new MySqlConnection(connectionstring);
-                   // string idContact = dr.GetInt32("id_contact").ToString();
+                    conContact = connection;
                     if (!dr.IsDBNull(dr.GetOrdinal("id_contact")))
                     {
                         string idContact = dr.GetInt32("id_contact").ToString();
@@ -87,14 +84,13 @@ namespace CRMAgentieImobiliara
                             conContact.Close();
                         }
                     }
-                    //string idProprietate = dr.GetInt32("id_proprietate").ToString();
                     if (!dr.IsDBNull(dr.GetOrdinal("id_proprietate"))) 
                     {
                         txtProprietate.Text = "ID=" + dr.GetString(("id_proprietate")).ToString();
                     }
             
                 }
-                con.Close();
+                connection.Close();
             }
             catch (Exception ex) {
                MessageBox.Show(ex.Source.ToString());

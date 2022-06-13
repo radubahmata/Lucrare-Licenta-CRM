@@ -21,23 +21,21 @@ namespace CRMAgentieImobiliara
     public partial class WindowEditActivitate : Window
     {
         string idActivitateEdit;
-        string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-        public WindowEditActivitate(string idEditat)
+        MySqlConnection conContact, con;
+        public WindowEditActivitate(string idEditat, MySqlConnection connection)
         {
+            con = connection;
             InitializeComponent();
-            //MessageBox.Show(idEditat);
             idActivitateEdit = idEditat;
             fillComboIdContact();
             fillComboIdProp();
-
-            MySqlConnection con = new MySqlConnection(connectionString);
-            MySqlConnection conContact = new MySqlConnection(connectionString);
+            conContact= connection;
             string query = "select * from activitati where id='" + idEditat + "';";
-            MySqlCommand cmd = new MySqlCommand(query, con);
+            MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dr;
             try
             {
-                con.Open();
+                connection.Open();
                 conContact.Open();
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
@@ -85,7 +83,7 @@ namespace CRMAgentieImobiliara
                     }
                     conContact.Close();
                 }
-                con.Close();
+                connection.Close();
             }
             catch (Exception ex) {
                 MessageBox.Show(ex.Message);
@@ -94,7 +92,7 @@ namespace CRMAgentieImobiliara
 
         private void btnEditActivitate_Click(object sender, RoutedEventArgs e)
         {
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (con)
             {
                 try
                 {
@@ -164,7 +162,6 @@ namespace CRMAgentieImobiliara
 
         void fillComboIdContact()
         {
-             MySqlConnection con = new MySqlConnection(connectionString);
             try
             {
                 con.Open();
@@ -191,8 +188,6 @@ namespace CRMAgentieImobiliara
 
         void fillComboIdProp()
         {
-            
-            MySqlConnection con = new MySqlConnection(connectionString);
             try
             {
                 con.Open();

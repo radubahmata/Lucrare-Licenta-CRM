@@ -22,21 +22,18 @@ namespace CRMAgentieImobiliara
     public partial class WindowOperatiuni : Window
     {
         string userId;
-        string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
 
-        public WindowOperatiuni(string idUser)
+        public WindowOperatiuni(string idUser, MySqlConnection connection)
         {
             userId = idUser;
             string queryDemand = "SELECT * FROM `cash` WHERE `userID`=" + userId + " ORDER BY data";
             InitializeComponent();
-            MySqlConnection connection = new MySqlConnection(connectionString);
             MySqlCommand cmd = new MySqlCommand(queryDemand, connection);
             connection.Open();
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             connection.Close();
             operatiuniDataGrid.DataContext = dt;
-
         }
     }
 }

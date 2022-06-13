@@ -22,33 +22,33 @@ namespace CRMAgentieImobiliara
     /// </summary>
     public partial class WindowLogin : Window
     {
+        string connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
         string userId; 
         int userIdInt;
+        MySqlConnection con;
         public WindowLogin()
         {
             InitializeComponent();
         }
 
         private void btnLoginSubmit_Click(object sender, RoutedEventArgs e)
-        {
-            ///conectare sql
-            string connectionString = "Server=localhost;userid=root;password=;Database=crmagentie_db";
-            MySqlConnection sqlCon = new MySqlConnection(connectionString);
+        {  
+            con = new MySqlConnection(connectionString);
             MySqlCommand cmd;
             MySqlDataReader dr;
             try
             {
-                if (sqlCon.State == ConnectionState.Closed)
-                    sqlCon.Open();
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
                 String query = "select count(1) from login where Username=@Username and Password=@Password";
-                MySqlCommand sqlCmd = new MySqlCommand(query, sqlCon);
-                sqlCmd.CommandType = CommandType.Text;
-                sqlCmd.Parameters.AddWithValue("@Username", txtloginUsername.Text);
-                sqlCmd.Parameters.AddWithValue("@Password", txtloginPassword.Password);
-                int count = Convert.ToInt32(sqlCmd.ExecuteScalar());
+                cmd = new MySqlCommand(query, con);
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.AddWithValue("@Username", txtloginUsername.Text);
+                cmd.Parameters.AddWithValue("@Password", txtloginPassword.Password);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
                 if (count == 1)
                 {
-                    cmd = new MySqlCommand("select * from login where `UserName`='"+txtloginUsername.Text+"'", sqlCon);
+                    cmd = new MySqlCommand("select * from login where `UserName`='"+txtloginUsername.Text+"'", con);
                     try
                     {
                         dr = cmd.ExecuteReader();
@@ -61,7 +61,7 @@ namespace CRMAgentieImobiliara
                         }
                     }
                     catch(Exception ex) { MessageBox.Show(ex.Message); }
-                    MainWindow dashboard = new MainWindow(userId, userIdInt);
+                    MainWindow dashboard = new MainWindow(userId, userIdInt, con);
                     dashboard.Show();
                     this.Close();
                 }
@@ -74,14 +74,14 @@ namespace CRMAgentieImobiliara
                 MessageBox.Show(ex.Message);
             }
             finally {
-                sqlCon.Close();
+                con.Close();
             }
            
         }
 
         private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
         {
-            WindowCreareCont window = new WindowCreareCont();
+            WindowCreareCont window = new WindowCreareCont(con);
             window.Show();
             this.Close();
         }

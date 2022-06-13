@@ -23,14 +23,14 @@ namespace CRMAgentieImobiliara
     {
         string userId;
         string connectionString = "SERVER=localhost;DATABASE=crmagentie_db;UID=root;PASSWORD=;";
-        
+        MySqlConnection con;
 
-        public WindowTranzactii(string idUser)
+        public WindowTranzactii(string idUser, MySqlConnection connection)
         {
+            con = connection;
             userId = idUser;
             string queryDemand = "SELECT * FROM `proprietati` WHERE `stadiu` = 'tranzactionata' AND `userID`=" + userId + " ORDER BY data_tranzactionare";
             InitializeComponent();
-            MySqlConnection connection = new MySqlConnection(connectionString);
             MySqlCommand cmd = new MySqlCommand(queryDemand, connection);
             connection.Open();
             DataTable dt = new DataTable();
@@ -45,7 +45,7 @@ namespace CRMAgentieImobiliara
             if (row_selected != null)
             {
                 string idProprietate = row_selected["id_proprietate"].ToString();
-                DetailsWindow window = new DetailsWindow(idProprietate);
+                DetailsWindow window = new DetailsWindow(idProprietate, con);
                 window.Show();
             }
         }

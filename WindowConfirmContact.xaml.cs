@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,10 @@ namespace CRMAgentieImobiliara
     {
         string cerere,userId;
         int userIdInt;
-        public WindowConfirmContact(string request, string idUser, int IdUserInt)
+        MySqlConnection con;
+        public WindowConfirmContact(string request, string idUser, int IdUserInt, MySqlConnection connection)
         {
-
+            con = connection;
             InitializeComponent();
             userIdInt = IdUserInt;
             cerere = request;
@@ -43,13 +45,13 @@ namespace CRMAgentieImobiliara
             if (cerere == "proprietate")
             {
                
-                Window1 window = new Window1(userId, userIdInt);
+                Window1 window = new WindowAddProprietate(userId, userIdInt, con);
                 window.Show();
                 this.Close();
             }
             else if (cerere == "activitate") 
             { 
-                WindowAddActivitate window = new WindowAddActivitate(userId, userIdInt);
+                WindowAddActivitate window = new WindowAddActivitate(userId, userIdInt, con);
                 window.Show();
                 this.Close();
             }
@@ -58,7 +60,7 @@ namespace CRMAgentieImobiliara
         private void btnNu_Click(object sender, RoutedEventArgs e)
         {
            
-            WindowContacte window = new WindowContacte(userIdInt);
+            WindowContacte window = new WindowContacte(userIdInt, con);
             window.Show();
             this.Close();
         }
