@@ -970,6 +970,56 @@ namespace CRMAgentieImobiliara
             con.Close();
             proprietatiDataGrid.DataContext = dt;
         }
+
+        private void btnRaportActivitati_Click(object sender, RoutedEventArgs e)
+        {
+            string dataStart = "", dataEnd = "";
+            if (dpStartRaport.SelectedDate != null)
+            {
+                dataStart = dpStartRaport.SelectedDate.Value.ToString("yyyy-MM-dd");
+            }
+            else dataStart = "1753-01-01";
+            if (dpFinalRaport.SelectedDate != null)
+            {
+                dataEnd = dpFinalRaport.SelectedDate.Value.ToString("yyyy-MM-dd");
+            }
+            else dataEnd = "9999-12-31";
+            string queryActTotale = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and data>='" + dataStart + "' and data<='" + dataEnd + "'";
+            string queryActFinalizate = "SELECT COUNT(*) FROM activitati where userId="+userId+" and stadiu='finalizata' and data>='"+dataStart+"' and data<='"+dataEnd+"'";
+            string queryActAnulate = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and stadiu='anulata' and data>='" + dataStart + "' and data<='" + dataEnd + "'";
+            string queryActAmanata = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and stadiu='amanata' and data>='" + dataStart + "' and data<='" + dataEnd + "'";
+
+            MySqlCommand cmd = new MySqlCommand(queryActFinalizate, con);
+            if (con.State == ConnectionState.Closed)
+                con.Open();
+            var ActFinalizate = Convert.ToInt32 (cmd.ExecuteScalar());
+            con.Close();
+
+            cmd.CommandText=queryActAnulate;
+            if (con.State == ConnectionState.Closed)
+                con.Open();
+            var ActAnulate = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+
+            cmd.CommandText = queryActAmanata;
+            if (con.State == ConnectionState.Closed)
+                con.Open();
+            var ActAmanate = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+
+            cmd.CommandText = queryActTotale;
+            if (con.State == ConnectionState.Closed)
+                con.Open();
+            var ActTotale = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+            double procentFinalizare = Convert.ToDouble(ActFinalizate)/ Convert.ToDouble(ActTotale) * 100;
+
+            txtActivitatiFinalizate.Text = ActFinalizate + " activitati finalizate";
+            txtActivitatiAnulate.Text = ActAnulate + " activitati anulate";
+            txtActivitatiAmanate.Text = ActAmanate + " activitati amanate";
+            txtProcentajFinalizare.Text = "Gradul de finalizare al activitatilor " + procentFinalizare+"%";
+        }
     }
+    
 }
 

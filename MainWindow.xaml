@@ -111,6 +111,23 @@
                     <Button x:Name="btnOneWeek" Content="7 zile" Margin="353,303,343,60" Click="btnOneWeek_Click" Width="92" Grid.ColumnSpan="2"/>
                     <Button x:Name="btnOneMonth" Content="1 luna" Margin="77.2,303,246,60" Click="btnOneMonth_Click" Width="100" Grid.Column="1"/>
                     <Button Content="Toate" Height="25" HorizontalAlignment="Left" Margin="124.2,339,0,0" x:Name="btnToateActivitati" VerticalAlignment="Top" Width="53" Click="btnToateActivitati_Click" Grid.Column="1" />
+
+                    <GroupBox Header="Raport periodic" Foreground="White" Margin="191.2,59,10,60" Grid.Column="1">
+                        <GroupBox.Background>
+                            <SolidColorBrush Color="#2e3137" Opacity="0.8"></SolidColorBrush>
+                        </GroupBox.Background>
+                        <Canvas Margin="0,0,-1.4,-4.6" Height="251" VerticalAlignment="Bottom">
+                            <TextBlock Text="Data de inceput a perioadei"  Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="10" Canvas.Top="10" Width="191" Height="20"/>
+                            <DatePicker Name="dpStartRaport" Canvas.Left="56" Canvas.Top="30"/>
+                            <TextBlock Text="Data finală a perioadei" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="10" Canvas.Top="58" Width="191" Height="20"/>
+                            <DatePicker Name="dpFinalRaport" Canvas.Left="56" Canvas.Top="78"/>
+                            <Button Name="btnRaportActivitati" Click="btnRaportActivitati_Click" Content="Raport" Height="23" Width="66" Canvas.Left="71" Canvas.Top="115"/>
+                            <TextBlock Name="txtActivitatiFinalizate" Width="201" Canvas.Top="156" Canvas.Left="5"/>
+                            <TextBlock Name="txtActivitatiAnulate" Width="201" Canvas.Top="177" Canvas.Left="5"/>
+                            <TextBlock Name="txtActivitatiAmanate" Width="201" Canvas.Top="198" Canvas.Left="5"/>
+                            <TextBlock Name="txtProcentajFinalizare" Width="201" Canvas.Top="219" Canvas.Left="5"/>
+                        </Canvas>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Height="25" Margin="-2,1,-2.2,-1.2">

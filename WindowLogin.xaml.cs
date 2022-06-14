@@ -29,11 +29,12 @@ namespace CRMAgentieImobiliara
         public WindowLogin()
         {
             InitializeComponent();
+            con = new MySqlConnection(connectionString);
         }
 
         private void btnLoginSubmit_Click(object sender, RoutedEventArgs e)
         {  
-            con = new MySqlConnection(connectionString);
+            
             MySqlCommand cmd;
             MySqlDataReader dr;
             try
