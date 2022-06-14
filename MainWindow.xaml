@@ -122,10 +122,10 @@
                             <TextBlock Text="Data finală a perioadei" Foreground="White" Opacity="0.85" TextWrapping="Wrap" TextAlignment="Center" Canvas.Left="10" Canvas.Top="58" Width="191" Height="20"/>
                             <DatePicker Name="dpFinalRaport" Canvas.Left="56" Canvas.Top="78"/>
                             <Button Name="btnRaportActivitati" Click="btnRaportActivitati_Click" Content="Raport" Height="23" Width="66" Canvas.Left="71" Canvas.Top="115"/>
-                            <TextBlock Name="txtActivitatiFinalizate" Width="201" Canvas.Top="156" Canvas.Left="5"/>
-                            <TextBlock Name="txtActivitatiAnulate" Width="201" Canvas.Top="177" Canvas.Left="5"/>
-                            <TextBlock Name="txtActivitatiAmanate" Width="201" Canvas.Top="198" Canvas.Left="5"/>
-                            <TextBlock Name="txtProcentajFinalizare" Width="201" Canvas.Top="219" Canvas.Left="5"/>
+                            <TextBlock Name="txtActivitatiFinalizate" TextAlignment="Center" Width="201" Canvas.Top="156" Canvas.Left="4"/>
+                            <TextBlock Name="txtActivitatiAnulate" TextAlignment="Center" Width="201" Canvas.Top="177" Canvas.Left="4"/>
+                            <TextBlock Name="txtActivitatiAmanate" TextAlignment="Center" Width="201" Canvas.Top="198" Canvas.Left="4"/>
+                            <TextBlock Name="txtProcentajFinalizare" TextAlignment="Center" Width="201" Canvas.Top="219" Canvas.Left="4"/>
                         </Canvas>
                     </GroupBox>
                 </Grid>
