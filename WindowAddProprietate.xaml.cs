@@ -143,8 +143,6 @@ namespace CRMAgentieImobiliara
             
         }
 
-
-
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
             try

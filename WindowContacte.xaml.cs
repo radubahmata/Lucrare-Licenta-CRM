@@ -99,9 +99,6 @@ namespace CRMAgentieImobiliara
             }
         }
 
-     
-       
-
         private void btnEditContact_Click(object sender, RoutedEventArgs e)
         {
             DataRowView row_selected = contacteDataGrid.SelectedItem as DataRowView;

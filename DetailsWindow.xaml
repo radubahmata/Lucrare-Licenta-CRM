@@ -16,13 +16,13 @@
         <Label Content="Proprietar:" Margin="29,106,657.6,275" FontSize="14"/>
         <Label Content="Adresă:" Margin="29,156,657.6,232" FontSize="14"/>
         <Label Content="Pret:" Margin="29,203,657.6,185" FontSize="14"/>
-        <Label Content="Suprafata:" Margin="29,244,657.6,144" FontSize="14"/>
-        <Label Content="Etaj:" Margin="29,285,657.6,103" FontSize="14"/>
-        <Label Content="Compartimentare:" Margin="29,325,632.6,63" FontSize="14"/>
-        <Label Content="Nr bai:" Margin="29,370,657.6,18" FontSize="14"/>
-        <Label Content="Comision:" Margin="395,234,291.6,154" FontSize="14"/>
-        <Label Content="Descriere:" Margin="395,277,291.6,111" FontSize="14"/>
-        <Label Content="Link oferta:" Margin="395,368,291.6,20" FontSize="14"/>
+        <Label Content="Suprafata:" Margin="29,244,657.6,135" FontSize="14"/>
+        <Label Content="Etaj:" Margin="29,285,657.6,95" FontSize="14"/>
+        <Label Content="Compartimentare:" Margin="29,325,632.6,55" FontSize="14"/>
+        <Label Content="Nr bai:" Margin="29,370,657.6,10" FontSize="14"/>
+        <Label Content="Comision:" Margin="395,234,291.6,147" FontSize="14"/>
+        <Label Content="Descriere:" Margin="395,277,291.6,108" FontSize="14"/>
+        <Label Content="Link oferta:" Margin="395,368,291.6,10" FontSize="14"/>
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtID" Margin="166,77,0,310" Height="33" RenderTransformOrigin="0.5,0.5" Width="171"/>
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtProprietar" Margin="166,105,0,265" Height="50" RenderTransformOrigin="0.5,0.5" Width="171"/>
         <TextBlock FontWeight="Bold" TextAlignment="Left" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="txtAdresa" Margin="166,156,0,221" Height="43" RenderTransformOrigin="0.5,0.5" Width="171"/>

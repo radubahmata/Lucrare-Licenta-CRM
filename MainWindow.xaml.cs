@@ -23,13 +23,6 @@ namespace CRMAgentieImobiliara
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    enum ActionState
-    {
-        New,
-        Edit,
-        Delete,
-        Nothing
-    }
 
     public partial class MainWindow : Window
     {
@@ -107,9 +100,15 @@ namespace CRMAgentieImobiliara
             }
         }
 
-        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        private void CmbStadiuProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MySqlCommand cmd = new MySqlCommand("select * from proprietati WHERE userId=" + userId + "", con);
+            string queryProprietatiCombo;
+            string stadiu = (sender as ComboBox).SelectedItem.ToString();
+            if (stadiu == "System.Windows.Controls.ComboBoxItem: Active") queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='activa'";
+            else if (stadiu == "System.Windows.Controls.ComboBoxItem: Pierdute") queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='pierduta'";
+            else queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='retrasa'";
+
+            MySqlCommand cmd = new MySqlCommand(queryProprietatiCombo, con);
             if (con.State == ConnectionState.Closed)
                 con.Open();
             DataTable dt = new DataTable();
@@ -151,17 +150,6 @@ namespace CRMAgentieImobiliara
             string request = "activitate";
             WindowConfirmContact window = new WindowConfirmContact(request, userId, userIdInt, con);
             window.Show();
-        }
-
-        private void btnRefreshActivitati_Click(object sender, RoutedEventArgs e)
-        {
-            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data >= '" + DateTime.Now.ToString("yyyy-MM-dd")+"' ORDER BY data", con);
-            if (con.State == ConnectionState.Closed)
-                con.Open();
-            DataTable dt = new DataTable();
-            dt.Load(cmd.ExecuteReader());
-            con.Close();
-            activitatiDataGrid.DataContext = dt;
         }
 
         private void btnEditActivitate_Click(object sender, RoutedEventArgs e)
@@ -255,7 +243,7 @@ namespace CRMAgentieImobiliara
         private void btnViitoareActivitati_Click(object sender, RoutedEventArgs e)
         {
             txtIntro.Text = "Toate activitatile viitoare:";
-            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND data >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", con);
+            MySqlCommand cmd = new MySqlCommand("SELECT id, tip, id_contact, id_proprietate, data, detalii, stadiu from activitati WHERE userId=" + userId + " AND stadiu='viitoare' AND data >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY data", con);
             if (con.State == ConnectionState.Closed)
                 con.Open();
             DataTable dt = new DataTable();
@@ -274,6 +262,55 @@ namespace CRMAgentieImobiliara
             dt.Load(cmd.ExecuteReader());
             con.Close();
             activitatiDataGrid.DataContext = dt;
+        }
+
+        private void btnRaportActivitati_Click(object sender, RoutedEventArgs e)
+        {
+            string dataStart = "", dataEnd = "";
+            if (dpStartRaport.SelectedDate != null)
+            {
+                dataStart = dpStartRaport.SelectedDate.Value.ToString("yyyy-MM-dd");
+            }
+            else dataStart = "1753-01-01";
+            if (dpFinalRaport.SelectedDate != null)
+            {
+                dataEnd = dpFinalRaport.SelectedDate.Value.ToString("yyyy-MM-dd");
+            }
+            else dataEnd = "9999-12-31";
+            string queryActTotale = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and data>='" + dataStart + "' and data<='" + dataEnd + "'";
+            string queryActFinalizate = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and stadiu='finalizata' and data>='" + dataStart + "' and data<='" + dataEnd + "'";
+            string queryActAnulate = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and stadiu='anulata' and data>='" + dataStart + "' and data<='" + dataEnd + "'";
+            string queryActAmanata = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and stadiu='amanata' and data>='" + dataStart + "' and data<='" + dataEnd + "'";
+
+            MySqlCommand cmd = new MySqlCommand(queryActFinalizate, con);
+            if (con.State == ConnectionState.Closed)
+                con.Open();
+            var ActFinalizate = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+
+            cmd.CommandText = queryActAnulate;
+            if (con.State == ConnectionState.Closed)
+                con.Open();
+            var ActAnulate = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+
+            cmd.CommandText = queryActAmanata;
+            if (con.State == ConnectionState.Closed)
+                con.Open();
+            var ActAmanate = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+
+            cmd.CommandText = queryActTotale;
+            if (con.State == ConnectionState.Closed)
+                con.Open();
+            var ActTotale = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+            double procentFinalizare = Convert.ToDouble(ActFinalizate) / Convert.ToDouble(ActTotale) * 100;
+
+            txtActivitatiFinalizate.Text = ActFinalizate + " activitati finalizate";
+            txtActivitatiAnulate.Text = ActAnulate + " activitati anulate";
+            txtActivitatiAmanate.Text = ActAmanate + " activitati amanate";
+            txtProcentajFinalizare.Text = "Grad finalizare activitati " + procentFinalizare + "%";
         }
 
         void fillComboLocalitate()
@@ -313,6 +350,173 @@ namespace CRMAgentieImobiliara
             dr.Close();
             con.Close();
             for (iLocalitati = 0; iLocalitati < nrLoc; iLocalitati++) cmbLocalitate.Items.Add(localitati[iLocalitati]);
+        }
+
+        private void btnGenerate_Click(object sender, RoutedEventArgs e)
+        {
+            string queryRequest = "SELECT * FROM proprietati ";
+            int n = 0;
+            string tranzactie, localitate, zona, compartimentare;
+            int pretMin, pretMax, sMin, sMax;
+            int etajMin, etajMax, nrCamMin, nrCamMax;
+            tranzactie = cmbTranzactie.Text.ToString();
+            if (tranzactie != null && tranzactie != "")
+            {
+                queryRequest = queryRequest + " WHERE tip_oferta='" + tranzactie + "'";
+                n++;
+            }
+            localitate = cmbLocalitate.Text.ToString();
+            if (localitate != null && localitate != "")
+            {
+                if (n == 0)
+                {
+                    queryRequest = queryRequest + " WHERE localitate='" + localitate + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND localitate='" + localitate + "'";
+                    n++;
+                }
+            }
+            zona = cmbZona.Text.ToString();
+            if (zona != null && zona != "")
+            {
+                if (n == 0)
+                {
+                    queryRequest = queryRequest + " WHERE zona='" + zona + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND zona='" + zona + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtPretMin.Text, out pretMin))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE pret>='" + pretMin + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND pret>='" + pretMin + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtPretMax.Text, out pretMax))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE pret<='" + pretMax + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND pret<='" + pretMax + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtSupMin.Text, out sMin))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE suprafata_utila>='" + sMin + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND suprafata_utila>='" + sMin + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtSupMax.Text, out sMax))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE suprafata_utila<='" + sMax + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND suprafata_utila<='" + sMax + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtEtajMin.Text, out etajMin))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE etaj>='" + etajMin + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND etaj>='" + etajMin + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtEtajMax.Text, out etajMax))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE etaj<='" + etajMax + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND etaj<='" + etajMax + "'";
+                    n++;
+                }
+            }
+            compartimentare = cmbCompartimentare.Text.ToString();
+            if (compartimentare != null && compartimentare != "")
+            {
+                if (n == 0)
+                {
+                    queryRequest = queryRequest + " WHERE compartimentare='" + compartimentare + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND compartimentare='" + compartimentare + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtNrCamMin.Text, out nrCamMin))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE nr_camere>='" + nrCamMin + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND nr_camere>='" + nrCamMin + "'";
+                    n++;
+                }
+            }
+            if (int.TryParse(txtNrCamMax.Text, out nrCamMax))
+            {
+                if (n == 0)
+                {
+                    queryRequest += " WHERE nr_camere<='" + nrCamMax + "'";
+                    n++;
+                }
+                else
+                {
+                    queryRequest += " AND nr_camere<='" + nrCamMax + "'";
+                    n++;
+                }
+            }
+            if (n == 0)
+                queryRequest += " WHERE stadiu='activa'";
+            else queryRequest += " AND stadiu='activa'";
+            WindowRezultateCerere window = new WindowRezultateCerere(queryRequest, con);
+            window.Show();
+
         }
 
         void fillComboLocalitateStatistici()
@@ -503,176 +707,7 @@ namespace CRMAgentieImobiliara
             con.Close();
         }
 
-        public void refresh()
-        {
-                MySqlCommand cmd = new MySqlCommand("select * from proprietati where userId=" + userId + " AND stadiu ='activa'", con);
-            if (con.State == ConnectionState.Closed)
-                con.Open();
-                DataTable dt = new DataTable();
-                dt.Load(cmd.ExecuteReader());
-                con.Close();
-                proprietatiDataGrid.DataContext = dt; 
-        }
-        private void btnGenerate_Click(object sender, RoutedEventArgs e)
-        {
-            string queryRequest = "SELECT * FROM proprietati ";
-            int n = 0;
-            string tranzactie,localitate,zona, compartimentare;
-            int pretMin, pretMax, sMin, sMax;
-            int etajMin, etajMax, nrCamMin,nrCamMax;
-            tranzactie = cmbTranzactie.Text.ToString();
-            if (tranzactie != null && tranzactie!="")
-            {
-                queryRequest = queryRequest + " WHERE tip_oferta='" + tranzactie + "'";
-                n++;
-            }
-            localitate = cmbLocalitate.Text.ToString();
-            if (localitate != null && localitate != "")
-            {
-                if (n == 0)
-                {
-                    queryRequest = queryRequest + " WHERE localitate='" + localitate + "'";
-                    n++;
-                }
-                else {
-                    queryRequest += " AND localitate='" + localitate + "'";
-                    n++;
-                } 
-            }
-            zona = cmbZona.Text.ToString();
-            if (zona != null && zona!="")
-            {
-                if (n == 0)
-                {
-                    queryRequest = queryRequest + " WHERE zona='" + zona + "'";
-                    n++;
-                }
-                else
-                {
-                    queryRequest += " AND zona='" + zona + "'";
-                    n++;
-                }
-            }
-            if (int.TryParse(txtPretMin.Text, out pretMin)) 
-            {
-                if (n == 0)
-                {
-                    queryRequest += " WHERE pret>='" + pretMin + "'";
-                    n++;
-                }
-                else {
-                    queryRequest += " AND pret>='" + pretMin + "'";
-                    n++;
-                }
-            }
-            if (int.TryParse(txtPretMax.Text, out pretMax))
-            {
-                if (n == 0)
-                {
-                    queryRequest += " WHERE pret<='" + pretMax + "'";
-                    n++;
-                }
-                else {
-                    queryRequest += " AND pret<='" + pretMax + "'";
-                    n++;
-                }
-            }
-            if (int.TryParse(txtSupMin.Text, out sMin)) 
-            {
-                if (n == 0)
-                {
-                    queryRequest += " WHERE suprafata_utila>='" + sMin + "'";
-                    n++;
-                }
-                else
-                {
-                    queryRequest += " AND suprafata_utila>='" + sMin + "'";
-                    n++;
-                }
-            }
-            if (int.TryParse(txtSupMax.Text, out sMax))
-            {
-                if (n == 0)
-                {
-                    queryRequest += " WHERE suprafata_utila<='" + sMax + "'";
-                    n++;
-                }
-                else
-                {
-                    queryRequest += " AND suprafata_utila<='" + sMax + "'";
-                    n++;
-                }
-            }
-            if (int.TryParse(txtEtajMin.Text, out etajMin))
-            {
-                if (n == 0)
-                {
-                    queryRequest += " WHERE etaj>='" + etajMin + "'";
-                    n++;
-                }
-                else
-                {
-                    queryRequest += " AND etaj>='" + etajMin + "'";
-                    n++;
-                }
-            }
-            if (int.TryParse(txtEtajMax.Text, out etajMax))
-            {
-                if (n == 0)
-                {
-                    queryRequest += " WHERE etaj<='" + etajMax + "'";
-                    n++;
-                }
-                else
-                {
-                    queryRequest += " AND etaj<='" + etajMax + "'";
-                    n++;
-                }
-            }
-            compartimentare = cmbCompartimentare.Text.ToString();
-            if (compartimentare != null && compartimentare!="")
-            {
-                if (n == 0)
-                {
-                    queryRequest = queryRequest + " WHERE compartimentare='" + compartimentare + "'";
-                    n++;
-                }
-                else
-                {
-                    queryRequest += " AND compartimentare='" + compartimentare + "'";
-                    n++;
-                }
-            }
-            if (int.TryParse(txtNrCamMin.Text, out nrCamMin))
-            {
-                if (n == 0)
-                {
-                    queryRequest += " WHERE nr_camere>='" + nrCamMin + "'";
-                    n++;
-                }
-                else
-                {
-                    queryRequest += " AND nr_camere>='" + nrCamMin + "'";
-                    n++;
-                }
-            }
-            if (int.TryParse(txtNrCamMax.Text, out nrCamMax))
-            {
-                if (n == 0)
-                {
-                    queryRequest += " WHERE nr_camere<='" + nrCamMax + "'";
-                    n++;
-                }
-                else
-                {
-                    queryRequest += " AND nr_camere<='" + nrCamMax + "'";
-                    n++;
-                }
-            }
-            WindowRezultateCerere window = new WindowRezultateCerere(queryRequest, con);
-            window.Show();
-
-        }
+       
        
         private void cmbLocalitateStatistici_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -953,73 +988,6 @@ namespace CRMAgentieImobiliara
             WindowOperatiuni window = new WindowOperatiuni(userId, con);
             window.Show();
         }
-
-        private void CmbStadiuProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string queryProprietatiCombo;
-            string stadiu = (sender as ComboBox).SelectedItem.ToString();
-            if (stadiu == "System.Windows.Controls.ComboBoxItem: Active") queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='activa'";
-            else if (stadiu == "System.Windows.Controls.ComboBoxItem: Pierdute") queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='pierduta'";
-            else queryProprietatiCombo = "select * from proprietati where userId=" + userId + " AND stadiu ='retrasa'";
-
-            MySqlCommand cmd = new MySqlCommand(queryProprietatiCombo, con);
-            if (con.State == ConnectionState.Closed)
-                con.Open();
-            DataTable dt = new DataTable();
-            dt.Load(cmd.ExecuteReader());
-            con.Close();
-            proprietatiDataGrid.DataContext = dt;
-        }
-
-        private void btnRaportActivitati_Click(object sender, RoutedEventArgs e)
-        {
-            string dataStart = "", dataEnd = "";
-            if (dpStartRaport.SelectedDate != null)
-            {
-                dataStart = dpStartRaport.SelectedDate.Value.ToString("yyyy-MM-dd");
-            }
-            else dataStart = "1753-01-01";
-            if (dpFinalRaport.SelectedDate != null)
-            {
-                dataEnd = dpFinalRaport.SelectedDate.Value.ToString("yyyy-MM-dd");
-            }
-            else dataEnd = "9999-12-31";
-            string queryActTotale = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and data>='" + dataStart + "' and data<='" + dataEnd + "'";
-            string queryActFinalizate = "SELECT COUNT(*) FROM activitati where userId="+userId+" and stadiu='finalizata' and data>='"+dataStart+"' and data<='"+dataEnd+"'";
-            string queryActAnulate = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and stadiu='anulata' and data>='" + dataStart + "' and data<='" + dataEnd + "'";
-            string queryActAmanata = "SELECT COUNT(*) FROM activitati where userId=" + userId + " and stadiu='amanata' and data>='" + dataStart + "' and data<='" + dataEnd + "'";
-
-            MySqlCommand cmd = new MySqlCommand(queryActFinalizate, con);
-            if (con.State == ConnectionState.Closed)
-                con.Open();
-            var ActFinalizate = Convert.ToInt32 (cmd.ExecuteScalar());
-            con.Close();
-
-            cmd.CommandText=queryActAnulate;
-            if (con.State == ConnectionState.Closed)
-                con.Open();
-            var ActAnulate = Convert.ToInt32(cmd.ExecuteScalar());
-            con.Close();
-
-            cmd.CommandText = queryActAmanata;
-            if (con.State == ConnectionState.Closed)
-                con.Open();
-            var ActAmanate = Convert.ToInt32(cmd.ExecuteScalar());
-            con.Close();
-
-            cmd.CommandText = queryActTotale;
-            if (con.State == ConnectionState.Closed)
-                con.Open();
-            var ActTotale = Convert.ToInt32(cmd.ExecuteScalar());
-            con.Close();
-            double procentFinalizare = Convert.ToDouble(ActFinalizate)/ Convert.ToDouble(ActTotale) * 100;
-
-            txtActivitatiFinalizate.Text = ActFinalizate + " activitati finalizate";
-            txtActivitatiAnulate.Text = ActAnulate + " activitati anulate";
-            txtActivitatiAmanate.Text = ActAmanate + " activitati amanate";
-            txtProcentajFinalizare.Text = "Gradul de finalizare al activitatilor " + procentFinalizare+"%";
-        }
     }
-    
 }
 

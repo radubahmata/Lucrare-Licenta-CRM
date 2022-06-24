@@ -31,7 +31,7 @@ namespace CRMAgentieImobiliara
             con = connection;
             con.Close();
             InitializeComponent();
-            string query = "select * from proprietati JOIN contacte  ON proprietati.id_contact=contacte.id_contact where proprietati.id_proprietate='" + idDetalii + "'";
+            string query = "select * from proprietati JOIN contacte ON proprietati.id_contact=contacte.id_contact where proprietati.id_proprietate='" + idDetalii + "'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dr;
             try {

@@ -58,7 +58,6 @@ namespace CRMAgentieImobiliara
                     cmbIdEdit.Text = idProp;
                     cmbTipOferta.Text = dr.GetString("tip_oferta");
                     cmbTipProprietate.Text = dr.GetString("tip_proprietate");
-                    //cmbContact.Text = dr.GetString("id_contact");
                     cmbJudet.Text = dr.GetString("judet");
                     localitateTextBox.Text = dr.GetString("localitate");
                     zonaTextBox.Text = dr.GetString("zona");
@@ -94,20 +93,14 @@ namespace CRMAgentieImobiliara
                         bi.EndInit();
                         imgThumb.Source = bi;
                     }
-                    
-                   
-                    
-
                 }
                 dr.Close();
                 connection.Close();
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-            
+            } 
         }
 
         private void btnUpdateProprietate_Click(object sender, RoutedEventArgs e)
@@ -292,7 +285,6 @@ namespace CRMAgentieImobiliara
                     stringName = dialog.SafeFileName;
                     imageName = dialog.FileName;
                     ImageSourceConverter isc = new ImageSourceConverter();
-                    ///image1.SetVa
                 }
                 dialog = null;
             }

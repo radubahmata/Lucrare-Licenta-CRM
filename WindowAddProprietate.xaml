@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Adaugare proprietate" Height="450" Width="800">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="D:/FSEGA/Licenta/AplicatieLicenta/CRMAgentieImobiliara/images/homelogo.jpg" Stretch="Uniform" Opacity="0.2"></ImageBrush>
+        </Grid.Background>
         <Label VerticalAlignment="Center" Margin="23,36,0,357" HorizontalAlignment="Left" Content="Tip Oferta:" Height="27"/>
         <ComboBox Name="cmbTipOferta" Margin="121,38,552.6,358" >
             <ComboBoxItem Content="vanzare"/>
